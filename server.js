@@ -1,14 +1,7 @@
-const express = require('express');
-const path = require('path');
+import express from "express";
 const app = express();
+const PORT = parseInt(process.env.PORT, 10); // IMPORTANT!! You HAVE to use this environment variable as port!
 
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static("dist"));
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server listening on port: ${PORT}`));
