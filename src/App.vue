@@ -1,20 +1,15 @@
 <template>
   <div id="app">
-    <WikiTimer />
+    <router-view />
   </div>
 </template>
 
 <script>
-import WikiTimer from './components/WikiTimer.vue';
-
 export default {
-  name: 'App',
-  components: {
-    WikiTimer,
-  },
+  name: 'App'
 };
 </script>
 
 <style>
-/* Add any global styles here if needed */
+/* Add your styles here */
 </style>
