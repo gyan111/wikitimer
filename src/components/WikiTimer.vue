@@ -140,7 +140,7 @@ export default {
   methods: {
     async fetchTimers() {
       try {
-        const response = await fetch('http://localhost:3001/timers');
+        const response = await fetch('/timers');
         const data = await response.json();
         this.events = data;
       } catch (error) {

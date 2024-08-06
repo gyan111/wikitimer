@@ -153,7 +153,7 @@ export default {
   methods: {
     async addTimer() {
       try {
-        const response = await fetch('http://localhost:3001/add-timer', {
+        const response = await fetch('/add-timer', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

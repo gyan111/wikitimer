@@ -4,9 +4,12 @@ import cors from 'cors';
 import mariadb from 'mariadb';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
-const PORT = parseInt(process.env.PORT, 10) || 3001; // Use port 3001 to avoid conflict
+const PORT = parseInt(process.env.PORT, 10) || 3001;
 
 app.use(express.static('dist'));
 app.use(bodyParser.json());
@@ -14,10 +17,10 @@ app.use(cors());
 
 // Create a pool of connections to the MariaDB server
 const pool = mariadb.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'wikitimer'
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
 });
 
 // Route to get all future timers
