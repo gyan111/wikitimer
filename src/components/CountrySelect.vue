@@ -5,9 +5,9 @@
       @input="filterCountries" 
       type="text" 
       placeholder="Country" 
-      class="w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm"
+      class="w-full py-2 px-3 border border-gray-300 dark:border-gray-600 bg-white text-black dark:bg-gray-800 dark:text-gray-100 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400 transition-all duration-200"
     >
-    <ul v-if="filteredCountries.length" class="absolute bg-white border border-gray-300 rounded-md shadow-sm mt-1 max-h-48 overflow-y-auto w-full">
+    <ul v-if="filteredCountries.length" class="absolute bg-white text-black dark:bg-gray-800 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm mt-1 max-h-48 overflow-y-auto w-full z-10">
       <li 
         v-for="country in filteredCountries" 
         :key="country" 

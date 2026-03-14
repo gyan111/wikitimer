@@ -1,0 +1,50 @@
+{
+    "app": {
+        "title": "WikiTimer",
+        "login": "Anmelden",
+        "themeLight": "Helles Design",
+        "themeDark": "Dunkles Design",
+        "language": "Sprache",
+        "addTimer": "Timer hinzufügen",
+        "backToTimers": "Zurück zu Timern",
+        "viewDashboard": "Dashboard anzeigen"
+    },
+    "timers": {
+        "allTimers": "Alle Timer",
+        "events": "Veranstaltungen",
+        "deadlines": "Fristen",
+        "search": "Veranstaltungen suchen...",
+        "noTimers": "Keine Timer gefunden.",
+        "noTimersDesc": "Erstellen Sie als Erster einen für Ihre Community!",
+        "createNew": "Neuen Timer erstellen"
+    },
+    "time": {
+        "days": "Tage",
+        "hours": "Stunden",
+        "minutes": "Minuten",
+        "seconds": "Sekunden"
+    },
+    "form": {
+        "title": "Neuen Timer hinzufügen",
+        "subtitle": "Erstellen Sie einen Countdown für Ihren nächsten Wiki-Meilenstein.",
+        "type": "Ereignistyp",
+        "typePlaceholder": "Typ auswählen",
+        "typeEvent": "Veranstaltung",
+        "typeDeadline": "Frist",
+        "name": "Titel",
+        "namePlaceholder": "z. B. Wikimania 2024",
+        "link": "Meta-Wiki Link",
+        "linkPlaceholder": "https://meta.wikimedia.org/wiki/...",
+        "dateTime": "Datum & Uhrzeit",
+        "timeZone": "Zeitzone",
+        "timeZonePlaceholder": "Zeitzone auswählen",
+        "region": "Region",
+        "regionPlaceholder": "Region auswählen",
+        "country": "Land",
+        "countryPlaceholder": "Tippen beginnen...",
+        "logo": "Logo-URL (Optional)",
+        "logoPlaceholder": "https://example.com/logo.png",
+        "logoInvalid": "Ungültige Bild-URL. Standard-Symbol wird verwendet.",
+        "submit": "Tracker starten"
+    }
+}

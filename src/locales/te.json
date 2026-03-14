@@ -1,0 +1,50 @@
+{
+    "app": {
+        "title": "WikiTimer",
+        "login": "లాగిన్ చేయండి",
+        "themeLight": "లైట్ థీమ్",
+        "themeDark": "డార్క్ థీమ్",
+        "language": "భాష",
+        "addTimer": "టైమర్ జోడించండి",
+        "backToTimers": "టైమర్‌లకు తిరిగి వెళ్లు",
+        "viewDashboard": "డాష్‌బోర్డ్ చూడండి"
+    },
+    "timers": {
+        "allTimers": "అన్ని టైమర్‌లు",
+        "events": "ఈవెంట్‌లు",
+        "deadlines": "గడువులు",
+        "search": "ఈవెంట్‌లను శోధించండి...",
+        "noTimers": "టైమర్‌లు ఏవీ కనుగొనబడలేదు.",
+        "noTimersDesc": "మీ కమ్యూనిటీ కోసం ఒకదాన్ని సృష్టించే మొదటి వ్యక్తి అవ్వండి!",
+        "createNew": "కొత్త టైమర్‌ని సృష్టించండి"
+    },
+    "time": {
+        "days": "రోజులు",
+        "hours": "గంటలు",
+        "minutes": "నిమిషాలు",
+        "seconds": "సెకన్లు"
+    },
+    "form": {
+        "title": "కొత్త టైమర్‌ని జోడించండి",
+        "subtitle": "మీ తదుపరి వికీ మైలురాయి కోసం కౌంట్‌డౌన్‌ని సృష్టించండి.",
+        "type": "ఈవెంట్ రకం",
+        "typePlaceholder": "రకాన్ని ఎంచుకోండి",
+        "typeEvent": "ఈవెంట్",
+        "typeDeadline": "గడువు",
+        "name": "శీర్షిక",
+        "namePlaceholder": "ఉదా. వికీమానియా 2024",
+        "link": "మెటా-వికీ లింక్",
+        "linkPlaceholder": "https://meta.wikimedia.org/wiki/...",
+        "dateTime": "తేదీ & సమయం",
+        "timeZone": "సమయ మండలం",
+        "timeZonePlaceholder": "సమయ మండలాన్ని ఎంచుకోండి",
+        "region": "ప్రాంతం",
+        "regionPlaceholder": "ప్రాంతాన్ని ఎంచుకోండి",
+        "country": "దేశం",
+        "countryPlaceholder": "టైప్ చేయడం ప్రారంభించండి...",
+        "logo": "లోగో URL (ఐచ్ఛికం)",
+        "logoPlaceholder": "https://example.com/logo.png",
+        "logoInvalid": "చెల్లని చిత్రం URL. డిఫాల్ట్ చిహ్నం ఉపయోగించబడుతుంది.",
+        "submit": "ట్రాకర్‌ను ప్రారంభించండి"
+    }
+}

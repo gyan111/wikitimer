@@ -1,116 +1,287 @@
 <template>
-  <div class="container mx-auto text-center p-6">
-    <h1 class="text-3xl font-bold mb-4">Add New Timer</h1>
-    <div v-if="successMessage" class="mb-4 bg-green-100 text-green-700 p-4 rounded-md shadow-sm">
-      {{ successMessage }}
-      <button @click="goToTimers" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600">See all timers</button>
-    </div>
-    <form @submit.prevent="addTimer" class="w-full max-w-lg mx-auto">
-      <div class="mb-4">
-        <select v-model="newTimer.type" class="w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm">
-          <option value="" disabled>Select Type</option>
-          <option value="event">Event</option>
-          <option value="deadline">Deadline</option>
-        </select>
-      </div>
-      <div class="mb-4">
-        <input v-model="newTimer.name" type="text" placeholder="Name" class="w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm">
-      </div>
-      <div class="mb-4">
-        <input v-model="newTimer.link" type="text" placeholder="Link" class="w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm">
-      </div>
-      <div class="mb-4">
-        <input v-model="newTimer.time" type="datetime-local" placeholder="Time" class="w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm">
-      </div>
-      <div class="mb-4">
-        <select v-model="newTimer.region" class="w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm">
-          <option value="" disabled>Select Region</option>
-          <option value="ESEAP: East and Southeast Asia, and the Pacific region">ESEAP: East and Southeast Asia, and the Pacific region</option>
-          <option value="SAARC: South Asia">SAARC: South Asia</option>
-          <option value="MENA: Middle East and North Africa">MENA: Middle East and North Africa</option>
-          <option value="Indaba: Africa">Indaba: Africa</option>
-          <option value="CEE and CA: Central and Eastern Europe and Central Asia">CEE and CA: Central and Eastern Europe and Central Asia</option>
-          <option value="Northern and Western Europe">Northern and Western Europe</option>
-          <option value="Latin America and the Caribbean">Latin America and the Caribbean</option>
-          <option value="North America">North America</option>
-        </select>
-      </div>
-      <div class="mb-4 relative">
-        <input 
-          v-model="newTimer.country" 
-          @input="filterCountries" 
-          type="text" 
-          placeholder="Country" 
-          class="w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm"
-        >
-        <ul v-if="filteredCountries.length" class="absolute bg-white border border-gray-300 rounded-md shadow-sm mt-1 max-h-48 overflow-y-auto w-full z-10">
-          <li 
-            v-for="country in filteredCountries" 
-            :key="country" 
-            @click="selectCountry(country)" 
-            class="py-2 px-3 hover:bg-gray-100 cursor-pointer"
-          >
-            {{ country }}
-          </li>
-        </ul>
-      </div>
-      <div class="mb-4">
-        <select v-model="newTimer.timeZone" class="w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm">
-          <option value="" disabled>Select Time Zone</option>
-          <option value="UTC-12:00">UTC-12:00</option>
-          <option value="UTC-11:00">UTC-11:00</option>
-          <option value="UTC-10:00">UTC-10:00</option>
-          <option value="UTC-09:30">UTC-09:30</option>
-          <option value="UTC-09:00">UTC-09:00</option>
-          <option value="UTC-08:00">UTC-08:00</option>
-          <option value="UTC-07:00">UTC-07:00</option>
-          <option value="UTC-06:00">UTC-06:00</option>
-          <option value="UTC-05:00">UTC-05:00</option>
-          <option value="UTC-04:00">UTC-04:00</option>
-          <option value="UTC-03:30">UTC-03:30</option>
-          <option value="UTC-03:00">UTC-03:00</option>
-          <option value="UTC-02:00">UTC-02:00</option>
-          <option value="UTC-01:00">UTC-01:00</option>
-          <option value="UTC+00:00">UTC+00:00</option>
-          <option value="UTC+01:00">UTC+01:00</option>
-          <option value="UTC+02:00">UTC+02:00</option>
-          <option value="UTC+03:00">UTC+03:00</option>
-          <option value="UTC+03:30">UTC+03:30</option>
-          <option value="UTC+04:00">UTC+04:00</option>
-          <option value="UTC+04:30">UTC+04:30</option>
-          <option value="UTC+05:00">UTC+05:00</option>
-          <option value="UTC+05:30">UTC+05:30</option>
-          <option value="UTC+05:45">UTC+05:45</option>
-          <option value="UTC+06:00">UTC+06:00</option>
-          <option value="UTC+06:30">UTC+06:30</option>
-          <option value="UTC+07:00">UTC+07:00</option>
-          <option value="UTC+08:00">UTC+08:00</option>
-          <option value="UTC+08:45">UTC+08:45</option>
-          <option value="UTC+09:00">UTC+09:00</option>
-          <option value="UTC+09:30">UTC+09:30</option>
-          <option value="UTC+10:00">UTC+10:00</option>
-          <option value="UTC+10:30">UTC+10:30</option>
-          <option value="UTC+11:00">UTC+11:00</option>
-          <option value="UTC+12:00">UTC+12:00</option>
-          <option value="UTC+12:45">UTC+12:45</option>
-          <option value="UTC+13:00">UTC+13:00</option>
-          <option value="UTC+14:00">UTC+14:00</option>
-        </select>
-      </div>
-      <div class="mb-4">
-        <input v-model="newTimer.logo" @input="validateLogo" type="text" placeholder="Logo Link (Optional)" class="w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm">
-        <div v-if="logoError" class="text-red-500 text-sm mt-2">The logo link is not valid.</div>
-        <div v-if="newTimer.logo && !logoError" class="mt-4">
-          <img :src="newTimer.logo" alt="Logo Preview" class="w-32 h-auto mx-auto">
+  <div class="container mx-auto px-4 sm:px-6 py-8">
+    <div class="max-w-2xl mx-auto glass-panel rounded-3xl overflow-hidden backdrop-blur-xl border border-white/20 shadow-2xl transition-all duration-500 hover:shadow-primary-500/10 relative z-20">
+      
+      <!-- Decorative background elements inside card -->
+      <div class="absolute top-0 right-0 -mt-20 -mr-20 w-64 h-64 bg-primary-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+      <div class="absolute bottom-0 left-0 -mb-20 -ml-20 w-72 h-72 bg-indigo-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+      
+      <!-- Header -->
+      <div class="relative bg-white/40 dark:bg-gray-900/40 p-8 sm:p-10 border-b border-white/20 dark:border-gray-700/50 backdrop-blur-md">
+        <div class="absolute top-8 right-8 w-16 h-16 bg-gradient-to-br from-primary-400 to-indigo-500 rounded-2xl rotate-12 opacity-80 blur-lg sm:block hidden"></div>
+        <div class="relative z-10">
+          <router-link to="/" class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors mb-6 group">
+            <svg class="w-4 h-4 mr-1 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            {{ $t('app.backToTimers') }}
+          </router-link>
+          <h1 class="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-indigo-600 dark:from-primary-400 dark:to-indigo-400 mb-3 tracking-tight">{{ $t('form.title') }}</h1>
+          <p class="text-gray-600 dark:text-gray-300 text-lg font-medium">{{ $t('form.subtitle') }}</p>
         </div>
       </div>
-      <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600">Add Timer</button>
-    </form>
+      
+      <div class="p-8 sm:p-10 relative z-10 bg-white/50 dark:bg-gray-800/50">
+        <transition
+          enter-active-class="transition duration-300 ease-out transform"
+          enter-from-class="opacity-0 -translate-y-4"
+          enter-to-class="opacity-100 translate-y-0"
+          leave-active-class="transition duration-200 ease-in transform"
+          leave-from-class="opacity-100 translate-y-0"
+          leave-to-class="opacity-0 -translate-y-4"
+        >
+          <div v-if="successMessage" class="mb-8 bg-green-50/80 dark:bg-green-900/30 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300 p-5 rounded-2xl shadow-sm backdrop-blur-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-green-100 dark:bg-green-800 flex items-center justify-center flex-shrink-0 text-green-600 dark:text-green-300">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+              </div>
+              <p class="font-medium">{{ successMessage }}</p>
+            </div>
+            <button @click="goToTimers" class="w-full sm:w-auto px-5 py-2.5 bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white rounded-xl shadow-md transition-all duration-300 font-medium whitespace-nowrap hover:shadow-lg hover:-translate-y-0.5">
+              {{ $t('app.viewDashboard') }}
+            </button>
+          </div>
+        </transition>
+
+        <form @submit.prevent="addTimer" class="space-y-7">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-7">
+            <!-- Timer Type -->
+            <div class="form-group relative">
+              <label for="type" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">{{ $t('form.type') }}</label>
+              <div class="relative">
+                <select
+                  id="type"
+                  v-model="newTimer.type"
+                  required
+                  class="w-full py-3.5 pl-4 pr-10 bg-white/70 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none transition-all duration-300 backdrop-blur-md hover:bg-white dark:hover:bg-gray-800"
+                >
+                  <option value="" disabled>{{ $t('form.typePlaceholder') }}</option>
+                  <option value="event">{{ $t('form.typeEvent') }}</option>
+                  <option value="deadline">{{ $t('form.typeDeadline') }}</option>
+                </select>
+                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-400">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Name -->
+            <div class="form-group relative">
+              <label for="name" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">{{ $t('form.name') }}</label>
+              <input
+                id="name"
+                v-model="newTimer.name"
+                type="text"
+                required
+                :placeholder="$t('form.namePlaceholder')"
+                class="w-full py-3.5 px-4 bg-white/70 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 backdrop-blur-md placeholder-gray-400 hover:bg-white dark:hover:bg-gray-800"
+              >
+            </div>
+          </div>
+
+          <!-- Link -->
+          <div class="form-group relative">
+            <label for="link" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">{{ $t('form.link') }}</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+              </div>
+              <input
+                id="link"
+                v-model="newTimer.link"
+                type="url"
+                required
+                :placeholder="$t('form.linkPlaceholder')"
+                class="w-full py-3.5 pl-11 pr-4 bg-white/70 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 backdrop-blur-md placeholder-gray-400 hover:bg-white dark:hover:bg-gray-800"
+              >
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-7">
+            <!-- Time -->
+            <div class="form-group relative">
+              <label for="time" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">{{ $t('form.dateTime') }}</label>
+              <input
+                id="time"
+                v-model="newTimer.time"
+                type="datetime-local"
+                required
+                class="w-full py-3.5 px-4 bg-white/70 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 backdrop-blur-md hover:bg-white dark:hover:bg-gray-800"
+              >
+            </div>
+
+            <!-- Time Zone -->
+            <div class="form-group relative">
+              <label for="timeZone" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">{{ $t('form.timeZone') }}</label>
+              <div class="relative">
+                <select
+                  id="timeZone"
+                  v-model="newTimer.timeZone"
+                  required
+                  class="w-full py-3.5 pl-4 pr-10 bg-white/70 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none transition-all duration-300 backdrop-blur-md hover:bg-white dark:hover:bg-gray-800"
+                >
+                  <option value="" disabled>{{ $t('form.timeZonePlaceholder') }}</option>
+                  <option value="UTC-12:00">UTC-12:00</option>
+                  <option value="UTC-11:00">UTC-11:00</option>
+                  <!-- ... timezones code remains mostly unaffected conceptually by translation of string ... -->
+                  <option value="UTC-10:00">UTC-10:00</option>
+                  <option value="UTC-09:30">UTC-09:30</option>
+                  <option value="UTC-09:00">UTC-09:00</option>
+                  <option value="UTC-08:00">UTC-08:00</option>
+                  <option value="UTC-07:00">UTC-07:00</option>
+                  <option value="UTC-06:00">UTC-06:00</option>
+                  <option value="UTC-05:00">UTC-05:00</option>
+                  <option value="UTC-04:00">UTC-04:00</option>
+                  <option value="UTC-03:30">UTC-03:30</option>
+                  <option value="UTC-03:00">UTC-03:00</option>
+                  <option value="UTC-02:00">UTC-02:00</option>
+                  <option value="UTC-01:00">UTC-01:00</option>
+                  <option value="UTC+00:00">UTC+00:00</option>
+                  <option value="UTC+01:00">UTC+01:00</option>
+                  <option value="UTC+02:00">UTC+02:00</option>
+                  <option value="UTC+03:00">UTC+03:00</option>
+                  <option value="UTC+03:30">UTC+03:30</option>
+                  <option value="UTC+04:00">UTC+04:00</option>
+                  <option value="UTC+04:30">UTC+04:30</option>
+                  <option value="UTC+05:00">UTC+05:00</option>
+                  <option value="UTC+05:30">UTC+05:30</option>
+                  <option value="UTC+05:45">UTC+05:45</option>
+                  <option value="UTC+06:00">UTC+06:00</option>
+                  <option value="UTC+06:30">UTC+06:30</option>
+                  <option value="UTC+07:00">UTC+07:00</option>
+                  <option value="UTC+08:00">UTC+08:00</option>
+                  <option value="UTC+08:45">UTC+08:45</option>
+                  <option value="UTC+09:00">UTC+09:00</option>
+                  <option value="UTC+09:30">UTC+09:30</option>
+                  <option value="UTC+10:00">UTC+10:00</option>
+                  <option value="UTC+10:30">UTC+10:30</option>
+                  <option value="UTC+11:00">UTC+11:00</option>
+                  <option value="UTC+12:00">UTC+12:00</option>
+                  <option value="UTC+12:45">UTC+12:45</option>
+                  <option value="UTC+13:00">UTC+13:00</option>
+                  <option value="UTC+14:00">UTC+14:00</option>
+                </select>
+                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-400">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-7">
+            <!-- Region -->
+            <div class="form-group relative">
+              <label for="region" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">{{ $t('form.region') }}</label>
+              <div class="relative">
+                <select
+                  id="region"
+                  v-model="newTimer.region"
+                  required
+                  class="w-full py-3.5 pl-4 pr-10 bg-white/70 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none transition-all duration-300 backdrop-blur-md hover:bg-white dark:hover:bg-gray-800"
+                >
+                  <option value="" disabled>{{ $t('form.regionPlaceholder') }}</option>
+                  <option value="ESEAP: East and Southeast Asia, and the Pacific region">ESEAP</option>
+                  <option value="SAARC: South Asia">SAARC</option>
+                  <option value="MENA: Middle East and North Africa">MENA</option>
+                  <option value="Indaba: Africa">Indaba</option>
+                  <option value="CEE and CA: Central and Eastern Europe and Central Asia">CEE & CA</option>
+                  <option value="Northern and Western Europe">Northern & Western Europe</option>
+                  <option value="Latin America and the Caribbean">Latin America & Caribbean</option>
+                  <option value="North America">North America</option>
+                </select>
+                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-400">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Country -->
+            <div class="form-group relative z-30">
+              <label for="country" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">{{ $t('form.country') }}</label>
+              <div class="relative">
+                <input
+                  id="country"
+                  v-model="newTimer.country"
+                  @input="filterCountries"
+                  type="text"
+                  required
+                  :placeholder="$t('form.countryPlaceholder')"
+                  class="w-full py-3.5 px-4 bg-white/70 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 backdrop-blur-md placeholder-gray-400 hover:bg-white dark:hover:bg-gray-800"
+                >
+                <transition
+                  enter-active-class="transition duration-200 ease-out"
+                  enter-from-class="opacity-0 translate-y-2"
+                  enter-to-class="opacity-100 translate-y-0"
+                  leave-active-class="transition duration-150 ease-in"
+                  leave-from-class="opacity-100 translate-y-0"
+                  leave-to-class="opacity-0 translate-y-2"
+                >
+                  <ul v-if="filteredCountries.length" class="absolute bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl mt-2 max-h-60 overflow-y-auto w-full z-50 py-1 divide-y divide-gray-100 dark:divide-gray-700">
+                    <li
+                      v-for="country in filteredCountries"
+                      :key="country"
+                      @click="selectCountry(country)"
+                      class="py-3 px-4 hover:bg-primary-50 dark:hover:bg-gray-700 cursor-pointer transition-colors text-sm"
+                    >
+                      {{ country }}
+                    </li>
+                  </ul>
+                </transition>
+              </div>
+            </div>
+          </div>
+
+          <!-- Logo -->
+          <div class="form-group relative">
+            <label for="logo" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">{{ $t('form.logo') }}</label>
+            <div class="flex gap-4 items-start sm:items-center flex-col sm:flex-row">
+              <div class="relative flex-1 w-full">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2-2v12a2 2 0 002 2z"></path></svg>
+                </div>
+                <input
+                  id="logo"
+                  v-model="newTimer.logo"
+                  @input="validateLogo"
+                  type="url"
+                  :placeholder="$t('form.logoPlaceholder')"
+                  class="w-full py-3.5 pl-11 pr-4 bg-white/70 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 backdrop-blur-md placeholder-gray-400 hover:bg-white dark:hover:bg-gray-800"
+                >
+              </div>
+              <div class="w-24 h-24 sm:w-16 sm:h-16 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600 bg-white/50 dark:bg-gray-800/50 flex items-center justify-center flex-shrink-0 overflow-hidden backdrop-blur-sm self-center sm:self-auto">
+                <img v-if="newTimer.logo && !logoError" :src="newTimer.logo" alt="Preview" class="w-full h-full object-contain p-2">
+                <svg v-else class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2-2v12a2 2 0 002 2z"></path></svg>
+              </div>
+            </div>
+            <p v-if="logoError" class="mt-2 text-sm text-red-500 flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              {{ $t('form.logoInvalid') }}
+            </p>
+          </div>
+          
+          <div class="pt-6 border-t border-gray-200/50 dark:border-gray-700/50">
+            <button
+              type="submit"
+              class="relative w-full inline-flex items-center justify-center px-8 py-4 overflow-hidden font-bold text-white rounded-2xl shadow-lg group bg-gradient-to-br from-primary-500 to-indigo-600 hover:from-primary-600 hover:to-indigo-700 transition-all duration-500 hover:shadow-xl hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-primary-500/50 text-lg tracking-wide"
+            >
+              <span class="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-[120%] group-hover:h-56 opacity-10"></span>
+              <span class="relative flex items-center gap-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                {{ $t('form.submit') }}
+              </span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import Footer from './Footer.vue'
+
 export default {
+  components: {
+    Footer
+  },
   data() {
     return {
       newTimer: {
@@ -163,11 +334,20 @@ export default {
 
         if (!response.ok) {
           const errorText = await response.text();
+          console.error('Server response:', errorText);
           throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
         }
 
-        const data = await response.json();
-        this.successMessage = data.message;
+        const responseText = await response.text();
+        console.log('Server response:', responseText);
+
+        try {
+          const data = JSON.parse(responseText);
+          this.successMessage = data.message;
+        } catch (parseError) {
+          console.error('Error parsing JSON:', parseError);
+          throw new Error('Invalid JSON response from server');
+        }
       } catch (error) {
         console.error('Error adding timer:', error);
       }
@@ -202,4 +382,20 @@ export default {
 </script>
 
 <style scoped>
+.form-group {
+  @apply transition-all duration-200;
+}
+
+.form-group:focus-within {
+  @apply transform scale-105;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 </style>

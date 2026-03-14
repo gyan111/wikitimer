@@ -1,7 +1,7 @@
 <template>
   <div>
-    <select v-model="selectedRegion" @change="updateRegion" class="w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm">
-      <option value="">Select Region</option>
+    <select v-model="selectedRegion" @change="updateRegion" class="w-full py-2 px-3 border border-gray-300 dark:border-gray-600 bg-white text-black dark:bg-gray-800 dark:text-gray-100 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:focus:border-blue-400 transition-all duration-200">
+  <option value="">Select Region</option>
       <option v-for="region in regions" :key="region" :value="region">{{ region }}</option>
     </select>
   </div>
@@ -39,4 +39,5 @@ export default {
 </script>
 
 <style scoped>
+
 </style>

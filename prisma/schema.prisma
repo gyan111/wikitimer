@@ -1,0 +1,21 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Timer {
+  id        Int      @id @default(autoincrement())
+  type      String   @db.VarChar(50)
+  name      String   @db.VarChar(255)
+  link      String   @db.VarChar(255)
+  time      DateTime
+  region    String   @db.VarChar(100)
+  country   String   @db.VarChar(100)
+  timeZone  String   @db.VarChar(50)
+  logo      String?  @db.VarChar(255)
+}

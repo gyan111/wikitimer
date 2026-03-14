@@ -1,0 +1,50 @@
+{
+    "app": {
+        "title": "WikiTimer",
+        "login": "Connexion",
+        "themeLight": "Thème Clair",
+        "themeDark": "Thème Sombre",
+        "language": "Langue",
+        "addTimer": "Ajouter un compte à rebours",
+        "backToTimers": "Retour",
+        "viewDashboard": "Voir le tableau de bord"
+    },
+    "timers": {
+        "allTimers": "Tous les comptes",
+        "events": "Événements",
+        "deadlines": "Dates limites",
+        "search": "Rechercher des événements...",
+        "noTimers": "Aucun compte à rebours trouvé.",
+        "noTimersDesc": "Soyez le premier à en créer un pour votre communauté !",
+        "createNew": "Créer un nouveau"
+    },
+    "time": {
+        "days": "Jours",
+        "hours": "Heures",
+        "minutes": "Minutes",
+        "seconds": "Secondes"
+    },
+    "form": {
+        "title": "Ajouter un compte à rebours",
+        "subtitle": "Créez un compte à rebours pour votre prochain événement wiki.",
+        "type": "Type d'événement",
+        "typePlaceholder": "Sélectionner le type",
+        "typeEvent": "Événement",
+        "typeDeadline": "Date limite",
+        "name": "Titre",
+        "namePlaceholder": "ex: Wikimania 2024",
+        "link": "Lien Meta-Wiki",
+        "linkPlaceholder": "https://meta.wikimedia.org/wiki/...",
+        "dateTime": "Date et Heure",
+        "timeZone": "Fuseau horaire",
+        "timeZonePlaceholder": "Sélectionner le fuseau horaire",
+        "region": "Région",
+        "regionPlaceholder": "Sélectionner une région",
+        "country": "Pays",
+        "countryPlaceholder": "Commencez à taper...",
+        "logo": "URL du logo (Optionnel)",
+        "logoPlaceholder": "https://example.com/logo.png",
+        "logoInvalid": "URL d'image invalide. L'icône par défaut sera utilisée.",
+        "submit": "Lancer le suivi"
+    }
+}

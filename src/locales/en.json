@@ -1,0 +1,50 @@
+{
+    "app": {
+        "title": "WikiTimer",
+        "login": "Log In",
+        "themeLight": "Light Theme",
+        "themeDark": "Dark Theme",
+        "language": "Language",
+        "addTimer": "Add Timer",
+        "backToTimers": "Back to Timers",
+        "viewDashboard": "View Dashboard"
+    },
+    "timers": {
+        "allTimers": "All Timers",
+        "events": "Events",
+        "deadlines": "Deadlines",
+        "search": "Search events...",
+        "noTimers": "No timers found.",
+        "noTimersDesc": "Be the first to create one for your community!",
+        "createNew": "Create New Timer"
+    },
+    "time": {
+        "days": "Days",
+        "hours": "Hours",
+        "minutes": "Minutes",
+        "seconds": "Seconds"
+    },
+    "form": {
+        "title": "Add New Timer",
+        "subtitle": "Create a countdown for your next wiki milestone.",
+        "type": "Event Type",
+        "typePlaceholder": "Select Type",
+        "typeEvent": "Event",
+        "typeDeadline": "Deadline",
+        "name": "Title",
+        "namePlaceholder": "e.g. Wikimania 2024",
+        "link": "Meta-Wiki Link",
+        "linkPlaceholder": "https://meta.wikimedia.org/wiki/...",
+        "dateTime": "Date & Time",
+        "timeZone": "Time Zone",
+        "timeZonePlaceholder": "Select Time Zone",
+        "region": "Region",
+        "regionPlaceholder": "Select Region",
+        "country": "Country",
+        "countryPlaceholder": "Start typing...",
+        "logo": "Logo URL (Optional)",
+        "logoPlaceholder": "https://example.com/logo.png",
+        "logoInvalid": "Invalid image URL. Will use default icon.",
+        "submit": "Launch Tracker"
+    }
+}
