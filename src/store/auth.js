@@ -164,7 +164,7 @@ export const useAuth = () => {
         throw new Error(`Failed to check authentication status: ${response.status}`);
       }
     } catch (err) {
-      error.value = 'Failed to verify authentication status';
+      // Don't show auth check errors to user by default
       debugLog('Auth check error', { 
         error: err.message,
         type: err.name

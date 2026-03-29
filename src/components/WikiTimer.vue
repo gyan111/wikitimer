@@ -2,10 +2,15 @@
   <div class="container mx-auto p-2 sm:p-6 w-full max-w-none">
     <!-- Toolbar -->
     <div class="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4 px-2">
-      <div class="flex items-center gap-3">
-        <h1 class="text-4xl font-extrabold tracking-tight text-gradient drop-shadow-sm">{{ $t('app.title') }}</h1>
-        <div class="h-8 w-1 bg-gradient-to-b from-primary-400 to-indigo-500 rounded-full hidden sm:block"></div>
-        <p class="hidden sm:block text-slate-500 dark:text-slate-400 font-medium">{{ $t('timers.search') }}</p>
+      <div class="flex items-center gap-3 w-full sm:w-auto flex-1">
+        <input 
+          id="search-input"
+          type="text" 
+          v-model="filters.searchQuery" 
+          :placeholder="$t('timers.search')"
+          class="text-3xl sm:text-4xl font-extrabold tracking-tight text-gradient drop-shadow-sm bg-transparent border-none outline-none placeholder-gray-400 dark:placeholder-gray-500 caret-primary-500 w-full sm:w-80 min-w-[200px] p-0 transition-opacity duration-300"
+          :class="{ 'animate-pulse opacity-80': !filters.searchQuery }"
+        >
       </div>
       <div class="flex items-center gap-4">
         <router-link 
@@ -20,18 +25,41 @@
         <button 
           v-if="isAuthenticated"
           @click="logout"
-          class="px-5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm hover:bg-white dark:hover:bg-gray-700 font-medium shadow-sm transition-all duration-300"
+          :disabled="isLoading"
+          class="flex items-center px-5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm hover:bg-white dark:hover:bg-gray-700 font-medium shadow-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Logout <span class="opacity-70 font-normal">({{ user?.username }})</span>
+          <svg v-if="isLoading" class="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-700 dark:text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          Logout <span class="opacity-70 font-normal ml-1">({{ user?.username }})</span>
         </button>
         <button 
           v-else
           @click="login"
-          class="px-5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm hover:bg-white dark:hover:bg-gray-700 font-medium shadow-sm transition-all duration-300"
+          :disabled="isLoading"
+          class="flex items-center px-5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm hover:bg-white dark:hover:bg-gray-700 font-medium shadow-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
+          <svg v-if="isLoading" class="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-700 dark:text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
           {{ $t('app.login') }}
         </button>
       </div>
+    </div>
+
+    <!-- Error Message -->
+    <div v-if="authError" class="mb-6 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-lg shadow-sm flex items-center justify-between">
+      <div class="flex items-center">
+        <svg class="h-5 w-5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <p>{{ authError }}</p>
+      </div>
+      <button @click="authError = null" class="text-red-500 hover:text-red-700 focus:outline-none p-1 rounded-md hover:bg-red-200 transition-colors" aria-label="Close error message">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
     </div>
 
     <!-- Filters Bar - Glassmorphic -->
@@ -68,6 +96,16 @@
             <option value="">All Types</option>
             <option value="event">Event</option>
             <option value="deadline">Deadline</option>
+          </select>
+          <select 
+            id="timeStatus" 
+            v-model="filters.timeStatus" 
+            @change="applyFilters" 
+            class="w-full py-2.5 px-4 rounded-xl border-0 bg-white/50 dark:bg-gray-800/80 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-500 appearance-none backdrop-blur-md"
+          >
+            <option value="upcoming">Upcoming Events</option>
+            <option value="past">Past Events</option>
+            <option value="all">All Events</option>
           </select>
           <select 
             id="sort" 
@@ -131,6 +169,17 @@
           <option value="">All Types</option>
           <option value="event">Event</option>
           <option value="deadline">Deadline</option>
+        </select>
+        
+        <select 
+          id="timeStatus" 
+          v-model="filters.timeStatus" 
+          @change="applyFilters" 
+          class="flex-1 py-2.5 px-4 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer"
+        >
+          <option value="upcoming">Upcoming Events</option>
+          <option value="past">Past Events</option>
+          <option value="all">All Events</option>
         </select>
         
         <select 
@@ -201,7 +250,18 @@
                 <span v-else class="text-xs font-bold text-gray-400">W</span>
               </div>
               <div class="flex-1 min-w-0">
-                <h3 class="font-bold text-lg leading-tight truncate text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">{{ event?.name }}</h3>
+                <div class="flex justify-between items-start">
+                  <h3 class="font-bold text-lg leading-tight truncate text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">{{ event?.name }}</h3>
+                  <button 
+                    v-if="user && (user.id === event.creatorId || user.isAdmin)"
+                    @click.stop="deleteEvent(event.id)"
+                    class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors absolute top-4 right-4 z-20"
+                    title="Delete Timer"
+                  >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                  </button>
+                </div>
+                <p v-if="event.creator?.username" class="text-xs text-primary-600 dark:text-primary-400 font-medium truncate mt-0.5">Added by {{ event.creator.username }}</p>
                 <p class="text-sm text-gray-500 dark:text-gray-400 truncate mt-1">{{ event?.region }}</p>
                 <p class="text-xs text-gray-400 dark:text-gray-500 truncate">{{ event?.country }}</p>
               </div>
@@ -246,18 +306,27 @@
 import { ref, onMounted, computed } from 'vue';
 import { useAuth } from '../store/auth';
 
-const { user, isAuthenticated, login, logout, checkAuth } = useAuth();
+const { user, isAuthenticated, isLoading, error: authError, login, logout, checkAuth } = useAuth();
 
-// Check authentication status when component mounts
 onMounted(() => {
   checkAuth();
+  
+  // Check for auth error in URL
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('error') === 'auth_failed') {
+    authError.value = 'Authentication failed. Please try again.';
+    // Clean up URL
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
 });
 
 const currentTime = ref(new Date());
 const filters = ref({
+  searchQuery: '',
   region: '',
   country: '',
   type: '',
+  timeStatus: 'upcoming',
   sort: 'asc'
 });
 const isPinned = ref(false);
@@ -274,9 +343,23 @@ const uniqueCountries = computed(() => {
 
 const filteredEvents = computed(() => {
   // Only include valid event objects with required fields
+  const query = filters.value.searchQuery.toLowerCase();
+  const now = new Date();
+  
   return events.value.filter(event => {
+    if (!event || typeof event !== 'object' || !event.link || !event.name || !event.time) return false;
+    
+    const eventTime = new Date(event.time);
+    let timeStatusMatch = true;
+    if (filters.value.timeStatus === 'upcoming') {
+      timeStatusMatch = eventTime > now;
+    } else if (filters.value.timeStatus === 'past') {
+      timeStatusMatch = eventTime <= now;
+    }
+    
     return (
-      event && typeof event === 'object' && event.link && event.name && event.time &&
+      timeStatusMatch &&
+      (!query || event.name.toLowerCase().includes(query)) &&
       (!filters.value.region || event.region === filters.value.region) &&
       (!filters.value.country || event.country === filters.value.country) &&
       (!filters.value.type || event.type === filters.value.type)
@@ -354,9 +437,11 @@ function applyFilters() {
 }
 
 function resetFilters() {
+  filters.value.searchQuery = '';
   filters.value.region = '';
   filters.value.country = '';
   filters.value.type = '';
+  filters.value.timeStatus = 'upcoming';
   filters.value.sort = 'asc';
   isPinned.value = false;
   localStorage.removeItem('pinnedFilters');
@@ -370,6 +455,29 @@ function pinFilters() {
 
 function viewEvent(event) {
   // Do nothing for now
+}
+
+async function deleteEvent(id) {
+  if (!confirm('Are you sure you want to delete this timer?')) return;
+  
+  try {
+    const response = await fetch(`/timers/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+    
+    if (response.ok) {
+      await fetchTimers(); // Refresh list on success
+    } else {
+      const data = await response.json();
+      authError.value = data.message || 'Failed to delete timer';
+    }
+  } catch (error) {
+    console.error('Error deleting timer:', error);
+    authError.value = 'Failed to delete timer. Check your connection.';
+  }
 }
 
 function updateTime() {

@@ -8,6 +8,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id        Int      @id @default(autoincrement())
+  wikiId    String   @unique
+  username  String
+  isAdmin   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  timers    Timer[]
+}
+
 model Timer {
   id        Int      @id @default(autoincrement())
   type      String   @db.VarChar(50)
@@ -18,4 +27,6 @@ model Timer {
   country   String   @db.VarChar(100)
   timeZone  String   @db.VarChar(50)
   logo      String?  @db.VarChar(255)
+  creatorId Int?
+  creator   User?    @relation(fields: [creatorId], references: [id])
 }

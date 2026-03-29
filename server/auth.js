@@ -1,6 +1,7 @@
 import passport from 'passport';
 import { Strategy as OAuth2Strategy } from 'passport-oauth2';
 import fetch from 'node-fetch';
+import prisma from './db.js';
 
 // OAuth2 configuration
 const WIKI_CLIENT_ID = process.env.WIKI_CLIENT_ID;
@@ -61,9 +62,23 @@ export default function(app) {
       }
 
       const userData = await response.json();
+      
+      // Upsert user in the database
+      const dbUser = await prisma.user.upsert({
+        where: { wikiId: userData.sub },
+        update: { username: userData.username },
+        create: {
+          wikiId: userData.sub,
+          username: userData.username,
+          isAdmin: false
+        }
+      });
+
       const user = {
-        id: userData.sub,
-        username: userData.username,
+        id: dbUser.id, // Use database ID
+        wikiId: dbUser.wikiId,
+        username: dbUser.username,
+        isAdmin: dbUser.isAdmin,
         accessToken,
         refreshToken
       };
@@ -94,10 +109,36 @@ export default function(app) {
 
   app.get('/auth/mediawiki/callback',
     passport.authenticate('oauth2', {
-      successRedirect: '/',
-      failureRedirect: '/login'
-    })
+      failureRedirect: `${process.env.CLIENT_URL || 'http://localhost:5173'}/?error=auth_failed`
+    }),
+    (req, res) => {
+      // Successful authentication, redirect to client
+      debugLog('Authentication successful, redirecting to client');
+      res.redirect(process.env.CLIENT_URL || 'http://localhost:5173');
+    }
   );
+
+  // Logout route
+  app.get('/auth/logout', (req, res) => {
+    debugLog('Logout requested');
+    req.logout((err) => {
+      if (err) {
+        debugLog('Error during logout', { error: err.message });
+        return res.status(500).json({ error: 'Failed to logout' });
+      }
+      
+      // Destroy the session
+      req.session.destroy((err) => {
+        if (err) {
+          debugLog('Error destroying session', { error: err.message });
+          return res.status(500).json({ error: 'Failed to clear session' });
+        }
+        res.clearCookie('connect.sid'); // Assuming default express-session cookie name
+        debugLog('Logout successful');
+        res.status(200).json({ message: 'Logged out successfully' });
+      });
+    });
+  });
 
   // Middleware to check if user is authenticated
   const isAuthenticated = (req, res, next) => {

@@ -42,6 +42,58 @@
         </transition>
 
         <form @submit.prevent="addTimer" class="space-y-7">
+          <!-- Wikidata Auto-fill -->
+          <div class="glass-panel !bg-indigo-50/50 dark:!bg-indigo-900/10 border-indigo-100 dark:border-indigo-800/30 p-5 rounded-2xl mb-2 relative">
+            <label for="wikidata-search" class="flex items-center text-sm font-semibold text-indigo-700 dark:text-indigo-300 mb-3 ml-1">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+              Auto-fill from Wikidata
+            </label>
+            <div class="relative z-40">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-indigo-400">
+                <svg v-if="isSearchingWikidata" class="animate-spin w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              </div>
+              <input
+                id="wikidata-search"
+                v-model="wikidataSearchQuery"
+                @input="handleWikidataInput"
+                type="text"
+                placeholder="Search events (e.g., Wikimania 2024)..."
+                class="w-full py-3.5 pl-11 pr-10 bg-white/80 dark:bg-gray-900/80 border border-indigo-200 dark:border-indigo-700/50 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 backdrop-blur-md placeholder-gray-400 hover:bg-white dark:hover:bg-gray-800"
+              >
+              <button 
+                v-if="wikidataSearchQuery" 
+                @click.prevent="clearWikidataSearch"
+                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+              </button>
+              
+              <!-- Suggestions Dropdown -->
+              <transition
+                enter-active-class="transition duration-200 ease-out"
+                enter-from-class="opacity-0 translate-y-2"
+                enter-to-class="opacity-100 translate-y-0"
+                leave-active-class="transition duration-150 ease-in"
+                leave-from-class="opacity-100 translate-y-0"
+                leave-to-class="opacity-0 translate-y-2"
+              >
+                <ul v-if="wikidataSuggestions.length > 0 && !isSearchingWikidata" class="absolute bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border border-gray-200 dark:border-gray-700 rounded-xl shadow-2xl mt-2 max-h-60 overflow-y-auto w-full z-50 py-1 divide-y divide-gray-100 dark:divide-gray-700">
+                  <li
+                    v-for="suggestion in wikidataSuggestions"
+                    :key="suggestion.id"
+                    @click="selectWikidataEntity(suggestion)"
+                    class="py-3 px-4 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 cursor-pointer transition-colors flex flex-col"
+                  >
+                    <span class="font-bold text-gray-900 dark:text-gray-100">{{ suggestion.label }}</span>
+                    <span v-if="suggestion.description" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">{{ suggestion.description }}</span>
+                  </li>
+                </ul>
+              </transition>
+            </div>
+            <p v-if="wikidataError" class="mt-2 text-sm text-red-500">{{ wikidataError }}</p>
+          </div>
+
           <div class="grid grid-cols-1 md:grid-cols-2 gap-7">
             <!-- Timer Type -->
             <div class="form-group relative">
@@ -318,7 +370,14 @@ export default {
         "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", 
         "Vietnam", "Yemen", "Zambia", "Zimbabwe"
       ],
-      filteredCountries: []
+      filteredCountries: [],
+      
+      // Wikidata Search State
+      wikidataSearchQuery: '',
+      wikidataSuggestions: [],
+      isSearchingWikidata: false,
+      wikidataError: '',
+      searchTimeout: null
     };
   },
   methods: {
@@ -376,6 +435,115 @@ export default {
     },
     goToTimers() {
       this.$router.push('/');
+    },
+    
+    // Wikidata Methods
+    handleWikidataInput() {
+      clearTimeout(this.searchTimeout);
+      this.wikidataError = '';
+      
+      if (!this.wikidataSearchQuery || this.wikidataSearchQuery.trim().length < 2) {
+        this.wikidataSuggestions = [];
+        return;
+      }
+      
+      this.isSearchingWikidata = true;
+      this.searchTimeout = setTimeout(() => {
+        this.fetchWikidataSuggestions();
+      }, 500); // 500ms debounce
+    },
+    
+    async fetchWikidataSuggestions() {
+      try {
+        const query = encodeURIComponent(this.wikidataSearchQuery.trim());
+        const url = `https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${query}&language=en&format=json&origin=*`;
+        
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Network response was not ok');
+        
+        const data = await response.json();
+        if (data && data.search) {
+          this.wikidataSuggestions = data.search;
+        } else {
+          this.wikidataSuggestions = [];
+        }
+      } catch (error) {
+        console.error('Error fetching Wikidata suggestions:', error);
+        this.wikidataError = 'Failed to fetch suggestions from Wikidata.';
+        this.wikidataSuggestions = [];
+      } finally {
+        this.isSearchingWikidata = false;
+      }
+    },
+    
+    async selectWikidataEntity(entity) {
+      this.wikidataSearchQuery = entity.label;
+      this.newTimer.name = entity.label;
+      this.wikidataSuggestions = [];
+      this.isSearchingWikidata = true;
+      this.wikidataError = '';
+      
+      try {
+        const url = `https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${entity.id}&props=claims|sitelinks/urls&format=json&origin=*`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Network response was not ok');
+        
+        const data = await response.json();
+        const details = data.entities[entity.id];
+        
+        // Form filling logic
+        
+        // 1. Determine Type (Event vs Deadline)
+        // Check for 'instance of' (P31) - if it's an event (Q1190554) or conference (Q2020153)
+        // By default we'll assume 'event' for now
+        this.newTimer.type = 'event';
+        
+        // 2. Extract Link
+        // Prefer MetaWiki sitelink, then Wikipedia, then fallback to Wikidata item
+        if (details.sitelinks) {
+          if (details.sitelinks.metawiki && details.sitelinks.metawiki.url) {
+            this.newTimer.link = details.sitelinks.metawiki.url;
+          } else if (details.sitelinks.enwiki && details.sitelinks.enwiki.url) {
+            this.newTimer.link = details.sitelinks.enwiki.url;
+          } else {
+            this.newTimer.link = `https://www.wikidata.org/wiki/${entity.id}`;
+          }
+        } else {
+          this.newTimer.link = `https://www.wikidata.org/wiki/${entity.id}`;
+        }
+        
+        // 3. Extract Time
+        // Check P580 (start time) or P582 (end time) or P585 (point in time)
+        const timeClaim = details.claims.P580 || details.claims.P585 || details.claims.P582;
+        if (timeClaim && timeClaim[0]?.mainsnak?.datavalue?.value?.time) {
+          // Wikidata time format: "+YYYY-MM-DDThh:mm:ssZ"
+          let rawTime = timeClaim[0].mainsnak.datavalue.value.time;
+          // Strip the leading '+' and 'Z' if present, then format for datetime-local
+          rawTime = rawTime.replace(/^\+/, '').replace(/Z$/, '');
+          
+          // Ensure it's in YYYY-MM-DDThh:mm format for the input
+          const dateObj = new Date(rawTime);
+          if (!isNaN(dateObj.getTime())) {
+            // ISO string is usually something like 2024-08-07T00:00:00.000Z
+            this.newTimer.time = dateObj.toISOString().slice(0, 16);
+          }
+        }
+        
+        // Note: Extracting Country (P17) requires another API call to resolve the country Q-node to a string label
+        // We will skip that for simplicity in this script, relying on user manual selection instead.
+
+      } catch (error) {
+        console.error('Error fetching Wikidata details:', error);
+        this.wikidataError = 'Failed to fetch full details from Wikidata.';
+      } finally {
+        this.isSearchingWikidata = false;
+      }
+    },
+    
+    clearWikidataSearch() {
+      this.wikidataSearchQuery = '';
+      this.wikidataSuggestions = [];
+      this.wikidataError = '';
     }
   }
 };

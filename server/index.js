@@ -104,6 +104,14 @@ app.get('/timers', async (req, res) => {
           gt: new Date()
         }
       },
+      include: {
+        creator: {
+          select: {
+            id: true,
+            username: true
+          }
+        }
+      },
       orderBy: {
         time: 'asc'
       }
@@ -133,13 +141,47 @@ app.post('/add-timer', async (req, res) => {
         region,
         country,
         timeZone,
-        logo
+        logo,
+        creatorId: req.user.id
       }
     });
     res.status(201).json({ message: 'Timer added successfully', timerId: timer.id.toString() });
   } catch (err) {
     console.error('Error adding timer:', err);
     res.status(500).json({ message: 'Error adding timer', error: err.message });
+  }
+});
+
+// Delete timer endpoint (protected)
+app.delete('/timers/:id', async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  const timerId = parseInt(req.params.id);
+
+  try {
+    const timer = await prisma.timer.findUnique({
+      where: { id: timerId }
+    });
+
+    if (!timer) {
+      return res.status(404).json({ message: 'Timer not found' });
+    }
+
+    // Check authorization: Must be the creator or an admin
+    if (timer.creatorId !== req.user.id && !req.user.isAdmin) {
+      return res.status(403).json({ message: 'Forbidden: You do not have permission to delete this timer' });
+    }
+
+    await prisma.timer.delete({
+      where: { id: timerId }
+    });
+
+    res.json({ message: 'Timer deleted successfully' });
+  } catch (err) {
+    console.error('Error deleting timer:', err);
+    res.status(500).json({ message: 'Error deleting timer', error: err.message });
   }
 });
 
