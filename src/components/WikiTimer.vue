@@ -234,7 +234,7 @@
         <transition-group name="list">
           <div
             v-for="(event, index) in sortedFilteredEvents"
-            :key="event.name + event.time"
+            :key="event.id || (event.name + event.time)"
             v-if="event && event.link && event.name && event.time"
             class="glass-card !bg-white/80 dark:!bg-gray-900 rounded-2xl p-6 flex flex-col gap-5 cursor-pointer relative overflow-hidden group border-t-4"
             :class="event.type === 'event' ? 'border-t-blue-500' : 'border-t-purple-500'"
@@ -253,7 +253,7 @@
                 <div class="flex justify-between items-start">
                   <h3 class="font-bold text-lg leading-tight truncate text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">{{ event?.name }}</h3>
                   <button 
-                    v-if="user && (user.id === event.creatorId || user.isAdmin)"
+                    v-if="!event.isMeta && user && (user.id === event.creatorId || user.isAdmin)"
                     @click.stop="deleteEvent(event.id)"
                     class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors absolute top-4 right-4 z-20"
                     title="Delete Timer"
@@ -274,6 +274,13 @@
               >
                 <span class="w-1.5 h-1.5 rounded-full mr-1.5 self-center inline-block" :class="event.type === 'event' ? 'bg-blue-500' : 'bg-purple-500'"></span>
                 {{ event.type }}
+              </span>
+              <span
+                v-if="event.isMeta"
+                class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wider shadow-sm border bg-emerald-50/80 border-emerald-200 text-emerald-700 dark:bg-emerald-900/30 dark:border-emerald-800 dark:text-emerald-300"
+                title="Imported from Meta-Wiki (Special:AllEvents)"
+              >
+                Meta
               </span>
               <a v-if="event && event.link" :href="event.link" target="_blank" rel="noopener" class="ml-auto inline-flex items-center text-xs font-medium text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors bg-white/50 dark:bg-gray-800/50 py-1 px-2 rounded-lg border border-gray-200 dark:border-gray-700 backdrop-blur-sm hover:shadow-sm" @click.stop>
                 Link
@@ -331,7 +338,10 @@ const filters = ref({
 });
 const isPinned = ref(false);
 const fallbackLogo = 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Wikimania_2024_wiki_header_registration.png';
-const events = ref([]);
+const userTimers = ref([]);
+const metaEvents = ref([]);
+// Combined, read-only-merged view of user-created timers and imported Meta events.
+const events = computed(() => [...userTimers.value, ...metaEvents.value]);
 
 const uniqueRegions = computed(() => {
   return [...new Set(events.value.map(event => event.region))];
@@ -393,9 +403,19 @@ async function fetchTimers() {
   try {
     const response = await fetch('/timers');
     const data = await response.json();
-    events.value = data;
+    userTimers.value = data;
   } catch (error) {
     console.error('Error fetching timers:', error);
+  }
+}
+
+async function fetchMetaEvents() {
+  try {
+    const response = await fetch('/meta-events');
+    if (!response.ok) return;
+    metaEvents.value = await response.json();
+  } catch (error) {
+    console.error('Error fetching meta events:', error);
   }
 }
 
@@ -496,6 +516,7 @@ onMounted(() => {
   updateTime();
   setInterval(updateTime, 1000);
   fetchTimers();
+  fetchMetaEvents();
   loadPinnedFilters();
 });
 </script>

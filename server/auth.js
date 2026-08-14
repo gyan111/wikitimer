@@ -8,8 +8,11 @@ const WIKI_CLIENT_ID = process.env.WIKI_CLIENT_ID;
 const WIKI_CLIENT_SECRET = process.env.WIKI_CLIENT_SECRET;
 const CALLBACK_URL = process.env.WIKI_CALLBACK_URL || 'http://localhost:3000/auth/mediawiki/callback';
 
-// Debug logging function
+const isProd = process.env.NODE_ENV === 'production';
+
+// Debug logging function (never logs secrets, and is silenced in production).
 const debugLog = (message, data = null) => {
+  if (isProd) return;
   console.log('\n=== DEBUG ===');
   console.log(message);
   if (data) {
@@ -20,10 +23,11 @@ const debugLog = (message, data = null) => {
 
 // Validate environment variables
 function validateEnvVariables() {
-  debugLog('Checking environment variables');
-  debugLog('Client ID', WIKI_CLIENT_ID);
-  debugLog('Client Secret', WIKI_CLIENT_SECRET);
-  debugLog('Callback URL', CALLBACK_URL);
+  debugLog('Checking OAuth environment variables', {
+    clientIdSet: !!WIKI_CLIENT_ID,
+    clientSecretSet: !!WIKI_CLIENT_SECRET,
+    callbackUrl: CALLBACK_URL
+  });
 
   if (!WIKI_CLIENT_ID || !WIKI_CLIENT_SECRET) {
     throw new Error('Missing required environment variables: WIKI_CLIENT_ID and/or WIKI_CLIENT_SECRET');
@@ -78,9 +82,7 @@ export default function(app) {
         id: dbUser.id, // Use database ID
         wikiId: dbUser.wikiId,
         username: dbUser.username,
-        isAdmin: dbUser.isAdmin,
-        accessToken,
-        refreshToken
+        isAdmin: dbUser.isAdmin
       };
 
       return done(null, user);
@@ -92,14 +94,25 @@ export default function(app) {
 
   passport.use(strategy);
 
-  // Serialize user for the session
+  // Store only the database id in the session; OAuth tokens are never persisted.
   passport.serializeUser((user, done) => {
-    done(null, user);
+    done(null, user.id);
   });
 
-  // Deserialize user from the session
-  passport.deserializeUser((user, done) => {
-    done(null, user);
+  // Reload the user from the database on each request.
+  passport.deserializeUser(async (id, done) => {
+    try {
+      const dbUser = await prisma.user.findUnique({ where: { id } });
+      if (!dbUser) return done(null, false);
+      done(null, {
+        id: dbUser.id,
+        wikiId: dbUser.wikiId,
+        username: dbUser.username,
+        isAdmin: dbUser.isAdmin
+      });
+    } catch (error) {
+      done(error);
+    }
   });
 
   // Auth routes

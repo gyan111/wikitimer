@@ -1,6 +1,8 @@
 import { ref } from 'vue';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+// Same-origin by default (frontend and API are served together in production).
+// In development the Vite dev server proxies these paths to the backend.
+const API_URL = import.meta.env.VITE_API_URL || '';
 const user = ref(null);
 const isAuthenticated = ref(false);
 const isLoading = ref(false);

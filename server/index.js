@@ -1,244 +1,244 @@
+import 'dotenv/config';
 import express from 'express';
-import auth from './auth.js';
 import session from 'express-session';
+import MySQLStoreFactory from 'express-mysql-session';
 import passport from 'passport';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import auth from './auth.js';
 import prisma from './db.js';
+import { getMetaEvents } from './meta-events.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const distPath = path.join(__dirname, '..', 'dist');
 
 const app = express();
+const isProd = process.env.NODE_ENV === 'production';
 const port = process.env.PORT || 3000;
 const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
 
-console.log('Starting server with configuration:', {
-  port,
-  clientUrl,
-  nodeEnv: process.env.NODE_ENV
-});
+console.log('Starting server:', { port, clientUrl, nodeEnv: process.env.NODE_ENV });
 
-// Custom CORS middleware
-app.use((req, res, next) => {
-  // Log incoming request
-  console.log('\n=== CORS Request ===');
-  console.log('Method:', req.method);
-  console.log('URL:', req.url);
-  console.log('Origin:', req.headers.origin);
-  console.log('===================\n');
+// Behind the Toolforge nginx proxy, trust the first hop so secure cookies work.
+app.set('trust proxy', 1);
 
-  const allowedOrigins = [
-    'http://localhost:5173',  // Default Vite port
-    'http://localhost:5174',  // Alternative port
-    'http://localhost:5175',  // Current port
-    process.env.CLIENT_URL    // From environment
-  ].filter(Boolean);  // Remove any undefined values
+// In production the frontend is served from the same origin as the API, so no
+// CORS handling is needed. In development the Vite dev server runs on a
+// different port, so allow the configured client origin(s).
+if (!isProd) {
+  app.use((req, res, next) => {
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://localhost:5174',
+      'http://localhost:5175',
+      process.env.CLIENT_URL
+    ].filter(Boolean);
 
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
+    res.setHeader('Access-Control-Max-Age', '3600');
+    if (req.method === 'OPTIONS') return res.status(204).end();
+    next();
+  });
+}
+
+// Session store: persist sessions in MariaDB (ToolsDB) so they survive restarts
+// and work across replicas. Falls back to the in-memory store if no database
+// URL is configured (local development only).
+function buildSessionStore() {
+  if (!process.env.DATABASE_URL) {
+    console.warn('DATABASE_URL not set; using in-memory session store (dev only).');
+    return undefined;
   }
+  const dbUrl = new URL(process.env.DATABASE_URL);
+  const MySQLStore = MySQLStoreFactory(session);
+  return new MySQLStore({
+    host: dbUrl.hostname,
+    port: Number(dbUrl.port) || 3306,
+    user: decodeURIComponent(dbUrl.username),
+    password: decodeURIComponent(dbUrl.password),
+    database: dbUrl.pathname.replace(/^\//, ''),
+    createDatabaseTable: true
+  });
+}
 
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
-  res.setHeader('Access-Control-Max-Age', '3600');
+if (!process.env.SESSION_COOKIE_SECRET) {
+  throw new Error('Missing required environment variable: SESSION_COOKIE_SECRET');
+}
 
-  // Handle preflight
-  if (req.method === 'OPTIONS') {
-    console.log('Handling OPTIONS preflight request');
-    return res.status(204).end();
-  }
-
-  next();
-});
-
-// Add session middleware
 app.use(session({
   secret: process.env.SESSION_COOKIE_SECRET,
+  store: buildSessionStore(),
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === 'production',
+    secure: isProd,
     httpOnly: true,
+    sameSite: 'lax',
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
   }
 }));
 
-// Body parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Debug middleware
-app.use((req, res, next) => {
-  console.log('\n=== Request ===');
-  console.log(`${req.method} ${req.url}`);
-  console.log('Headers:', req.headers);
-  console.log('=============\n');
-
-  // Log response headers after they're sent
-  res.on('finish', () => {
-    console.log('\n=== Response ===');
-    console.log('Status:', res.statusCode);
-    console.log('Headers:', res.getHeaders());
-    console.log('==============\n');
+// Verbose request/response logging is useful in development but leaks headers
+// (and cookies) in production, so keep it dev-only.
+if (!isProd) {
+  app.use((req, res, next) => {
+    console.log(`\n=== ${req.method} ${req.url} ===`);
+    console.log('Headers:', req.headers);
+    res.on('finish', () => console.log('Response:', res.statusCode));
+    next();
   });
-
-  next();
-});
+}
 
 // Initialize auth
-const { isAuthenticated } = auth(app);
+auth(app);
 
-// Test endpoint
+// --- API routes ---
+
 app.get('/test', (req, res) => {
-  res.json({
-    message: 'Server is working',
-    origin: req.headers.origin,
-    allowedOrigin: clientUrl
-  });
+  res.json({ message: 'Server is working', origin: req.headers.origin });
 });
 
-// Timers endpoint
+// Timers created by users.
 app.get('/timers', async (req, res) => {
   try {
     const timers = await prisma.timer.findMany({
-      where: {
-        time: {
-          gt: new Date()
-        }
-      },
-      include: {
-        creator: {
-          select: {
-            id: true,
-            username: true
-          }
-        }
-      },
-      orderBy: {
-        time: 'asc'
-      }
+      where: { time: { gt: new Date() } },
+      include: { creator: { select: { id: true, username: true } } },
+      orderBy: { time: 'asc' }
     });
     res.json(timers);
   } catch (err) {
     console.error('Error fetching timers:', err);
-    res.status(500).json({ message: 'Error fetching timers', error: err.message });
+    res.status(500).json({ message: 'Error fetching timers' });
   }
 });
 
-// Add timer endpoint (protected)
-app.post('/add-timer', async (req, res) => {
-  const { type, name, link, time, region, country, timeZone, logo } = req.body;
+// Read-only global events imported from Meta-Wiki (Special:AllEvents).
+app.get('/meta-events', async (req, res) => {
+  try {
+    const events = await getMetaEvents();
+    res.json(events);
+  } catch (err) {
+    console.error('Error fetching meta events:', err.message);
+    res.status(502).json({ message: 'Error fetching meta events' });
+  }
+});
 
+// Validates and normalizes the body of an add-timer request.
+function validateTimerInput(body) {
+  const errors = [];
+  const str = (v) => (typeof v === 'string' ? v.trim() : '');
+  const data = {
+    type: str(body.type),
+    name: str(body.name),
+    link: str(body.link),
+    time: body.time,
+    region: str(body.region),
+    country: str(body.country),
+    timeZone: str(body.timeZone),
+    logo: body.logo != null ? str(body.logo) : null
+  };
+
+  if (!['event', 'deadline'].includes(data.type)) errors.push('type must be "event" or "deadline"');
+  if (!data.name || data.name.length > 255) errors.push('name is required (max 255 chars)');
+  if (!data.link || data.link.length > 255) errors.push('link is required (max 255 chars)');
+  if (data.region.length > 100) errors.push('region too long (max 100 chars)');
+  if (data.country.length > 100) errors.push('country too long (max 100 chars)');
+  if (data.timeZone.length > 50) errors.push('timeZone too long (max 50 chars)');
+  if (data.logo && data.logo.length > 255) errors.push('logo too long (max 255 chars)');
+
+  const parsedTime = new Date(data.time);
+  if (isNaN(parsedTime.getTime())) errors.push('time is not a valid date');
+  else data.time = parsedTime;
+
+  return { data, errors };
+}
+
+// Add timer endpoint (protected).
+app.post('/add-timer', async (req, res) => {
   if (!req.isAuthenticated()) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
 
+  const { data, errors } = validateTimerInput(req.body);
+  if (errors.length) {
+    return res.status(400).json({ message: 'Invalid timer data', errors });
+  }
+
   try {
     const timer = await prisma.timer.create({
-      data: {
-        type,
-        name,
-        link,
-        time: new Date(time),
-        region,
-        country,
-        timeZone,
-        logo,
-        creatorId: req.user.id
-      }
+      data: { ...data, creatorId: req.user.id }
     });
     res.status(201).json({ message: 'Timer added successfully', timerId: timer.id.toString() });
   } catch (err) {
     console.error('Error adding timer:', err);
-    res.status(500).json({ message: 'Error adding timer', error: err.message });
+    res.status(500).json({ message: 'Error adding timer' });
   }
 });
 
-// Delete timer endpoint (protected)
+// Delete timer endpoint (protected).
 app.delete('/timers/:id', async (req, res) => {
   if (!req.isAuthenticated()) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
 
-  const timerId = parseInt(req.params.id);
+  const timerId = parseInt(req.params.id, 10);
+  if (isNaN(timerId)) {
+    return res.status(400).json({ message: 'Invalid timer id' });
+  }
 
   try {
-    const timer = await prisma.timer.findUnique({
-      where: { id: timerId }
-    });
-
+    const timer = await prisma.timer.findUnique({ where: { id: timerId } });
     if (!timer) {
       return res.status(404).json({ message: 'Timer not found' });
     }
-
-    // Check authorization: Must be the creator or an admin
     if (timer.creatorId !== req.user.id && !req.user.isAdmin) {
       return res.status(403).json({ message: 'Forbidden: You do not have permission to delete this timer' });
     }
-
-    await prisma.timer.delete({
-      where: { id: timerId }
-    });
-
+    await prisma.timer.delete({ where: { id: timerId } });
     res.json({ message: 'Timer deleted successfully' });
   } catch (err) {
     console.error('Error deleting timer:', err);
-    res.status(500).json({ message: 'Error deleting timer', error: err.message });
+    res.status(500).json({ message: 'Error deleting timer' });
   }
 });
 
-// User endpoint
+// Current authenticated user.
 app.get('/api/user', (req, res) => {
-  console.log('Auth check:', {
-    session: req.session,
-    user: req.user,
-    isAuthenticated: req.isAuthenticated()
-  });
-
   if (!req.isAuthenticated()) {
-    return res.status(401).json({
-      error: 'Not authenticated',
-      message: 'Please log in to access this resource'
-    });
+    return res.status(401).json({ error: 'Not authenticated' });
   }
   res.json(req.user);
 });
 
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.json({
-    status: 'ok',
-    cors: {
-      enabled: true,
-      allowedOrigin: clientUrl,
-      credentials: true
-    },
-    env: {
-      nodeEnv: process.env.NODE_ENV,
-      port: port
-    },
-    request: {
-      origin: req.headers.origin,
-      headers: req.headers
-    },
-    response: {
-      headers: res.getHeaders()
-    }
-  });
+// Health check endpoints (Toolforge uses one via service.template).
+const healthHandler = (req, res) => res.json({ status: 'ok' });
+app.get('/health', healthHandler);
+app.get('/healthz', healthHandler);
+
+// --- Static frontend + SPA fallback ---
+// Serve the built Vue app and fall back to index.html for client-side routes
+// (e.g. /add) so deep links work with history mode.
+app.use(express.static(distPath));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(distPath, 'index.html'));
 });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error('\n=== Error ===');
-  console.error(err);
-  console.error('============\n');
-
-  res.status(500).json({
-    error: 'Internal server error',
-    message: err.message
-  });
+  console.error('Unhandled error:', err);
+  res.status(500).json({ error: 'Internal server error' });
 });
 
-// Start server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
-  console.log(`CORS enabled for origin: ${clientUrl}`);
 });
