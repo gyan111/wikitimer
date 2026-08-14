@@ -276,6 +276,13 @@
                 {{ event.type }}
               </span>
               <span
+                v-if="isOngoing(event)"
+                class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wider shadow-sm border bg-amber-50/80 border-amber-200 text-amber-700 dark:bg-amber-900/30 dark:border-amber-800 dark:text-amber-300 animate-pulse"
+                title="Event is currently happening"
+              >
+                Ongoing
+              </span>
+              <span
                 v-if="event.isMeta"
                 class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wider shadow-sm border bg-emerald-50/80 border-emerald-200 text-emerald-700 dark:bg-emerald-900/30 dark:border-emerald-800 dark:text-emerald-300"
                 title="Imported from Meta-Wiki (Special:AllEvents)"
@@ -290,14 +297,16 @@
             
             <div class="mt-2 pt-4 border-t border-gray-100 dark:border-gray-700/50 relative z-10">
               <div class="flex items-center justify-between mb-2">
-                <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Countdown</span>
+                <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                  {{ isOngoing(event) ? 'Ends in' : (isPast(event) ? 'Status' : 'Starts in') }}
+                </span>
                 <span class="text-xs px-2 py-0.5 bg-gray-100 dark:bg-gray-800 rounded text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">{{ event?.timeZone }}</span>
               </div>
               <div class="flex items-end gap-2">
-                <span class="text-2xl font-bold tabular-nums tracking-tight text-gradient">{{ event?.time ? formatDate(event.time) : '' }}</span>
+                <span class="text-lg font-bold tabular-nums tracking-tight text-gradient">{{ formatEventDates(event) }}</span>
               </div>
-              <div class="mt-1 font-mono text-sm tracking-wider tabular-nums font-bold opacity-80" :class="event.type === 'event' ? 'text-blue-600 dark:text-blue-400' : 'text-purple-600 dark:text-purple-400'">
-                {{ event?.time ? formatTime(event.time).months + 'M ' + formatTime(event.time).hours + 'h ' + formatTime(event.time).minutes + 'm ' + formatTime(event.time).seconds + 's' : '' }}
+              <div class="mt-1 font-mono text-sm tracking-wider tabular-nums font-bold opacity-80" :class="isOngoing(event) ? 'text-amber-600 dark:text-amber-400' : (event.type === 'event' ? 'text-blue-600 dark:text-blue-400' : 'text-purple-600 dark:text-purple-400')">
+                {{ formatCountdown(event) }}
               </div>
             </div>
           </div>
@@ -344,27 +353,48 @@ const metaEvents = ref([]);
 const events = computed(() => [...userTimers.value, ...metaEvents.value]);
 
 const uniqueRegions = computed(() => {
-  return [...new Set(events.value.map(event => event.region))];
+  return [...new Set(events.value.map(event => event.region).filter(Boolean))];
 });
 
 const uniqueCountries = computed(() => {
-  return [...new Set(events.value.map(event => event.country))];
+  return [...new Set(events.value.map(event => event.country).filter(Boolean))];
 });
 
+function isOngoing(event) {
+  if (!event || !event.time) return false;
+  const now = new Date();
+  const startTime = new Date(event.time);
+  const endTime = event.endTime ? new Date(event.endTime) : null;
+  return startTime <= now && endTime !== null && endTime >= now;
+}
+
+function isPast(event) {
+  if (!event || !event.time) return false;
+  const now = new Date();
+  const endTime = event.endTime ? new Date(event.endTime) : new Date(event.time);
+  return endTime < now;
+}
+
+function isUpcoming(event) {
+  if (!event || !event.time) return false;
+  const now = new Date();
+  const startTime = new Date(event.time);
+  return startTime > now;
+}
+
 const filteredEvents = computed(() => {
-  // Only include valid event objects with required fields
   const query = filters.value.searchQuery.toLowerCase();
   const now = new Date();
   
   return events.value.filter(event => {
     if (!event || typeof event !== 'object' || !event.link || !event.name || !event.time) return false;
     
-    const eventTime = new Date(event.time);
     let timeStatusMatch = true;
     if (filters.value.timeStatus === 'upcoming') {
-      timeStatusMatch = eventTime > now;
+      // Show events starting in the future OR currently ongoing
+      timeStatusMatch = isUpcoming(event) || isOngoing(event);
     } else if (filters.value.timeStatus === 'past') {
-      timeStatusMatch = eventTime <= now;
+      timeStatusMatch = isPast(event);
     }
     
     return (
@@ -423,16 +453,30 @@ function showNoTimersAlert() {
   alert('No active event or deadline timers added.');
 }
 
-function formatDate(time) {
-  const eventTime = new Date(time);
+function formatEventDates(event) {
+  if (!event || !event.time) return '';
   const options = { year: 'numeric', month: 'short', day: 'numeric' };
-  return eventTime.toLocaleDateString('en-US', options);
+  const start = new Date(event.time).toLocaleDateString('en-US', options);
+  if (event.endTime) {
+    const end = new Date(event.endTime).toLocaleDateString('en-US', options);
+    return start === end ? start : `${start} – ${end}`;
+  }
+  return start;
 }
 
-function formatTime(time) {
-  const eventTime = new Date(time);
+function formatCountdown(event) {
+  if (!event || !event.time) return '';
   const now = new Date();
-  let diff = eventTime - now;
+  let target = new Date(event.time);
+  
+  if (isOngoing(event)) {
+    target = new Date(event.endTime);
+  } else if (isPast(event)) {
+    return 'Event Ended';
+  }
+
+  let diff = target - now;
+  if (diff <= 0) return '00M 00h 00m 00s';
 
   const months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30));
   diff -= months * (1000 * 60 * 60 * 24 * 30);
@@ -444,12 +488,13 @@ function formatTime(time) {
   diff -= minutes * (1000 * 60);
   const seconds = Math.floor((diff / 1000) % 60);
 
-  return {
-    months: months < 10 ? `0${months}` : months,
-    hours: hours < 10 ? `0${hours}` : hours,
-    minutes: minutes < 10 ? `0${minutes}` : minutes,
-    seconds: seconds < 10 ? `0${seconds}` : seconds,
-  };
+  const mStr = months < 10 ? `0${months}` : months;
+  const dStr = days < 10 ? `0${days}` : days;
+  const hStr = hours < 10 ? `0${hours}` : hours;
+  const minStr = minutes < 10 ? `0${minutes}` : minutes;
+  const sStr = seconds < 10 ? `0${seconds}` : seconds;
+
+  return `${mStr}M ${dStr}d ${hStr}h ${minStr}m ${sStr}s`;
 }
 
 function applyFilters() {
