@@ -31,21 +31,31 @@ jobs:
         run: npm run build
 
   deploy:
-    name: Deploy to Toolforge
+    name: Deploy to Toolforge API
     runs-on: ubuntu-latest
     needs: test
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
     steps:
-      - name: Trigger Build & Restart on Toolforge
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: login.toolforge.org
-          username: ${{ secrets.TOOLFORGE_SSH_USER }}
-          key: ${{ secrets.TOOLFORGE_SSH_KEY }}
-          script: |
-            echo "Starting build on Toolforge..."
-            become wikitimer toolforge build start https://github.com/gyan111/wikitimer --wait
-            echo "Restarting webservice..."
-            become wikitimer toolforge webservice buildservice restart
-            echo "WikiTimer deployment complete!"
+      - name: Trigger Toolforge Deployment API
+        run: |
+          if [ -z "${{ secrets.TOOLFORGE_DEPLOY_TOKEN }}" ]; then
+            echo "TOOLFORGE_DEPLOY_TOKEN secret not configured yet. Skipping auto-deploy."
+            exit 0
+          fi
+
+          echo "Triggering Toolforge Components Deployment..."
+          RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X POST "https://api.svc.toolforge.org/components/v1/tool/wikitimer/deployment?token=${{ secrets.TOOLFORGE_DEPLOY_TOKEN }}&force-run=true&force-build=true")
+          
+          BODY=$(echo "$RESPONSE" | sed -e '$d')
+          STATUS=$(echo "$RESPONSE" | tail -n1 | cut -d: -f2)
+
+          echo "Response Status: $STATUS"
+          echo "Response Body: $BODY"
+
+          if [ "$STATUS" -ge 200 ] && [ "$STATUS" -lt 300 ]; then
+            echo "✅ Toolforge deployment triggered successfully!"
+          else
+            echo "⚠️ Deployment API returned status $STATUS: $BODY"
+            exit 1
+          fi
