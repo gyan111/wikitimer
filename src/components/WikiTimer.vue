@@ -273,12 +273,13 @@
             @click="viewEvent(event)"
           >
             <!-- Background Glow Effect on Hover -->
-            <div class="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-500"
-                 :class="event.type === 'event' ? 'from-blue-400 to-indigo-600' : 'from-purple-400 to-pink-600'"></div>
+            <div class="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                 :class="event.type === 'event' ? 'from-blue-500/10 via-indigo-500/5 to-transparent' : 'from-rose-500/15 via-pink-500/5 to-transparent'"></div>
             
             <div>
               <div class="flex items-start gap-3 relative z-10">
-                <div class="flex-shrink-0 w-12 h-12 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-2 shadow-sm overflow-hidden flex items-center justify-center">
+                <div class="flex-shrink-0 w-12 h-12 rounded-xl border p-2 shadow-sm overflow-hidden flex items-center justify-center"
+                     :class="event.type === 'event' ? 'border-blue-100 dark:border-blue-900/40 bg-blue-50/50 dark:bg-gray-800' : 'border-rose-100 dark:border-rose-900/40 bg-rose-50/50 dark:bg-gray-800'">
                   <img :src="getEventLogo(event)" :alt="event.name" class="w-full h-full object-contain" @error="$event.target.src=fallbackLogo" />
                 </div>
                 <div class="flex-1 min-w-0">
@@ -315,10 +316,10 @@
               
               <div class="flex flex-wrap gap-2 items-center relative z-10 mt-4">
                 <span 
-                  class="inline-flex px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wider shadow-sm border"
-                  :class="event.type === 'event' ? 'bg-blue-50/80 border-blue-200 text-blue-700 dark:bg-blue-900/30 dark:border-blue-800 dark:text-blue-300' : 'bg-purple-50/80 border-purple-200 text-purple-700 dark:bg-purple-900/30 dark:border-purple-800 dark:text-purple-300'"
+                  class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider shadow-sm border"
+                  :class="event.type === 'event' ? 'bg-blue-50/90 border-blue-200 text-blue-700 dark:bg-blue-900/30 dark:border-blue-800 dark:text-blue-300' : 'bg-rose-50/90 border-rose-200 text-rose-700 dark:bg-rose-900/30 dark:border-rose-800 dark:text-rose-300'"
                 >
-                  <span class="w-1.5 h-1.5 rounded-full mr-1.5 self-center inline-block" :class="event.type === 'event' ? 'bg-blue-500' : 'bg-purple-500'"></span>
+                  <span class="w-1.5 h-1.5 rounded-full mr-1.5 self-center inline-block" :class="event.type === 'event' ? 'bg-blue-500' : 'bg-rose-500'"></span>
                   {{ event.type }}
                 </span>
                 <span
@@ -344,15 +345,18 @@
             
             <div class="pt-4 border-t border-gray-100 dark:border-gray-700/50 relative z-10">
               <div class="flex items-center justify-between mb-1.5">
-                <span class="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                  {{ isOngoing(event) ? 'Ends in' : (isPast(event) ? 'Status' : 'Starts in') }}
+                <span class="text-xs font-semibold uppercase tracking-wide" :class="event.type === 'deadline' ? 'text-rose-600 dark:text-rose-400 font-bold' : 'text-gray-600 dark:text-gray-400'">
+                  {{ isOngoing(event) ? 'Ends in' : (isPast(event) ? 'Status' : (event.type === 'deadline' ? '⏰ Deadline in' : 'Starts in')) }}
                 </span>
-                <span class="text-xs px-2 py-0.5 bg-gray-100 dark:bg-gray-800 rounded text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">{{ event?.timeZone }}</span>
+                <span class="text-xs px-2 py-0.5 rounded border"
+                      :class="event.type === 'deadline' ? 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800/50' : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700'">
+                  {{ event?.timeZone }}
+                </span>
               </div>
               <div class="flex items-end gap-2">
                 <span class="text-sm font-bold text-gray-800 dark:text-gray-200 truncate">{{ formatEventDates(event) }}</span>
               </div>
-              <div class="mt-1 font-mono text-sm tracking-wider tabular-nums font-bold" :class="isOngoing(event) ? 'text-amber-600 dark:text-amber-400' : (event.type === 'event' ? 'text-blue-600 dark:text-blue-400' : 'text-purple-600 dark:text-purple-400')">
+              <div class="mt-1 font-mono text-sm tracking-wider tabular-nums font-bold" :class="isOngoing(event) ? 'text-amber-600 dark:text-amber-400' : (event.type === 'event' ? 'text-blue-600 dark:text-blue-400' : 'text-rose-600 dark:text-rose-400')">
                 {{ formatCountdown(event) }}
               </div>
             </div>
@@ -1040,6 +1044,45 @@ function formatCountdown(event) {
   const sStr = parts.seconds < 10 ? `0${parts.seconds}` : parts.seconds;
 
   return `${dStr}d ${hStr}h ${minStr}m ${sStr}s`;
+}
+
+function getGoogleCalendarUrl(event) {
+  if (!event || !event.time) return '#';
+  try {
+    const start = new Date(event.time).toISOString().replace(/-|:|\.\d\d\d/g, '');
+    const end = new Date(event.endTime || event.time).toISOString().replace(/-|:|\.\d\d\d/g, '');
+    const title = encodeURIComponent(event.name || 'Wikimedia Event');
+    const targetParam = event.slug || encodeURIComponent(event.id);
+    const details = encodeURIComponent(`Wiki Timer: ${window.location.origin}/timer/${targetParam}\n\nEvent Link: ${event.link || ''}`);
+    const location = encodeURIComponent(event.participation || event.country || event.region || 'Online');
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}`;
+  } catch (e) {
+    return '#';
+  }
+}
+
+async function copyShareLink(event) {
+  if (!event) return;
+  const targetParam = event.slug || encodeURIComponent(event.id);
+  const url = `${window.location.origin}/timer/${targetParam}`;
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(url);
+    } else {
+      const textarea = document.createElement('textarea');
+      textarea.value = url;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+    }
+    isCopied.value = true;
+    setTimeout(() => {
+      isCopied.value = false;
+    }, 2500);
+  } catch (err) {
+    console.error('Failed to copy link', err);
+  }
 }
 
 function viewEvent(event) {
