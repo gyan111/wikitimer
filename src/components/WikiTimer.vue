@@ -349,7 +349,10 @@ const fallbackLogo = 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Wikima
 const userTimers = ref([]);
 const metaEvents = ref([]);
 // Combined, read-only-merged view of user-created timers and imported Meta events.
-const events = computed(() => [...userTimers.value, ...metaEvents.value]);
+const events = computed(() => [
+  ...(Array.isArray(userTimers.value) ? userTimers.value : []),
+  ...(Array.isArray(metaEvents.value) ? metaEvents.value : [])
+]);
 
 const uniqueRegions = computed(() => {
   return [...new Set(events.value.map(event => event.region).filter(Boolean))];
@@ -431,20 +434,30 @@ const formattedCurrentTime = computed(() => {
 async function fetchTimers() {
   try {
     const response = await fetch('/timers');
+    if (!response.ok) {
+      userTimers.value = [];
+      return;
+    }
     const data = await response.json();
-    userTimers.value = data;
+    userTimers.value = Array.isArray(data) ? data : [];
   } catch (error) {
     console.error('Error fetching timers:', error);
+    userTimers.value = [];
   }
 }
 
 async function fetchMetaEvents() {
   try {
     const response = await fetch('/meta-events');
-    if (!response.ok) return;
-    metaEvents.value = await response.json();
+    if (!response.ok) {
+      metaEvents.value = [];
+      return;
+    }
+    const data = await response.json();
+    metaEvents.value = Array.isArray(data) ? data : [];
   } catch (error) {
     console.error('Error fetching meta events:', error);
+    metaEvents.value = [];
   }
 }
 
