@@ -36,12 +36,12 @@
     "@types/node": "^20.0.0",
     "@types/passport": "^1.0.17",
     "@types/passport-oauth2": "^1.4.17",
-    "@vitejs/plugin-vue": "^5.0.5",
+    "@vitejs/plugin-vue": "^6.0.8",
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.39",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.6.3",
-    "vite": "^8.2.1",
+    "vite": "^6.4.3",
     "vitest": "^4.1.10"
   }
 }
