@@ -62,161 +62,109 @@
       </button>
     </div>
 
-    <!-- Filters Bar - Glassmorphic -->
-    <div class="mb-10 w-full glass-panel !bg-white/60 dark:!bg-gray-900/60 rounded-2xl p-4 sm:p-6 transition-all duration-300 relative z-20">
-      <!-- Mobile Filters -->
-      <div class="flex flex-col gap-4 md:hidden">
-        <div class="grid grid-cols-1 gap-4">
+    <!-- Filters Bar - Glassmorphic & Responsive -->
+    <div class="mb-8 w-full glass-panel !bg-white/70 dark:!bg-gray-900/70 rounded-2xl p-4 sm:p-5 transition-all duration-300 relative z-20 shadow-lg border border-white/40 dark:border-gray-800">
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 items-center">
+        <!-- Region Filter -->
+        <div class="relative">
           <select 
             id="region" 
             v-model="filters.region" 
             @change="applyFilters" 
-            class="w-full py-2.5 px-4 rounded-xl border-0 bg-white/50 dark:bg-gray-800/80 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-500 appearance-none backdrop-blur-md"
+            class="w-full py-2.5 pl-3 pr-8 rounded-xl border border-gray-200/70 dark:border-gray-700/70 bg-white/80 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700/90 transition-all cursor-pointer truncate"
           >
             <option value="">All Regions</option>
             <option v-for="region in uniqueRegions" :key="region" :value="region">{{ region }}</option>
           </select>
+          <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-gray-400">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </div>
+        </div>
+
+        <!-- Location / Country Filter -->
+        <div class="relative">
           <select 
             id="country" 
             v-model="filters.country" 
             @change="applyFilters" 
-            class="w-full py-2.5 px-4 rounded-xl border-0 bg-white/50 dark:bg-gray-800/80 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-500 appearance-none backdrop-blur-md"
+            class="w-full py-2.5 pl-3 pr-8 rounded-xl border border-gray-200/70 dark:border-gray-700/70 bg-white/80 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700/90 transition-all cursor-pointer truncate"
           >
-            <option value="">All Countries</option>
+            <option value="">All Locations</option>
             <option v-for="country in uniqueCountries" :key="country" :value="country">{{ country }}</option>
           </select>
+          <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-gray-400">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </div>
         </div>
-        <div class="grid grid-cols-2 gap-4">
+        
+        <!-- Type Filter -->
+        <div class="relative">
           <select 
             id="type" 
             v-model="filters.type" 
             @change="applyFilters" 
-            class="w-full py-2.5 px-4 rounded-xl border-0 bg-white/50 dark:bg-gray-800/80 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-500 appearance-none backdrop-blur-md"
+            class="w-full py-2.5 pl-3 pr-8 rounded-xl border border-gray-200/70 dark:border-gray-700/70 bg-white/80 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700/90 transition-all cursor-pointer truncate"
           >
             <option value="">All Types</option>
             <option value="event">Event</option>
             <option value="deadline">Deadline</option>
           </select>
+          <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-gray-400">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </div>
+        </div>
+        
+        <!-- Time Status Filter -->
+        <div class="relative">
           <select 
             id="timeStatus" 
             v-model="filters.timeStatus" 
             @change="applyFilters" 
-            class="w-full py-2.5 px-4 rounded-xl border-0 bg-white/50 dark:bg-gray-800/80 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-500 appearance-none backdrop-blur-md"
+            class="w-full py-2.5 pl-3 pr-8 rounded-xl border border-gray-200/70 dark:border-gray-700/70 bg-white/80 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700/90 transition-all cursor-pointer truncate"
           >
-            <option value="upcoming">Upcoming Events</option>
+            <option value="upcoming">Upcoming</option>
             <option value="past">Past Events</option>
             <option value="all">All Events</option>
           </select>
+          <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-gray-400">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </div>
+        </div>
+        
+        <!-- Sort Filter -->
+        <div class="relative">
           <select 
             id="sort" 
             v-model="filters.sort" 
             @change="applyFilters" 
-            class="w-full py-2.5 px-4 rounded-xl border-0 bg-white/50 dark:bg-gray-800/80 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-500 appearance-none backdrop-blur-md"
+            class="w-full py-2.5 pl-3 pr-8 rounded-xl border border-gray-200/70 dark:border-gray-700/70 bg-white/80 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700/90 transition-all cursor-pointer truncate"
           >
-            <option value="desc">Recent First</option>
-            <option value="asc">Oldest First</option>
+            <option value="asc">Soonest First</option>
+            <option value="desc">Latest First</option>
           </select>
+          <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-gray-400">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </div>
         </div>
-        <div class="flex justify-center gap-4 mt-2">
+        
+        <!-- Actions: Pin & Reset -->
+        <div class="flex items-center gap-2 justify-end col-span-2 sm:col-span-1">
           <button 
             @click="pinFilters" 
-            :class="isPinned ? 'bg-green-500 text-white shadow-green-500/30' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200'" 
-            class="flex-1 py-2.5 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400 font-medium transition-all duration-300 flex items-center justify-center gap-2"
-          >
-            <svg v-if="isPinned" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path></svg>
-            {{ isPinned ? 'Pinned' : 'Pin View' }}
-          </button>
-          <button 
-            @click="resetFilters" 
-            class="flex-1 py-2.5 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/30 hover:bg-red-100 dark:hover:bg-red-900/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 font-medium transition-all duration-300"
-          >
-            Reset
-          </button>
-        </div>
-      </div>
-
-      <!-- Desktop Filters -->
-      <div class="hidden md:flex items-center gap-4 relative">
-        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
-        </div>
-        <select 
-          id="region" 
-          v-model="filters.region" 
-          @change="applyFilters" 
-          class="flex-1 py-2.5 pl-10 pr-8 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 container-query cursor-pointer"
-        >
-          <option value="">All Topics / Regions</option>
-          <option v-for="region in uniqueRegions" :key="region" :value="region">{{ region }}</option>
-        </select>
-
-        <select 
-          id="wiki" 
-          v-model="filters.wiki" 
-          @change="applyFilters" 
-          class="flex-1 py-2.5 px-4 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer"
-        >
-          <option value="">All Wiki Projects</option>
-          <option v-for="wiki in uniqueWikis" :key="wiki" :value="wiki">{{ wiki }}</option>
-        </select>
-        
-        <select 
-          id="country" 
-          v-model="filters.country" 
-          @change="applyFilters" 
-          class="flex-1 py-2.5 px-4 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer"
-        >
-          <option value="">All Locations</option>
-          <option v-for="country in uniqueCountries" :key="country" :value="country">{{ country }}</option>
-        </select>
-        
-        <select 
-          id="type" 
-          v-model="filters.type" 
-          @change="applyFilters" 
-          class="flex-1 py-2.5 px-4 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer"
-        >
-          <option value="">All Types</option>
-          <option value="event">Event</option>
-          <option value="deadline">Deadline</option>
-        </select>
-        
-        <select 
-          id="timeStatus" 
-          v-model="filters.timeStatus" 
-          @change="applyFilters" 
-          class="flex-1 py-2.5 px-4 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer"
-        >
-          <option value="upcoming">Upcoming Events</option>
-          <option value="past">Past Events</option>
-          <option value="all">All Events</option>
-        </select>
-        
-        <select 
-          id="sort" 
-          v-model="filters.sort" 
-          @change="applyFilters" 
-          class="flex-1 py-2.5 px-4 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer"
-        >
-          <option value="asc">Upcoming Soonest</option>
-          <option value="desc">Latest First</option>
-        </select>
-        
-        <div class="flex items-center gap-2 border-l border-gray-200 dark:border-gray-700 pl-4">
-          <button 
-            @click="pinFilters" 
-            :class="isPinned ? 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20' : 'text-gray-500 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800'" 
-            class="p-2.5 rounded-xl transition-all duration-300"
+            :class="isPinned ? 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800' : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 border-gray-200 dark:border-gray-700'" 
+            class="flex-1 sm:flex-initial p-2.5 rounded-xl border transition-all flex items-center justify-center gap-1 text-xs font-semibold"
             :title="isPinned ? 'Filters Pinned' : 'Pin Filters'"
           >
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path></svg>
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path></svg>
+            <span class="sm:hidden">{{ isPinned ? 'Pinned' : 'Pin' }}</span>
           </button>
           <button 
             @click="resetFilters" 
-            class="p-2.5 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all duration-300"
+            class="flex-1 sm:flex-initial p-2.5 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl border border-red-200 dark:border-red-800/30 transition-all flex items-center justify-center gap-1 text-xs font-semibold"
             title="Reset Filters"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+            <span class="sm:hidden">Reset</span>
           </button>
         </div>
       </div>

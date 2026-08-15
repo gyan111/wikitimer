@@ -86,6 +86,20 @@ function slugify(name, href = '') {
   return `${base}-${hex}`;
 }
 
+// Normalizes CampaignEvents topic into standardized main regions
+function normalizeRegion(rawTopic) {
+  if (!rawTopic) return 'Global';
+  const t = rawTopic.toLowerCase();
+  if (t.includes('africa')) return 'Africa';
+  if (t.includes('asia') || t.includes('indonesia') || t.includes('india') || t.includes('malayalam') || t.includes('japan') || t.includes('china')) return 'Asia';
+  if (t.includes('europe') || t.includes('cee') || t.includes('france') || t.includes('germany') || t.includes('italy')) return 'Europe';
+  if (t.includes('latin') || t.includes('caribbean') || t.includes('south america') || t.includes('central america') || t.includes('brazil')) return 'Latin America';
+  if (t.includes('north america') || t.includes('united states') || t.includes('canada') || t.includes('usa')) return 'North America';
+  if (t.includes('oceania') || t.includes('pacific') || t.includes('australia') || t.includes('new zealand')) return 'Oceania';
+  if (t.includes('middle east') || t.includes('mena') || t.includes('arab')) return 'MENA';
+  return 'Global';
+}
+
 function parseRow(rowHtml) {
   // Match the event title link by its stable CSS class rather than the
   // namespace in the URL. Non-English wikis use localized namespaces
@@ -114,7 +128,7 @@ function parseRow(rowHtml) {
 
   // The wiki host that owns the event page (e.g. meta.wikimedia.org, fr.wikipedia.org).
   const wiki = href.replace(/^\/\//, '').split('/')[0];
-  const region = topics || 'Global';
+  const region = normalizeRegion(topics || widgets['Region']);
 
   return {
     id: 'meta:' + href.replace(/^\/\//, ''),
