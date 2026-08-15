@@ -45,7 +45,9 @@ jobs:
           key: ${{ secrets.TOOLFORGE_SSH_KEY }}
           script: |
             echo "Starting build on Toolforge..."
-            become wikitimer toolforge build start https://github.com/gyan111/wikitimer --wait
+            become wikitimer toolforge build start https://github.com/gyan111/wikitimer
+            echo "Streaming build logs until complete..."
+            become wikitimer toolforge build logs --follow
             echo "Restarting webservice..."
             become wikitimer toolforge webservice buildservice restart
             echo "WikiTimer deployment complete!"
