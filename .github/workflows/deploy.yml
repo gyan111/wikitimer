@@ -31,22 +31,21 @@ jobs:
         run: npm run build
 
   deploy:
-    name: Deploy to Toolforge API
+    name: Deploy to Toolforge
     runs-on: ubuntu-latest
     needs: test
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
     steps:
-      - name: Trigger Toolforge Deployment API
-        run: |
-          if [ -z "${{ secrets.TOOLFORGE_DEPLOY_TOKEN }}" ]; then
-            echo "TOOLFORGE_DEPLOY_TOKEN secret not configured yet. Skipping auto-deploy."
-            exit 0
-          fi
-
-          echo "Triggering Toolforge Build & Deployment API..."
-          curl -s -f -X POST \
-            -H "Authorization: Bearer ${{ secrets.TOOLFORGE_DEPLOY_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            https://api.svc.toolforge.org/v1/tool/wikitimer/deployments || echo "Deployment triggered"
-          echo "Deployment request sent to Toolforge!"
+      - name: Trigger Build & Restart on Toolforge
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: login.toolforge.org
+          username: ${{ secrets.TOOLFORGE_SSH_USER }}
+          key: ${{ secrets.TOOLFORGE_SSH_KEY }}
+          script: |
+            echo "Starting build on Toolforge..."
+            become wikitimer toolforge build start https://github.com/gyan111/wikitimer --wait
+            echo "Restarting webservice..."
+            become wikitimer toolforge webservice buildservice restart
+            echo "WikiTimer deployment complete!"
