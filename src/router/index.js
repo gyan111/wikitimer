@@ -9,6 +9,12 @@ const routes = [
     component: WikiTimer
   },
   {
+    path: '/timer/:id(.*)',
+    name: 'TimerDetail',
+    component: WikiTimer,
+    props: true
+  },
+  {
     path: '/add',
     name: 'AddTimer',
     component: AddTimer

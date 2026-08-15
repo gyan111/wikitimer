@@ -148,7 +148,7 @@ describe('parseRow', () => {
     expect(event.name).toBe('Test Event');
     expect(event.link).toBe('https://meta.wikimedia.org/wiki/Event:Test_Event');
     expect(event.time).toBe('2026-07-11T00:00:00.000Z');
-    expect(event.endTime).toBe('2026-07-15T00:00:00.000Z');
+    expect(event.endTime).toBe('2026-07-15T23:59:59.999Z');
     expect(event.country).toBe('Nigeria');
     expect(event.wiki).toBe('meta.wikimedia.org');
     expect(event.isMeta).toBe(true);
@@ -212,7 +212,7 @@ describe('parseRow', () => {
   it('handles event with no end date', () => {
     const event = parseRow(makeRow({ endDate: '' }));
     expect(event).not.toBeNull();
-    expect(event.endTime).toBeNull();
+    expect(event.endTime).toBe('2026-07-11T23:59:59.999Z');
   });
 
   it('infers Online country from participation widget', () => {
@@ -258,7 +258,7 @@ describe('parseRow', () => {
       endDate: '31 August 2026',
     }));
     expect(event.time).toBe('2026-08-01T00:00:00.000Z');
-    expect(event.endTime).toBe('2026-08-31T00:00:00.000Z');
+    expect(event.endTime).toBe('2026-08-31T23:59:59.999Z');
   });
 });
 

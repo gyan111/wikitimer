@@ -42,13 +42,17 @@ function decodeEntities(str) {
     .trim();
 }
 
-// Parses a "11 July 2026" style date into a UTC ISO string (start of day).
-function parseDate(text) {
+// Parses a "11 July 2026" style date into a UTC ISO string.
+// If isEndOfDay is true, sets the time to 23:59:59.999 UTC so the event remains active throughout the final day.
+function parseDate(text, isEndOfDay = false) {
   const m = text.match(/(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/);
   if (!m) return null;
   const month = MONTHS[m[2].toLowerCase()];
   if (month === undefined) return null;
-  return new Date(Date.UTC(Number(m[3]), month, Number(m[1]))).toISOString();
+  if (isEndOfDay) {
+    return new Date(Date.UTC(Number(m[3]), month, Number(m[1]), 23, 59, 59, 999)).toISOString();
+  }
+  return new Date(Date.UTC(Number(m[3]), month, Number(m[1]), 0, 0, 0, 0)).toISOString();
 }
 
 // Builds a label -> content map from the "text with icon" widgets in a row.
@@ -77,12 +81,15 @@ function parseRow(rowHtml) {
   const dateMatch = rowHtml.match(/<strong>([\s\S]*?)<\/strong>/);
   const dateText = dateMatch ? decodeEntities(dateMatch[1]) : '';
   const [startText, endText] = dateText.split(/\s+[\u2013\u2014-]\s+/);
-  const time = parseDate(startText || '');
+  const time = parseDate(startText || '', false);
   if (!time) return null;
 
   const widgets = parseWidgets(rowHtml);
   const participation = widgets['Participation options'] || '';
   const country = widgets['Country'] || (participation.toLowerCase().includes('online') ? 'Online' : '');
+  const eventTypes = widgets['Event types'] || '';
+  const topics = widgets['Topics'] || '';
+  const organizers = widgets['Organizers'] || '';
 
   // The wiki host that owns the event page (e.g. meta.wikimedia.org, fr.wikipedia.org).
   const wiki = href.replace(/^\/\//, '').split('/')[0];
@@ -95,9 +102,13 @@ function parseRow(rowHtml) {
     name,
     link,
     time,
-    endTime: endText ? parseDate(endText) : null,
+    endTime: endText ? parseDate(endText, true) : parseDate(startText, true),
     region: 'Global',
     country,
+    participation,
+    eventTypes,
+    topics,
+    organizers,
     timeZone: 'UTC',
     logo: null,
     wiki
