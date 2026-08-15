@@ -235,7 +235,6 @@
           <div
             v-for="(event, index) in sortedFilteredEvents"
             :key="event.id || (event.name + event.time)"
-            v-if="event && event.link && event.name && event.time"
             class="glass-card !bg-white/80 dark:!bg-gray-900 rounded-2xl p-6 flex flex-col gap-5 cursor-pointer relative overflow-hidden group border-t-4"
             :class="event.type === 'event' ? 'border-t-blue-500' : 'border-t-purple-500'"
             @click="viewEvent(event)"
