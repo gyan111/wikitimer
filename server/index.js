@@ -27,16 +27,15 @@ app.set('trust proxy', 1);
 // different port, so allow the configured client origin(s).
 if (!isProd) {
   app.use((req, res, next) => {
-    const allowedOrigins = [
-      'http://localhost:5173',
-      'http://localhost:5174',
-      'http://localhost:5175',
-      process.env.CLIENT_URL
-    ].filter(Boolean);
-
     const origin = req.headers.origin;
-    if (allowedOrigins.includes(origin)) {
-      res.setHeader('Access-Control-Allow-Origin', origin);
+    if (origin) {
+      // Allow any localhost or 127.0.0.1 port or configured CLIENT_URL in development
+      if (
+        /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin) ||
+        origin === process.env.CLIENT_URL
+      ) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+      }
     }
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
