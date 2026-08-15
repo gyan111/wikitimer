@@ -136,25 +136,27 @@
       </div>
 
       <!-- Desktop Filters -->
-      <div class="hidden md:flex items-center gap-4 relative">
-        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+      <div class="hidden md:flex items-center gap-3 lg:gap-4 relative w-full">
+        <div class="relative flex-1 min-w-0">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+          </div>
+          <select 
+            id="region" 
+            v-model="filters.region" 
+            @change="applyFilters" 
+            class="w-full py-2.5 pl-9 pr-6 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer truncate"
+          >
+            <option value="">All Regions</option>
+            <option v-for="region in uniqueRegions" :key="region" :value="region">{{ region }}</option>
+          </select>
         </div>
-        <select 
-          id="region" 
-          v-model="filters.region" 
-          @change="applyFilters" 
-          class="flex-1 py-2.5 pl-10 pr-8 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer"
-        >
-          <option value="">All Regions</option>
-          <option v-for="region in uniqueRegions" :key="region" :value="region">{{ region }}</option>
-        </select>
         
         <select 
           id="country" 
           v-model="filters.country" 
           @change="applyFilters" 
-          class="flex-1 py-2.5 px-4 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer"
+          class="flex-1 min-w-0 py-2.5 px-3 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer truncate"
         >
           <option value="">All Countries</option>
           <option v-for="country in uniqueCountries" :key="country" :value="country">{{ country }}</option>
@@ -164,7 +166,7 @@
           id="type" 
           v-model="filters.type" 
           @change="applyFilters" 
-          class="flex-1 py-2.5 px-4 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer"
+          class="flex-1 min-w-0 py-2.5 px-3 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer truncate"
         >
           <option value="">All Types</option>
           <option value="event">Event</option>
@@ -175,7 +177,7 @@
           id="timeStatus" 
           v-model="filters.timeStatus" 
           @change="applyFilters" 
-          class="flex-1 py-2.5 px-4 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer"
+          class="flex-1 min-w-0 py-2.5 px-3 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer truncate"
         >
           <option value="upcoming">Upcoming Events</option>
           <option value="past">Past Events</option>
@@ -186,13 +188,13 @@
           id="sort" 
           v-model="filters.sort" 
           @change="applyFilters" 
-          class="flex-1 py-2.5 px-4 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer"
+          class="flex-1 min-w-0 py-2.5 px-3 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer truncate"
         >
           <option value="desc">Recent First</option>
           <option value="asc">Oldest First</option>
         </select>
         
-        <div class="flex items-center gap-2 border-l border-gray-200 dark:border-gray-700 pl-4">
+        <div class="flex items-center gap-2 border-l border-gray-200 dark:border-gray-700 pl-3 flex-shrink-0">
           <button 
             @click="pinFilters" 
             :class="isPinned ? 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20' : 'text-gray-500 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800'" 
@@ -595,8 +597,10 @@ const events = computed(() => [
   ...(Array.isArray(metaEvents.value) ? metaEvents.value : [])
 ]);
 
+const standardRegions = ['Africa', 'Asia', 'Europe', 'Latin America', 'North America', 'Oceania', 'MENA', 'Global'];
+
 const uniqueRegions = computed(() => {
-  return [...new Set(events.value.map(event => event.region).filter(Boolean))].sort();
+  return standardRegions;
 });
 
 const uniqueWikis = computed(() => {
@@ -643,13 +647,22 @@ const filteredEvents = computed(() => {
       timeStatusMatch = isPast(event);
     }
     
-    const eventWiki = event.wikiProject || event.wiki || '';
+    let regionMatch = true;
+    if (filters.value.region) {
+      const selected = filters.value.region.toLowerCase();
+      const eventRegion = (event.region || '').toLowerCase();
+      const eventTopics = (event.topics || '').toLowerCase();
+      if (selected === 'global') {
+        regionMatch = eventRegion === 'global' || (!event.region && !event.topics);
+      } else {
+        regionMatch = eventRegion.includes(selected) || eventTopics.includes(selected);
+      }
+    }
 
     return (
       timeStatusMatch &&
+      regionMatch &&
       (!query || event.name.toLowerCase().includes(query)) &&
-      (!filters.value.region || event.region === filters.value.region) &&
-      (!filters.value.wiki || eventWiki === filters.value.wiki) &&
       (!filters.value.country || event.country === filters.value.country) &&
       (!filters.value.type || event.type === filters.value.type)
     );
