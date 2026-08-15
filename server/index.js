@@ -117,8 +117,8 @@ app.get('/timers', async (req, res) => {
     });
     res.json(timers);
   } catch (err) {
-    console.error('Error fetching timers:', err);
-    res.status(500).json({ message: 'Error fetching timers' });
+    console.warn('Could not fetch user timers (database query failed):', err.message);
+    res.json([]); // Return empty list gracefully so the frontend continues functioning
   }
 });
 

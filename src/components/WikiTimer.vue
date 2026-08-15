@@ -318,7 +318,7 @@
 
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useAuth } from '../store/auth';
 
 const { user, isAuthenticated, isLoading, error: authError, login, logout, checkAuth } = useAuth();
@@ -336,6 +336,7 @@ onMounted(() => {
 });
 
 const currentTime = ref(new Date());
+let timerInterval = null;
 const filters = ref({
   searchQuery: '',
   region: '',
@@ -364,7 +365,7 @@ const uniqueCountries = computed(() => {
 
 function isOngoing(event) {
   if (!event || !event.time) return false;
-  const now = new Date();
+  const now = currentTime.value;
   const startTime = new Date(event.time);
   const endTime = event.endTime ? new Date(event.endTime) : null;
   return startTime <= now && endTime !== null && endTime >= now;
@@ -372,14 +373,14 @@ function isOngoing(event) {
 
 function isPast(event) {
   if (!event || !event.time) return false;
-  const now = new Date();
+  const now = currentTime.value;
   const endTime = event.endTime ? new Date(event.endTime) : new Date(event.time);
   return endTime < now;
 }
 
 function isUpcoming(event) {
   if (!event || !event.time) return false;
-  const now = new Date();
+  const now = currentTime.value;
   const startTime = new Date(event.time);
   return startTime > now;
 }
@@ -478,7 +479,7 @@ function formatEventDates(event) {
 
 function formatCountdown(event) {
   if (!event || !event.time) return '';
-  const now = new Date();
+  const now = currentTime.value;
   let target = new Date(event.time);
   
   if (isOngoing(event)) {
@@ -571,10 +572,16 @@ function loadPinnedFilters() {
 
 onMounted(() => {
   updateTime();
-  setInterval(updateTime, 1000);
+  timerInterval = setInterval(updateTime, 1000);
   fetchTimers();
   fetchMetaEvents();
   loadPinnedFilters();
+});
+
+onUnmounted(() => {
+  if (timerInterval) {
+    clearInterval(timerInterval);
+  }
 });
 </script>
 

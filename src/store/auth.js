@@ -8,14 +8,9 @@ const isAuthenticated = ref(false);
 const isLoading = ref(false);
 const error = ref(null);
 
-// Debug logging function
+// Debug logging function (silenced)
 const debugLog = (message, data = null) => {
-  console.log('\n=== CLIENT DEBUG ===');
-  console.log(message);
-  if (data) {
-    console.log('Data:', data);
-  }
-  console.log('==================\n');
+  // Silent in production
 };
 
 // Helper function for API requests
