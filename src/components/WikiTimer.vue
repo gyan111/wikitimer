@@ -377,66 +377,66 @@
       >
         <div
           v-if="selectedEvent"
-          class="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
+          class="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-md flex items-start sm:items-center justify-center p-3 sm:p-6"
           @click.self="closeModal"
         >
           <div
-            class="relative w-full max-w-2xl bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden transform transition-all flex flex-col animate-in fade-in zoom-in-95 duration-200 my-8"
+            class="relative w-full max-w-2xl bg-white dark:bg-gray-900 rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden transform transition-all flex flex-col animate-in fade-in zoom-in-95 duration-200 my-4 sm:my-8"
             @click.stop
           >
             <!-- Top Gradient Accent -->
             <div
               class="h-3 w-full bg-gradient-to-r"
-              :class="selectedEvent.type === 'event' ? 'from-blue-500 via-indigo-500 to-cyan-400' : 'from-purple-500 via-pink-500 to-rose-400'"
+              :class="selectedEvent.type === 'event' ? 'from-blue-500 via-indigo-500 to-cyan-400' : 'from-rose-500 via-pink-500 to-amber-400'"
             ></div>
 
-            <!-- Header Controls: Star & Close -->
-            <div class="absolute top-5 right-5 flex items-center gap-1 z-20">
+            <!-- Header Controls: Star & Close (Always easily reachable on mobile & desktop) -->
+            <div class="absolute top-4 right-4 sm:top-5 sm:right-5 flex items-center gap-2 z-30">
               <button
                 @click="toggleStar(selectedEvent)"
-                class="p-2 rounded-full text-gray-400 hover:text-amber-400 dark:hover:text-amber-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                class="p-2 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-xs text-gray-400 hover:text-amber-400 dark:hover:text-amber-400 shadow-sm border border-gray-200/60 dark:border-gray-700/60 transition-colors"
                 :class="{ '!text-amber-400': isStarred(selectedEvent) }"
                 :title="isStarred(selectedEvent) ? 'Remove Star' : 'Star Event'"
               >
-                <svg class="w-6 h-6" :fill="isStarred(selectedEvent) ? 'currentColor' : 'none'" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" :fill="isStarred(selectedEvent) ? 'currentColor' : 'none'" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
               </button>
               <button
                 @click="closeModal"
-                class="p-2 rounded-full text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                class="p-2 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-xs text-gray-500 hover:text-gray-900 dark:hover:text-gray-100 shadow-sm border border-gray-200/60 dark:border-gray-700/60 transition-colors"
                 title="Close modal (Esc)"
               >
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
               </button>
             </div>
 
-            <div class="p-6 sm:p-8 flex flex-col gap-6">
+            <div class="p-5 sm:p-8 flex flex-col gap-5 sm:gap-6">
               <!-- Header with Logo and Title -->
-              <div class="flex items-start gap-4">
-                <div class="flex-shrink-0 w-16 h-16 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-2 shadow-sm flex items-center justify-center">
+              <div class="flex items-start gap-3.5">
+                <div class="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-2 shadow-sm flex items-center justify-center">
                   <img :src="getEventLogo(selectedEvent)" alt="logo" class="w-full h-full object-contain" @error="$event.target.src=fallbackLogo" />
                 </div>
-                <div class="flex-1 min-w-0 pr-16">
-                  <div class="flex flex-wrap gap-2 items-center mb-2">
+                <div class="flex-1 min-w-0 pr-20">
+                  <div class="flex flex-wrap gap-1.5 sm:gap-2 items-center mb-1.5">
                     <span 
-                      class="inline-flex px-2.5 py-0.5 rounded-md text-xs font-bold uppercase tracking-wider border shadow-xs"
-                      :class="selectedEvent.type === 'event' ? 'bg-blue-50 border-blue-200 text-blue-700 dark:bg-blue-900/30 dark:border-blue-800 dark:text-blue-300' : 'bg-purple-50 border-purple-200 text-purple-700 dark:bg-purple-900/30 dark:border-purple-800 dark:text-purple-300'"
+                      class="inline-flex px-2 py-0.5 rounded-md text-[11px] sm:text-xs font-bold uppercase tracking-wider border shadow-xs"
+                      :class="selectedEvent.type === 'event' ? 'bg-blue-50 border-blue-200 text-blue-700 dark:bg-blue-900/30 dark:border-blue-800 dark:text-blue-300' : 'bg-rose-50 border-rose-200 text-rose-700 dark:bg-rose-900/30 dark:border-rose-800 dark:text-rose-300'"
                     >
                       {{ selectedEvent.type }}
                     </span>
                     <span 
                       v-if="isOngoing(selectedEvent)"
-                      class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold uppercase tracking-wider border bg-amber-50 border-amber-200 text-amber-700 dark:bg-amber-900/30 dark:border-amber-800 dark:text-amber-300 animate-pulse"
+                      class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] sm:text-xs font-bold uppercase tracking-wider border bg-amber-50 border-amber-200 text-amber-700 dark:bg-amber-900/30 dark:border-amber-800 dark:text-amber-300 animate-pulse"
                     >
                       Happening Now
                     </span>
                     <span 
                       v-if="selectedEvent.isMeta"
-                      class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold uppercase tracking-wider border bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-900/30 dark:border-emerald-800 dark:text-emerald-300"
+                      class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] sm:text-xs font-bold uppercase tracking-wider border bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-900/30 dark:border-emerald-800 dark:text-emerald-300"
                     >
                       Meta-Wiki
                     </span>
                   </div>
-                  <h2 class="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white leading-tight">
+                  <h2 class="text-lg sm:text-2xl font-extrabold text-gray-900 dark:text-white leading-snug sm:leading-tight">
                     {{ selectedEvent.name }}
                   </h2>
                 </div>
@@ -609,6 +609,17 @@
                   <span>iCal (.ics)</span>
                 </button>
               </div>
+
+              <!-- Mobile Dedicated Close Button -->
+              <div class="sm:hidden pt-2 border-t border-gray-100 dark:border-gray-800">
+                <button
+                  @click="closeModal"
+                  type="button"
+                  class="w-full py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-xl text-sm transition-all shadow-xs"
+                >
+                  Close
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -652,7 +663,7 @@ const filters = ref({
   country: '',
   type: '',
   timeStatus: 'upcoming',
-  sort: 'asc',
+  sort: 'desc',
   starredOnly: false
 });
 
@@ -1158,7 +1169,7 @@ function resetFilters() {
     country: '',
     type: '',
     timeStatus: 'upcoming',
-    sort: 'asc',
+    sort: 'desc',
     starredOnly: false
   };
   isPinned.value = false;
@@ -1185,8 +1196,12 @@ onMounted(async () => {
   timerInterval = setInterval(updateTime, 1000);
   const pinned = localStorage.getItem('pinnedFilters');
   if (pinned) {
-    filters.value = JSON.parse(pinned);
-    isPinned.value = true;
+    try {
+      filters.value = { ...filters.value, ...JSON.parse(pinned) };
+      isPinned.value = true;
+    } catch (e) {
+      console.error('Failed to parse pinned filters', e);
+    }
   }
   
   isLoadingEvents.value = true;
