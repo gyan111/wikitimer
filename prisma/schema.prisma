@@ -18,15 +18,17 @@ model User {
 }
 
 model Timer {
-  id        Int      @id @default(autoincrement())
-  type      String   @db.VarChar(50)
-  name      String   @db.VarChar(255)
-  link      String   @db.VarChar(255)
-  time      DateTime
-  region    String   @db.VarChar(100)
-  country   String   @db.VarChar(100)
-  timeZone  String   @db.VarChar(50)
-  logo      String?  @db.VarChar(255)
-  creatorId Int?
-  creator   User?    @relation(fields: [creatorId], references: [id])
+  id         Int       @id @default(autoincrement())
+  type       String    @db.VarChar(50)
+  name       String    @db.VarChar(255)
+  link       String    @db.VarChar(255)
+  time       DateTime
+  endTime    DateTime?
+  region     String    @db.VarChar(100)
+  country    String    @db.VarChar(100)
+  timeZone   String    @db.VarChar(50)
+  organizers String?   @db.VarChar(255)
+  logo       String?   @db.VarChar(255)
+  creatorId  Int?
+  creator    User?     @relation(fields: [creatorId], references: [id])
 }

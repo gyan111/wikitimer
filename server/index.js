@@ -148,9 +148,11 @@ function validateTimerInput(body) {
     name: str(body.name),
     link: str(body.link),
     time: body.time,
+    endTime: body.endTime ? new Date(body.endTime) : null,
     region: str(body.region),
     country: str(body.country),
     timeZone: str(body.timeZone),
+    organizers: body.organizers != null ? str(body.organizers) : null,
     logo: body.logo != null ? str(body.logo) : null
   };
 
@@ -160,11 +162,16 @@ function validateTimerInput(body) {
   if (data.region.length > 100) errors.push('region too long (max 100 chars)');
   if (data.country.length > 100) errors.push('country too long (max 100 chars)');
   if (data.timeZone.length > 50) errors.push('timeZone too long (max 50 chars)');
+  if (data.organizers && data.organizers.length > 255) errors.push('organizers too long (max 255 chars)');
   if (data.logo && data.logo.length > 255) errors.push('logo too long (max 255 chars)');
 
   const parsedTime = new Date(data.time);
   if (isNaN(parsedTime.getTime())) errors.push('time is not a valid date');
   else data.time = parsedTime;
+
+  if (data.endTime && isNaN(data.endTime.getTime())) {
+    data.endTime = null;
+  }
 
   return { data, errors };
 }
