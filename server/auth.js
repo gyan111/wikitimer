@@ -127,7 +127,7 @@ export default function(app) {
     passport.authenticate('oauth2')
   );
 
-  app.get('/auth/mediawiki/callback',
+  const callbackHandler = [
     passport.authenticate('oauth2', {
       failureRedirect: `${process.env.CLIENT_URL || 'http://localhost:5173'}/?error=auth_failed`
     }),
@@ -136,7 +136,10 @@ export default function(app) {
       debugLog('Authentication successful, redirecting to client');
       res.redirect(process.env.CLIENT_URL || 'http://localhost:5173');
     }
-  );
+  ];
+
+  app.get('/auth/mediawiki/callback', ...callbackHandler);
+  app.get('/callback', ...callbackHandler);
 
   // Logout route
   app.get('/auth/logout', (req, res) => {

@@ -66,6 +66,26 @@ function parseWidgets(rowHtml) {
   return widgets;
 }
 
+// Creates a clean, human-readable slug with short deterministic hash for clean URLs.
+function slugify(name, href = '') {
+  let base = (name || '')
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // remove accents
+    .replace(/[^\w\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .slice(0, 50);
+  if (!base) base = 'event';
+  let hash = 0;
+  for (let i = 0; i < href.length; i++) {
+    hash = ((hash << 5) - hash) + href.charCodeAt(i);
+    hash |= 0;
+  }
+  const hex = Math.abs(hash).toString(36).slice(0, 4);
+  return `${base}-${hex}`;
+}
+
 function parseRow(rowHtml) {
   // Match the event title link by its stable CSS class rather than the
   // namespace in the URL. Non-English wikis use localized namespaces
@@ -89,13 +109,16 @@ function parseRow(rowHtml) {
   const country = widgets['Country'] || (participation.toLowerCase().includes('online') ? 'Online' : '');
   const eventTypes = widgets['Event types'] || '';
   const topics = widgets['Topics'] || '';
+  const wikiProject = widgets['Wikis'] || '';
   const organizers = widgets['Organizers'] || '';
 
   // The wiki host that owns the event page (e.g. meta.wikimedia.org, fr.wikipedia.org).
   const wiki = href.replace(/^\/\//, '').split('/')[0];
+  const region = topics || 'Global';
 
   return {
     id: 'meta:' + href.replace(/^\/\//, ''),
+    slug: slugify(name, href),
     isMeta: true,
     source: 'meta-allevents',
     type: 'event',
@@ -103,11 +126,12 @@ function parseRow(rowHtml) {
     link,
     time,
     endTime: endText ? parseDate(endText, true) : parseDate(startText, true),
-    region: 'Global',
+    region,
     country,
     participation,
     eventTypes,
     topics,
+    wikiProject: wikiProject || wiki,
     organizers,
     timeZone: 'UTC',
     logo: null,
@@ -189,4 +213,4 @@ export async function getMetaEvents() {
 }
 
 // Expose internal helpers for unit tests. Not part of the public API.
-export const _testing = { decodeEntities, parseDate, parseWidgets, parseRow };
+export const _testing = { decodeEntities, parseDate, parseWidgets, parseRow, slugify };

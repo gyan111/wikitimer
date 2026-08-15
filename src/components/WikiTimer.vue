@@ -146,8 +146,18 @@
           @change="applyFilters" 
           class="flex-1 py-2.5 pl-10 pr-8 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 container-query cursor-pointer"
         >
-          <option value="">All Regions</option>
+          <option value="">All Topics / Regions</option>
           <option v-for="region in uniqueRegions" :key="region" :value="region">{{ region }}</option>
+        </select>
+
+        <select 
+          id="wiki" 
+          v-model="filters.wiki" 
+          @change="applyFilters" 
+          class="flex-1 py-2.5 px-4 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer"
+        >
+          <option value="">All Wiki Projects</option>
+          <option v-for="wiki in uniqueWikis" :key="wiki" :value="wiki">{{ wiki }}</option>
         </select>
         
         <select 
@@ -156,7 +166,7 @@
           @change="applyFilters" 
           class="flex-1 py-2.5 px-4 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer"
         >
-          <option value="">All Countries</option>
+          <option value="">All Locations</option>
           <option v-for="country in uniqueCountries" :key="country" :value="country">{{ country }}</option>
         </select>
         
@@ -188,8 +198,8 @@
           @change="applyFilters" 
           class="flex-1 py-2.5 px-4 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer"
         >
-          <option value="desc">Recent First</option>
-          <option value="asc">Oldest First</option>
+          <option value="asc">Upcoming Soonest</option>
+          <option value="desc">Latest First</option>
         </select>
         
         <div class="flex items-center gap-2 border-l border-gray-200 dark:border-gray-700 pl-4">
@@ -212,7 +222,26 @@
       </div>
     </div>
 
+    <!-- Loading Skeleton State -->
+    <div v-if="isLoadingEvents" class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 animate-pulse">
+      <div v-for="n in 8" :key="n" class="glass-card bg-white/50 dark:bg-gray-900/50 rounded-2xl p-6 flex flex-col gap-4 border border-gray-200/50 dark:border-gray-800">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-gray-200 dark:bg-gray-800"></div>
+          <div class="flex-1 space-y-2">
+            <div class="h-4 bg-gray-200 dark:bg-gray-800 rounded w-3/4"></div>
+            <div class="h-3 bg-gray-200 dark:bg-gray-800 rounded w-1/2"></div>
+          </div>
+        </div>
+        <div class="h-6 bg-gray-200 dark:bg-gray-800 rounded-md w-1/3"></div>
+        <div class="pt-4 border-t border-gray-100 dark:border-gray-800 space-y-2">
+          <div class="h-4 bg-gray-200 dark:bg-gray-800 rounded w-2/3"></div>
+          <div class="h-6 bg-gray-200 dark:bg-gray-800 rounded w-1/2"></div>
+        </div>
+      </div>
+    </div>
+
     <transition
+      v-else
       enter-active-class="transition-opacity duration-500"
       enter-from-class="opacity-0"
       enter-to-class="opacity-100"
@@ -537,10 +566,12 @@ const currentTime = ref(new Date());
 let timerInterval = null;
 const selectedEvent = ref(null);
 const isCopied = ref(false);
+const isLoadingEvents = ref(true);
 
 const filters = ref({
   searchQuery: '',
   region: '',
+  wiki: '',
   country: '',
   type: '',
   timeStatus: 'upcoming',
@@ -554,7 +585,7 @@ const metaEvents = ref([]);
 // Official Wikimedia Project Logos
 function getEventLogo(event) {
   if (event?.logo) return event.logo;
-  const link = (event?.link || event?.wiki || '').toLowerCase();
+  const link = (event?.link || event?.wiki || event?.wikiProject || '').toLowerCase();
   if (link.includes('wikidata')) return 'https://upload.wikimedia.org/wikipedia/commons/f/ff/Wikidata-logo.svg';
   if (link.includes('commons')) return 'https://upload.wikimedia.org/wikipedia/commons/4/4a/Commons-logo.svg';
   if (link.includes('wikiquote')) return 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Wikiquote-logo.svg';
@@ -575,11 +606,15 @@ const events = computed(() => [
 ]);
 
 const uniqueRegions = computed(() => {
-  return [...new Set(events.value.map(event => event.region).filter(Boolean))];
+  return [...new Set(events.value.map(event => event.region).filter(Boolean))].sort();
+});
+
+const uniqueWikis = computed(() => {
+  return [...new Set(events.value.map(event => event.wikiProject || event.wiki).filter(Boolean))].sort();
 });
 
 const uniqueCountries = computed(() => {
-  return [...new Set(events.value.map(event => event.country).filter(Boolean))];
+  return [...new Set(events.value.map(event => event.country).filter(Boolean))].sort();
 });
 
 function isOngoing(event) {
@@ -618,10 +653,13 @@ const filteredEvents = computed(() => {
       timeStatusMatch = isPast(event);
     }
     
+    const eventWiki = event.wikiProject || event.wiki || '';
+
     return (
       timeStatusMatch &&
       (!query || event.name.toLowerCase().includes(query)) &&
       (!filters.value.region || event.region === filters.value.region) &&
+      (!filters.value.wiki || eventWiki === filters.value.wiki) &&
       (!filters.value.country || event.country === filters.value.country) &&
       (!filters.value.type || event.type === filters.value.type)
     );
@@ -739,7 +777,8 @@ function getGoogleCalendarUrl(event) {
     const start = new Date(event.time).toISOString().replace(/-|:|\.\d\d\d/g, '');
     const end = new Date(event.endTime || event.time).toISOString().replace(/-|:|\.\d\d\d/g, '');
     const title = encodeURIComponent(event.name || 'Wikimedia Event');
-    const details = encodeURIComponent(`Wiki Timer: ${window.location.origin}/timer/${encodeURIComponent(event.id)}\n\nEvent Link: ${event.link || ''}`);
+    const targetParam = event.slug || encodeURIComponent(event.id);
+    const details = encodeURIComponent(`Wiki Timer: ${window.location.origin}/timer/${targetParam}\n\nEvent Link: ${event.link || ''}`);
     const location = encodeURIComponent(event.country || event.region || 'Online');
     return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}`;
   } catch (e) {
@@ -749,7 +788,8 @@ function getGoogleCalendarUrl(event) {
 
 async function copyShareLink(event) {
   if (!event) return;
-  const url = `${window.location.origin}/timer/${encodeURIComponent(event.id)}`;
+  const targetParam = event.slug || encodeURIComponent(event.id);
+  const url = `${window.location.origin}/timer/${targetParam}`;
   try {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       await navigator.clipboard.writeText(url);
@@ -772,9 +812,9 @@ async function copyShareLink(event) {
 
 function viewEvent(event) {
   selectedEvent.value = event;
-  const eventId = String(event.id || '');
-  if (eventId && route.params.id !== eventId) {
-    router.push({ name: 'TimerDetail', params: { id: eventId } });
+  const targetParam = event.slug || String(event.id || '');
+  if (targetParam && route.params.id !== targetParam) {
+    router.push({ name: 'TimerDetail', params: { id: targetParam } });
   }
 }
 
@@ -787,11 +827,14 @@ function closeModal() {
 
 function syncSelectedEventFromRoute() {
   if (route.params.id && events.value.length > 0) {
-    const targetId = String(route.params.id);
+    const rawTarget = String(route.params.id);
+    const targetId = rawTarget.toLowerCase();
     const found = events.value.find(e => 
-      String(e.id) === targetId || 
-      String(e.id) === `meta:${targetId}` ||
-      decodeURIComponent(String(e.id)) === decodeURIComponent(targetId)
+      (e.slug && e.slug.toLowerCase() === targetId) ||
+      String(e.id).toLowerCase() === targetId || 
+      String(e.id).toLowerCase() === `meta:${targetId}` ||
+      decodeURIComponent(String(e.id)).toLowerCase() === decodeURIComponent(targetId) ||
+      (e.name && e.name.toLowerCase() === targetId)
     );
     if (found) {
       selectedEvent.value = found;
@@ -822,6 +865,7 @@ function applyFilters() {
 function resetFilters() {
   filters.value.searchQuery = '';
   filters.value.region = '';
+  filters.value.wiki = '';
   filters.value.country = '';
   filters.value.type = '';
   filters.value.timeStatus = 'upcoming';
@@ -874,14 +918,19 @@ function loadPinnedFilters() {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   window.addEventListener('keydown', handleKeyDown);
   updateTime();
   timerInterval = setInterval(updateTime, 1000);
-  fetchTimers();
-  fetchMetaEvents();
   loadPinnedFilters();
-  syncSelectedEventFromRoute();
+  
+  isLoadingEvents.value = true;
+  try {
+    await Promise.all([fetchTimers(), fetchMetaEvents()]);
+  } finally {
+    isLoadingEvents.value = false;
+    syncSelectedEventFromRoute();
+  }
 });
 
 onUnmounted(() => {

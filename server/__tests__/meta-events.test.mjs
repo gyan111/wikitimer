@@ -4,7 +4,22 @@
 import { describe, it, expect } from 'vitest';
 import { _testing } from '../meta-events.js';
 
-const { decodeEntities, parseDate, parseWidgets, parseRow } = _testing;
+const { decodeEntities, parseDate, parseWidgets, parseRow, slugify } = _testing;
+
+// ---------------------------------------------------------------------------
+// slugify
+// ---------------------------------------------------------------------------
+describe('slugify', () => {
+  it('creates clean lowercase kebab-case slug', () => {
+    const slug = slugify('Africa Wiki Women Skill Up Workshop 2026', '//meta.wikimedia.org/wiki/Event:Africa');
+    expect(slug).toMatch(/^africa-wiki-women-skill-up-workshop-2026-[a-z0-9]+$/);
+  });
+
+  it('strips accents and special characters', () => {
+    const slug = slugify('Août & Décembre @ Paris!', '//fr.wikipedia.org/wiki/Evento:Test');
+    expect(slug).toMatch(/^aout-decembre-paris-[a-z0-9]+$/);
+  });
+});
 
 // ---------------------------------------------------------------------------
 // decodeEntities
