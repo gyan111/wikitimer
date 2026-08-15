@@ -1,8 +1,0 @@
-config_version: v1beta1
-
-components:
-  web:
-    component_type: continuous
-    build:
-      repository: https://github.com/gyan111/wikitimer
-      ref: main
