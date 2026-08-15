@@ -30,17 +30,24 @@ function validateEnvVariables() {
   });
 
   if (!WIKI_CLIENT_ID || !WIKI_CLIENT_SECRET) {
-    throw new Error('Missing required environment variables: WIKI_CLIENT_ID and/or WIKI_CLIENT_SECRET');
+    console.warn('⚠️  WIKI_CLIENT_ID and/or WIKI_CLIENT_SECRET not set; OAuth login will be disabled.');
+    return false;
   }
+  return true;
 }
 
 export default function(app) {
-  // Validate environment variables before proceeding
-  validateEnvVariables();
-
   // Initialize Passport
   app.use(passport.initialize());
   app.use(passport.session());
+
+  const hasOAuth = validateEnvVariables();
+  if (!hasOAuth) {
+    app.get('/auth/mediawiki', (req, res) => {
+      res.status(503).json({ error: 'OAuth login is not configured on this server.' });
+    });
+    return;
+  }
 
   // Custom OAuth2 Strategy for MediaWiki
   const strategy = new OAuth2Strategy({
