@@ -1,0 +1,49 @@
+name: CI / CD - Test & Deploy to Toolforge
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Test & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build frontend
+        run: npm run build
+
+  deploy:
+    name: Deploy to Toolforge
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Trigger Build & Restart on Toolforge
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: login.toolforge.org
+          username: ${{ secrets.TOOLFORGE_SSH_USER }}
+          key: ${{ secrets.TOOLFORGE_SSH_KEY }}
+          script: |
+            become wikitimer toolforge build start https://github.com/gyan111/wikitimer --wait
+            become wikitimer toolforge webservice buildservice restart
+            echo "Deployment to WikiTimer complete!"
