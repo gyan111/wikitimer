@@ -743,7 +743,7 @@ async function copyWikitext(event) {
   const timerUrl = `${window.location.origin}/timer/${targetParam}`;
   const dates = formatEventDates(event);
   const link = event.link || timerUrl;
-  const snippet = `[{{link}} '''${event.name}'''] – ''${dates} (UTC)'' · [${timerUrl} ⏱️ View Live Countdown on WikiTimer]`;
+  const snippet = `[${link} '''${event.name}'''] – ''${dates} (UTC)'' · [${timerUrl} ⏱️ View Live Countdown on WikiTimer]`;
 
   try {
     if (navigator.clipboard && navigator.clipboard.writeText) {
