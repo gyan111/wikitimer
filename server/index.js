@@ -106,8 +106,15 @@ app.get('/test', (req, res) => {
   res.json({ message: 'Server is working', origin: req.headers.origin });
 });
 
+// In-memory timers store when DATABASE_URL is not set (local dev)
+let devTimerCounter = 1;
+const devTimers = [];
+
 // Timers created by users.
 app.get('/timers', async (req, res) => {
+  if (!process.env.DATABASE_URL) {
+    return res.json(devTimers);
+  }
   try {
     const timers = await prisma.timer.findMany({
       where: { time: { gt: new Date() } },
@@ -173,6 +180,17 @@ app.post('/add-timer', async (req, res) => {
     return res.status(400).json({ message: 'Invalid timer data', errors });
   }
 
+  if (!process.env.DATABASE_URL) {
+    const newTimer = {
+      id: devTimerCounter++,
+      ...data,
+      creatorId: req.user.id,
+      creator: { id: req.user.id, username: req.user.username }
+    };
+    devTimers.push(newTimer);
+    return res.status(201).json({ message: 'Timer added successfully', timerId: newTimer.id.toString() });
+  }
+
   try {
     const timer = await prisma.timer.create({
       data: { ...data, creatorId: req.user.id }
@@ -193,6 +211,16 @@ app.delete('/timers/:id', async (req, res) => {
   const timerId = parseInt(req.params.id, 10);
   if (isNaN(timerId)) {
     return res.status(400).json({ message: 'Invalid timer id' });
+  }
+
+  if (!process.env.DATABASE_URL) {
+    const index = devTimers.findIndex(t => t.id === timerId);
+    if (index === -1) return res.status(404).json({ message: 'Timer not found' });
+    if (devTimers[index].creatorId !== req.user.id && !req.user.isAdmin) {
+      return res.status(403).json({ message: 'Forbidden: You do not have permission to delete this timer' });
+    }
+    devTimers.splice(index, 1);
+    return res.json({ message: 'Timer deleted successfully' });
   }
 
   try {

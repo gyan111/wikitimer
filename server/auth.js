@@ -36,6 +36,11 @@ function validateEnvVariables() {
   return true;
 }
 
+// In-memory dev user store when DATABASE_URL is not set (local development)
+let devUserCounter = 1;
+const devUsersBySub = new Map();
+const devUsersById = new Map();
+
 export default function(app) {
   // Initialize Passport
   app.use(passport.initialize());
@@ -64,7 +69,7 @@ export default function(app) {
       const response = await fetch('https://meta.wikimedia.org/w/rest.php/oauth2/resource/profile', {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
-          'User-Agent': 'Wiki Timer Application/1.0'
+          'User-Agent': process.env.META_USER_AGENT || 'WikiTimer/1.0 (https://wikitimer.toolforge.org/; contact: toolforge-wikitimer@wmcloud.org)'
         }
       });
 
@@ -73,42 +78,64 @@ export default function(app) {
       }
 
       const userData = await response.json();
-      
-      // Upsert user in the database
-      const dbUser = await prisma.user.upsert({
-        where: { wikiId: userData.sub },
-        update: { username: userData.username },
-        create: {
-          wikiId: userData.sub,
-          username: userData.username,
-          isAdmin: false
-        }
-      });
+      let user;
 
-      const user = {
-        id: dbUser.id, // Use database ID
-        wikiId: dbUser.wikiId,
-        username: dbUser.username,
-        isAdmin: dbUser.isAdmin
-      };
+      if (process.env.DATABASE_URL) {
+        // Upsert user in MariaDB
+        const dbUser = await prisma.user.upsert({
+          where: { wikiId: userData.sub },
+          update: { username: userData.username },
+          create: {
+            wikiId: userData.sub,
+            username: userData.username,
+            isAdmin: false
+          }
+        });
+        user = {
+          id: dbUser.id,
+          wikiId: dbUser.wikiId,
+          username: dbUser.username,
+          isAdmin: dbUser.isAdmin
+        };
+      } else {
+        // In-memory fallback for local development without DB
+        let devUser = devUsersBySub.get(userData.sub);
+        if (!devUser) {
+          devUser = {
+            id: devUserCounter++,
+            wikiId: userData.sub,
+            username: userData.username,
+            isAdmin: false
+          };
+          devUsersBySub.set(userData.sub, devUser);
+          devUsersById.set(devUser.id, devUser);
+        } else {
+          devUser.username = userData.username;
+        }
+        user = { ...devUser };
+      }
 
       return done(null, user);
     } catch (error) {
-      debugLog('Error in OAuth callback', { error: error.message });
+      console.error('Error in OAuth callback:', error);
       return done(error);
     }
   });
 
   passport.use(strategy);
 
-  // Store only the database id in the session; OAuth tokens are never persisted.
+  // Store only the user id in the session; OAuth tokens are never persisted.
   passport.serializeUser((user, done) => {
     done(null, user.id);
   });
 
-  // Reload the user from the database on each request.
+  // Reload the user on each request.
   passport.deserializeUser(async (id, done) => {
     try {
+      if (!process.env.DATABASE_URL) {
+        const devUser = devUsersById.get(id);
+        return done(null, devUser || false);
+      }
       const dbUser = await prisma.user.findUnique({ where: { id } });
       if (!dbUser) return done(null, false);
       done(null, {
