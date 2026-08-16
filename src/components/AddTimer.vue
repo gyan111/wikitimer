@@ -694,9 +694,80 @@ function clearWikidataSearch() {
   wikidataError.value = '';
 }
 
-function selectWikidataEntity(entity) {
+async function selectWikidataEntity(entity) {
   newTimer.value.name = entity.label;
   newTimer.value.link = entity.concepturi;
+  if (entity.description) {
+    newTimer.value.topics = entity.description;
+  }
   clearWikidataSearch();
+
+  // Fetch detailed entity claims from Wikidata
+  try {
+    const res = await fetch(`https://www.wikidata.org/wiki/Special:EntityData/${entity.id}.json`);
+    if (res.ok) {
+      const data = await res.json();
+      const item = data.entities && data.entities[entity.id];
+      if (item) {
+        // 1. Meta-Wiki / Wikipedia sitelink
+        if (item.sitelinks) {
+          if (item.sitelinks.metawiki && item.sitelinks.metawiki.url) {
+            newTimer.value.link = item.sitelinks.metawiki.url;
+          } else if (item.sitelinks.enwiki && item.sitelinks.enwiki.url) {
+            newTimer.value.link = item.sitelinks.enwiki.url;
+          }
+        }
+
+        const claims = item.claims || {};
+
+        // 2. Start time (P580)
+        if (claims.P580 && claims.P580[0]?.mainsnak?.datavalue?.value?.time) {
+          const rawTime = claims.P580[0].mainsnak.datavalue.value.time.replace(/^\+/, '');
+          const d = new Date(rawTime);
+          if (!isNaN(d.getTime())) {
+            // Convert to YYYY-MM-DDTHH:MM for datetime-local input
+            const pad = (n) => String(n).padStart(2, '0');
+            const formatted = `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}T${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`;
+            newTimer.value.time = formatted;
+          }
+        }
+
+        // 3. End time (P582)
+        if (claims.P582 && claims.P582[0]?.mainsnak?.datavalue?.value?.time) {
+          const rawEndTime = claims.P582[0].mainsnak.datavalue.value.time.replace(/^\+/, '');
+          const dEnd = new Date(rawEndTime);
+          if (!isNaN(dEnd.getTime())) {
+            const pad = (n) => String(n).padStart(2, '0');
+            const formattedEnd = `${dEnd.getUTCFullYear()}-${pad(dEnd.getUTCMonth() + 1)}-${pad(dEnd.getUTCDate())}T${pad(dEnd.getUTCHours())}:${pad(dEnd.getUTCMinutes())}`;
+            newTimer.value.endTime = formattedEnd;
+          }
+        }
+
+        // 4. Location (P276) & Country (P17)
+        const locId = claims.P276 && claims.P276[0]?.mainsnak?.datavalue?.value?.id;
+        const countryId = claims.P17 && claims.P17[0]?.mainsnak?.datavalue?.value?.id;
+
+        if (locId || countryId) {
+          const ids = [locId, countryId].filter(Boolean).join('|');
+          const labelsRes = await fetch(`https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${ids}&props=labels&languages=en&format=json&origin=*`);
+          if (labelsRes.ok) {
+            const labelsData = await labelsRes.json();
+            const locName = locId && labelsData.entities[locId]?.labels?.en?.value;
+            const countryName = countryId && labelsData.entities[countryId]?.labels?.en?.value;
+            
+            if (locName && countryName && locName.toLowerCase() !== countryName.toLowerCase()) {
+              newTimer.value.country = `${locName}, ${countryName}`;
+            } else if (countryName) {
+              newTimer.value.country = countryName;
+            } else if (locName) {
+              newTimer.value.country = locName;
+            }
+          }
+        }
+      }
+    }
+  } catch (err) {
+    console.error('Error fetching Wikidata entity details:', err);
+  }
 }
 </script>

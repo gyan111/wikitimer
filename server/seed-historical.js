@@ -218,6 +218,32 @@ export const HISTORICAL_EVENTS = [
 
   // --- Regional Conferences ---
   {
+    name: 'WikiConference India 2026',
+    link: 'https://meta.wikimedia.org/wiki/WikiConference_India_2026',
+    time: '2026-09-04T09:00:00Z',
+    endTime: '2026-09-06T18:00:00Z',
+    region: 'Asia',
+    country: 'Kochi, India',
+    timeZone: 'UTC+05:30',
+    participation: 'In-person',
+    type: 'event',
+    organizers: 'Wikimedia India Community & WCI Organizing Team',
+    topics: 'WikiConference India, WCI, Kochi, Kerala, India, South Asia, Collaboration'
+  },
+  {
+    name: 'Wiki Loves Village 2026',
+    link: 'https://meta.wikimedia.org/wiki/Wiki_Loves_Village_2026',
+    time: '2026-08-15T00:00:00Z',
+    endTime: '2026-09-15T23:59:59Z',
+    region: 'Asia',
+    country: 'India',
+    timeZone: 'UTC+05:30',
+    participation: 'Hybrid',
+    type: 'event',
+    organizers: 'Wiki Loves Village Team & WCI 2026',
+    topics: 'Wiki Loves Village, WLV26, Photography, Rural Heritage, India, Wikimedia Commons'
+  },
+  {
     name: 'GLAM Wiki Conference 2023 (Montevideo)',
     link: 'https://meta.wikimedia.org/wiki/GLAM_Wiki_Conference_2023',
     time: '2023-11-16T09:00:00Z',
