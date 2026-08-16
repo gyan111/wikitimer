@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import AddTimer from '@/components/AddTimer.vue';
 import WikiTimer from '@/components/WikiTimer.vue';
+import EmbedTimer from '@/components/EmbedTimer.vue';
 
 const routes = [
   {
@@ -12,6 +13,12 @@ const routes = [
     path: '/timer/:id(.*)',
     name: 'TimerDetail',
     component: WikiTimer,
+    props: true
+  },
+  {
+    path: '/embed/:id(.*)',
+    name: 'EmbedTimer',
+    component: EmbedTimer,
     props: true
   },
   {

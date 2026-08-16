@@ -674,6 +674,15 @@
                 </div>
               </div>
 
+              <!-- Mini Location Map (Only rendered for in-person / hybrid host cities) -->
+              <div v-if="hasPhysicalLocation(selectedEvent)" class="rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 shadow-2xs">
+                <div class="px-3.5 py-2 bg-gray-100/70 dark:bg-gray-800/80 border-b border-gray-200/60 dark:border-gray-700/60 flex items-center justify-between text-xs font-semibold text-gray-700 dark:text-gray-300">
+                  <span class="flex items-center gap-1.5 font-bold">📍 {{ selectedEvent.country || selectedEvent.region }}</span>
+                  <span class="text-[11px] text-gray-400 font-normal">Host City Map</span>
+                </div>
+                <div id="modal-mini-map" class="h-32 w-full z-10"></div>
+              </div>
+
               <!-- Action Buttons Row 1: Main Actions -->
               <div class="flex flex-wrap gap-2.5 pt-1">
                 <a
@@ -721,9 +730,9 @@
                 </button>
               </div>
 
-              <!-- Calendar Integrations Row -->
-              <div class="flex items-center gap-2 pt-2 border-t border-gray-100 dark:border-gray-800">
-                <span class="text-xs text-gray-400 font-medium">Add to Calendar:</span>
+              <!-- Calendar & Embed Integrations Row -->
+              <div class="flex items-center flex-wrap gap-2 pt-2 border-t border-gray-100 dark:border-gray-800">
+                <span class="text-xs text-gray-400 font-medium">Export & Embed:</span>
                 <a
                   :href="getGoogleCalendarUrl(selectedEvent)"
                   target="_blank"
@@ -731,7 +740,7 @@
                   class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/40 text-blue-600 dark:text-blue-300 text-xs font-semibold rounded-lg border border-blue-200 dark:border-blue-800/50 transition-all"
                 >
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                  <span>{{ $t('modal.addToGoogleCalendar') }}</span>
+                  <span>Google Cal</span>
                 </a>
                 <button
                   @click="downloadICal(selectedEvent)"
@@ -740,8 +749,42 @@
                   title="Download .ics file for Apple Calendar, Outlook, etc."
                 >
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                  <span>{{ $t('modal.downloadIcs') }}</span>
+                  <span>.ICS File</span>
                 </button>
+                <button
+                  @click="showEmbedDrawer = !showEmbedDrawer"
+                  type="button"
+                  class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-xs font-semibold rounded-lg border border-purple-200 dark:border-purple-800/50 transition-all"
+                  title="Get embed code for external websites or dashboards"
+                >
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                  <span>Embed Widget</span>
+                </button>
+              </div>
+
+              <!-- Embed Widget Code Snippet Box -->
+              <div v-if="showEmbedDrawer" class="p-3.5 bg-purple-50/70 dark:bg-purple-950/40 rounded-xl border border-purple-200 dark:border-purple-900/60 flex flex-col gap-2 animate-in fade-in duration-200">
+                <div class="flex items-center justify-between text-xs font-bold text-purple-900 dark:text-purple-200">
+                  <span class="flex items-center gap-1.5">🌐 <span>Live Embed HTML Snippet</span></span>
+                  <button @click="showEmbedDrawer = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-sm leading-none">✕</button>
+                </div>
+                <p class="text-[11px] text-gray-600 dark:text-gray-400">
+                  Paste this iframe into your chapter website, event landing page, or community dashboard:
+                </p>
+                <div class="flex items-center gap-2">
+                  <input
+                    type="text"
+                    readonly
+                    :value="getEmbedIframeCode(selectedEvent)"
+                    class="flex-1 text-xs font-mono bg-white dark:bg-gray-900 px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 select-all"
+                  />
+                  <button
+                    @click="copyEmbedCode(selectedEvent)"
+                    class="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold rounded-lg transition-colors whitespace-nowrap"
+                  >
+                    {{ isEmbedCopied ? '✓ Copied!' : 'Copy Code' }}
+                  </button>
+                </div>
               </div>
 
               <!-- Mobile Dedicated Close Button -->
@@ -765,10 +808,13 @@
 
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
+import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuth } from '../store/auth';
 import EventsMap from './EventsMap.vue';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import { getEventCoordinates } from '@/utils/geo.js';
 
 const route = useRoute();
 const router = useRouter();
@@ -1039,7 +1085,103 @@ function downloadICal(event) {
   }
 }
 
-// 5. Browser Notifications & Reminder
+// 5. Standalone Embed Code Generator (<iframe ...>)
+const showEmbedDrawer = ref(false);
+const isEmbedCopied = ref(false);
+
+function getEmbedUrl(event) {
+  if (!event) return '';
+  const targetParam = event.slug || encodeURIComponent(event.id);
+  return `${window.location.origin}/embed/${targetParam}`;
+}
+
+function getEmbedIframeCode(event) {
+  const url = getEmbedUrl(event);
+  return `<iframe src="${url}" width="100%" height="200" frameborder="0" style="border:none; border-radius:16px; overflow:hidden; max-width:420px;" title="${event?.name || 'Wiki Timer'}"></iframe>`;
+}
+
+async function copyEmbedCode(event) {
+  if (!event) return;
+  const code = getEmbedIframeCode(event);
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(code);
+    } else {
+      const textarea = document.createElement('textarea');
+      textarea.value = code;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+    }
+    isEmbedCopied.value = true;
+    setTimeout(() => {
+      isEmbedCopied.value = false;
+    }, 2500);
+  } catch (err) {
+    console.error('Failed to copy embed code:', err);
+  }
+}
+
+// 6. Modal Mini-Map (for in-person events)
+let modalMapInstance = null;
+
+function hasPhysicalLocation(event) {
+  if (!event) return false;
+  const country = (event.country || '').toLowerCase();
+  const participation = (event.participation || '').toLowerCase();
+  if (country === 'online' || country === 'virtual' || participation === 'online') {
+    return false;
+  }
+  return !!getEventCoordinates(event);
+}
+
+function initModalMiniMap(event) {
+  if (modalMapInstance) {
+    modalMapInstance.remove();
+    modalMapInstance = null;
+  }
+  if (!event || !hasPhysicalLocation(event)) return;
+
+  const coords = getEventCoordinates(event);
+  if (!coords) return;
+
+  const container = document.getElementById('modal-mini-map');
+  if (!container) return;
+
+  modalMapInstance = L.map(container, {
+    center: coords,
+    zoom: 11,
+    zoomControl: false,
+    attributionControl: false,
+    dragging: false,
+    scrollWheelZoom: false,
+    doubleClickZoom: false,
+    touchZoom: false
+  });
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18
+  }).addTo(modalMapInstance);
+
+  const markerBg = event.type === 'deadline' ? '#f43f5e' : '#3b82f6';
+  const customIcon = L.divIcon({
+    html: `<div style="background: ${markerBg}; width: 22px; height: 22px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; color: white; font-size: 11px;">📍</div>`,
+    className: 'modal-map-pin',
+    iconSize: [22, 22],
+    iconAnchor: [11, 11]
+  });
+
+  L.marker(coords, { icon: customIcon }).addTo(modalMapInstance);
+
+  setTimeout(() => {
+    if (modalMapInstance) {
+      modalMapInstance.invalidateSize();
+    }
+  }, 120);
+}
+
+// 7. Browser Notifications & Reminder
 const reminderIds = ref(new Set(JSON.parse(localStorage.getItem('wikitimer_reminders') || '[]')));
 
 function hasReminder(event) {
@@ -1395,14 +1537,23 @@ async function copyShareLink(event) {
 
 function viewEvent(event) {
   selectedEvent.value = event;
+  showEmbedDrawer.value = false;
   const targetParam = event.slug || String(event.id || '');
   if (targetParam && route.params.id !== targetParam) {
     router.push({ name: 'TimerDetail', params: { id: targetParam } });
   }
+  nextTick(() => {
+    initModalMiniMap(event);
+  });
 }
 
 function closeModal() {
   selectedEvent.value = null;
+  showEmbedDrawer.value = false;
+  if (modalMapInstance) {
+    modalMapInstance.remove();
+    modalMapInstance = null;
+  }
   if (route.name === 'TimerDetail') {
     router.push({ name: 'WikiTimer' });
   }
@@ -1443,7 +1594,12 @@ function syncSelectedEventFromRoute() {
       String(e.id).toLowerCase() === targetId || 
       String(e.id).toLowerCase() === `meta:${targetId}`
     );
-    if (found) selectedEvent.value = found;
+    if (found) {
+      selectedEvent.value = found;
+      nextTick(() => {
+        initModalMiniMap(found);
+      });
+    }
   } else if (!route.params.id) {
     selectedEvent.value = null;
   }
