@@ -112,6 +112,12 @@ function parseRow(rowHtml) {
   const link = 'https:' + href;
   const name = decodeEntities(linkMatch[2].replace(/<[^>]+>/g, ''));
 
+  // Filter out test pages, sandbox scratchpads, and QA testing artifacts
+  const isSandboxOrTest = /sandbox\b|event test|\btest\s+\d+|t\d{6}/i.test(name) ||
+    /\/sandbox\//i.test(href) ||
+    /\/test\//i.test(href);
+  if (isSandboxOrTest) return null;
+
   const dateMatch = rowHtml.match(/<strong>([\s\S]*?)<\/strong>/);
   const dateText = dateMatch ? decodeEntities(dateMatch[1]) : '';
   const [startText, endText] = dateText.split(/\s+[\u2013\u2014-]\s+/);

@@ -275,6 +275,13 @@ describe('parseRow', () => {
     expect(event.time).toBe('2026-08-01T00:00:00.000Z');
     expect(event.endTime).toBe('2026-08-31T23:59:59.999Z');
   });
+
+  it('filters out sandbox and test scratchpad events', () => {
+    expect(parseRow(makeRow({ name: 'Sandbox/Event Test 007' }))).toBeNull();
+    expect(parseRow(makeRow({ name: 'Sandbox/VWalters-WMF/T400773' }))).toBeNull();
+    expect(parseRow(makeRow({ name: 'Sandbox/Worklist video guide' }))).toBeNull();
+    expect(parseRow(makeRow({ href: '//meta.wikimedia.org/wiki/Sandbox/Test_123', name: 'Real Event' }))).toBeNull();
+  });
 });
 
 // ---------------------------------------------------------------------------
