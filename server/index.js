@@ -300,8 +300,24 @@ app.get('/healthz', healthHandler);
 // --- Static frontend + SPA fallback ---
 // Serve the built Vue app and fall back to index.html for client-side routes
 // (e.g. /add) so deep links work with history mode.
-app.use(express.static(distPath));
+app.use(express.static(distPath, {
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html')) {
+      // Never cache index.html so users always receive the newest asset hashes after deployment
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
+    } else if (filePath.includes('/assets/')) {
+      // Hashed assets (JS/CSS) can be cached long-term
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    }
+  }
+}));
+
 app.get('*', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
   res.sendFile(path.join(distPath, 'index.html'));
 });
 

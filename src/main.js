@@ -25,6 +25,12 @@ const i18n = createI18n({
     }
 });
 
+// Auto-recover from outdated deploy bundles / missing chunks
+window.addEventListener('vite:preloadError', (event) => {
+  event.preventDefault();
+  window.location.reload();
+});
+
 const app = createApp(App);
 app.use(i18n);
 app.use(router);
