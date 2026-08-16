@@ -1,16 +1,37 @@
-# Wiki Timer
+# ⏱️ WikiTimer
 
-A Vue.js application for tracking Wikimedia events and deadlines.
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+[![Hosted on Wikimedia Toolforge](https://img.shields.io/badge/Hosted%20on-Wikimedia%20Toolforge-brightgreen.svg)](https://wikitimer.toolforge.org)
+[![Node.js](https://img.shields.io/badge/Node.js-20+-green.svg)](https://nodejs.org)
+[![Vue 3](https://img.shields.io/badge/Vue.js-3.x-emerald.svg)](https://vuejs.org)
 
-The app also imports the global Wikimedia event list (Meta-Wiki
-`Special:AllEvents` / CampaignEvents "Collaboration List") as a read-only,
-merged view alongside user-created timers.
+**WikiTimer** is an event coordination hub and countdown tracker designed for the global Wikimedia movement. It aggregates upcoming conferences, campaigns, and deadlines across Wikimedia projects, provides real-time countdowns, timezone conversion, calendar synchronization, and embeddable wikitext snippets.
 
-## Prerequisites
+🔗 **Live Tool:** [https://wikitimer.toolforge.org](https://wikitimer.toolforge.org)  
+📖 **Full Documentation:** [Read DOCS.md](DOCS.md)
 
-Before installation, ensure you have the following installed:
-- Node.js (v18 or higher)
-- MariaDB / MySQL
+---
+
+## ✨ Features at a Glance
+
+- ⏰ **Live Countdowns & Deadlines:** Precision tracking for multi-day events (e.g. Wikimania) and strict deadlines (e.g. scholarship cutoffs).
+- 🌍 **UTC ↔ Local Timezone Toggle:** Instant conversion to eliminate timezone confusion.
+- 📅 **1-Click Calendar Sync:** Export to Google Calendar and universal Apple/Outlook `.ics` files.
+- 📝 **Wikitext Markdown Embeds:** 1-click embed snippet for Meta-Wiki and Wikipedia project banners.
+- 🗄️ **Permanent Historical Archive:** Automatically captures and archives concluded Wikimedia events in MariaDB.
+- 🔐 **Wikimedia OAuth 2.0:** Secure login with your Wikimedia account.
+- 🌐 **Multi-Lingual (i18n):** English, Deutsch, Français, ଓଡ଼ିଆ, മലയാളം, and తెలుగు.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend:** Vue 3 (Vite), Tailwind CSS, `vue-i18n`, `vue-router`
+- **Backend:** Express.js, Node.js 20+, Passport.js (OAuth 2.0)
+- **Database:** MariaDB (ToolsDB) via Prisma ORM
+- **Infrastructure:** Wikimedia Toolforge (Build Service & Kubernetes)
+
+---
 
 ## Installation
 
