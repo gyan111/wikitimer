@@ -30,28 +30,28 @@ function slugify(name, href = '') {
 export const HISTORICAL_EVENTS = [
   // --- Wikimania Editions ---
   {
-    name: 'Wikimania 2026',
+    name: 'Wikimania 2026 (Paris)',
     link: 'https://wikimania.wikimedia.org/wiki/2026',
     time: '2026-08-05T09:00:00Z',
     endTime: '2026-08-09T18:00:00Z',
     region: 'Europe',
-    country: 'France',
+    country: 'Paris, France',
     timeZone: 'UTC+02:00',
     type: 'event',
     organizers: 'Wikimedia France & Core Organizing Team',
-    topics: 'Wikimania, Community, Strategy'
+    topics: 'Wikimania, Paris, France, Community, Strategy'
   },
   {
-    name: 'Wikimania 2025',
+    name: 'Wikimania 2025 (Nairobi)',
     link: 'https://wikimania.wikimedia.org/wiki/2025',
     time: '2025-08-06T09:00:00Z',
     endTime: '2025-08-09T18:00:00Z',
-    region: 'Europe',
-    country: 'Poland',
-    timeZone: 'UTC+02:00',
+    region: 'Africa',
+    country: 'Nairobi, Kenya',
+    timeZone: 'UTC+03:00',
     type: 'event',
-    organizers: 'Wikimedia Poland & COT',
-    topics: 'Wikimania, Community'
+    organizers: 'Wikimedia Kenya & Core Organizing Team',
+    topics: 'Wikimania, Nairobi, Kenya, Community'
   },
   {
     name: 'Wikimania 2024 (Katowice)',
@@ -59,11 +59,11 @@ export const HISTORICAL_EVENTS = [
     time: '2024-08-07T08:00:00Z',
     endTime: '2024-08-10T18:00:00Z',
     region: 'Europe',
-    country: 'Poland',
+    country: 'Katowice, Poland',
     timeZone: 'UTC+02:00',
     type: 'event',
     organizers: 'Wikimedia CEE & WMF',
-    topics: 'Wikimania, Collaboration'
+    topics: 'Wikimania, Katowice, Poland, Collaboration'
   },
   {
     name: 'Wikimania 2023 (Singapore)',

@@ -1042,10 +1042,31 @@ function getEventLogo(event) {
   return 'https://upload.wikimedia.org/wikipedia/commons/7/75/Wikimedia_Community_Logo.svg';
 }
 
-const events = computed(() => [
-  ...(Array.isArray(userTimers.value) ? userTimers.value : []),
-  ...(Array.isArray(metaEvents.value) ? metaEvents.value : [])
-]);
+const events = computed(() => {
+  const combined = [
+    ...(Array.isArray(userTimers.value) ? userTimers.value : []),
+    ...(Array.isArray(metaEvents.value) ? metaEvents.value : [])
+  ];
+  
+  const seen = new Set();
+  return combined.filter(event => {
+    if (!event || typeof event !== 'object' || !event.name || !event.time) return false;
+    
+    // Deduplication key based on normalized URL, metaId, slug, or name+time
+    const linkKey = (event.link || '').replace(/^https?:\/\//, '').replace(/\/+$/, '').toLowerCase();
+    const metaKey = event.metaId ? `meta:${event.metaId}` : '';
+    const slugKey = event.slug ? `slug:${event.slug}` : '';
+    const fallbackKey = `fallback:${event.name.trim().toLowerCase()}_${new Date(event.time).getTime()}`;
+    
+    const primaryKey = metaKey || slugKey || linkKey || fallbackKey;
+    if (seen.has(primaryKey) || (linkKey && seen.has(linkKey))) {
+      return false;
+    }
+    if (linkKey) seen.add(linkKey);
+    seen.add(primaryKey);
+    return true;
+  });
+});
 
 const standardRegions = ['Africa', 'Asia', 'Europe', 'Latin America', 'North America', 'Oceania', 'MENA', 'Global'];
 const uniqueRegions = computed(() => standardRegions);
@@ -1110,7 +1131,8 @@ const filteredEvents = computed(() => {
     if (selectedTag.value && selectedTag.value !== 'all') {
       const nameLower = (event.name || '').toLowerCase();
       const topicsLower = (event.topics || '').toLowerCase();
-      const fullText = `${nameLower} ${topicsLower}`;
+      const countryLower = (event.country || '').toLowerCase();
+      const fullText = `${nameLower} ${topicsLower} ${countryLower}`;
       
       if (selectedTag.value === 'wikimania') {
         tagMatch = fullText.includes('wikimania');
@@ -1129,11 +1151,27 @@ const filteredEvents = computed(() => {
       }
     }
 
+    // Search query matching across title, country, region, topics, organizers, and wiki project
+    let queryMatch = true;
+    if (query) {
+      const searchCorpus = [
+        event.name || '',
+        event.topics || '',
+        event.country || '',
+        event.region || '',
+        event.organizers || '',
+        event.wiki || '',
+        event.wikiProject || '',
+        event.link || ''
+      ].join(' ').toLowerCase();
+      queryMatch = searchCorpus.includes(query);
+    }
+
     return (
       timeStatusMatch &&
       regionMatch &&
       tagMatch &&
-      (!query || event.name.toLowerCase().includes(query) || (event.topics && event.topics.toLowerCase().includes(query)) || (event.country && event.country.toLowerCase().includes(query))) &&
+      queryMatch &&
       (!filters.value.country || event.country === filters.value.country) &&
       (!filters.value.type || event.type === filters.value.type)
     );
