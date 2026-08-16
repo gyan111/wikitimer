@@ -75,6 +75,7 @@
 import { ref, onMounted, onUnmounted, watch, computed } from 'vue';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import { getEventCoordinates } from '@/utils/geo.js';
 
 const props = defineProps({
   events: {

@@ -680,7 +680,7 @@
                   <span class="flex items-center gap-1.5 font-bold">📍 {{ selectedEvent.country || selectedEvent.region }}</span>
                   <span class="text-[11px] text-gray-400 font-normal">Host City Map</span>
                 </div>
-                <div id="modal-mini-map" class="h-32 w-full z-10"></div>
+                <div ref="modalMapContainer" class="h-36 w-full z-10"></div>
               </div>
 
               <!-- Action Buttons Row 1: Main Actions -->
@@ -1124,6 +1124,7 @@ async function copyEmbedCode(event) {
 }
 
 // 6. Modal Mini-Map (for in-person events)
+const modalMapContainer = ref(null);
 let modalMapInstance = null;
 
 function hasPhysicalLocation(event) {
@@ -1138,7 +1139,11 @@ function hasPhysicalLocation(event) {
 
 function initModalMiniMap(event) {
   if (modalMapInstance) {
-    modalMapInstance.remove();
+    try {
+      modalMapInstance.remove();
+    } catch (e) {
+      console.warn('Error removing map instance:', e);
+    }
     modalMapInstance = null;
   }
   if (!event || !hasPhysicalLocation(event)) return;
@@ -1146,40 +1151,53 @@ function initModalMiniMap(event) {
   const coords = getEventCoordinates(event);
   if (!coords) return;
 
-  const container = document.getElementById('modal-mini-map');
+  const container = modalMapContainer.value || document.getElementById('modal-mini-map');
   if (!container) return;
 
-  modalMapInstance = L.map(container, {
-    center: coords,
-    zoom: 11,
-    zoomControl: false,
-    attributionControl: false,
-    dragging: false,
-    scrollWheelZoom: false,
-    doubleClickZoom: false,
-    touchZoom: false
-  });
+  try {
+    modalMapInstance = L.map(container, {
+      center: coords,
+      zoom: 11,
+      zoomControl: false,
+      attributionControl: false,
+      dragging: false,
+      scrollWheelZoom: false,
+      doubleClickZoom: false,
+      touchZoom: false
+    });
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 18
-  }).addTo(modalMapInstance);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18
+    }).addTo(modalMapInstance);
 
-  const markerBg = event.type === 'deadline' ? '#f43f5e' : '#3b82f6';
-  const customIcon = L.divIcon({
-    html: `<div style="background: ${markerBg}; width: 22px; height: 22px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; color: white; font-size: 11px;">📍</div>`,
-    className: 'modal-map-pin',
-    iconSize: [22, 22],
-    iconAnchor: [11, 11]
-  });
+    const markerBg = event.type === 'deadline' ? '#f43f5e' : '#3b82f6';
+    const customIcon = L.divIcon({
+      html: `<div style="background: ${markerBg}; width: 22px; height: 22px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; color: white; font-size: 11px;">📍</div>`,
+      className: 'modal-map-pin',
+      iconSize: [22, 22],
+      iconAnchor: [11, 11]
+    });
 
-  L.marker(coords, { icon: customIcon }).addTo(modalMapInstance);
+    L.marker(coords, { icon: customIcon }).addTo(modalMapInstance);
 
-  setTimeout(() => {
-    if (modalMapInstance) {
-      modalMapInstance.invalidateSize();
-    }
-  }, 120);
+    setTimeout(() => {
+      if (modalMapInstance) modalMapInstance.invalidateSize();
+    }, 100);
+    setTimeout(() => {
+      if (modalMapInstance) modalMapInstance.invalidateSize();
+    }, 300);
+  } catch (err) {
+    console.error('Failed to init modal mini-map:', err);
+  }
 }
+
+watch(modalMapContainer, (el) => {
+  if (el && selectedEvent.value && hasPhysicalLocation(selectedEvent.value)) {
+    setTimeout(() => {
+      initModalMiniMap(selectedEvent.value);
+    }, 50);
+  }
+});
 
 // 7. Browser Notifications & Reminder
 const reminderIds = ref(new Set(JSON.parse(localStorage.getItem('wikitimer_reminders') || '[]')));
