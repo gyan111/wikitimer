@@ -71,6 +71,17 @@
         <span>{{ tag.icon }}</span>
         <span>{{ $t(tag.labelKey) }}</span>
       </button>
+
+      <!-- Quick Reset Button on Tags Line -->
+      <button
+        v-if="selectedTag !== 'all' || filters.searchQuery || filters.region || filters.country || filters.type || filters.starredOnly || filters.timeStatus !== 'upcoming'"
+        @click="resetFilters"
+        class="flex-shrink-0 px-3 py-1.5 rounded-full border border-red-200 dark:border-red-800/40 bg-red-50/80 dark:bg-red-950/30 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 font-semibold transition-all flex items-center gap-1 cursor-pointer shadow-2xs"
+        :title="$t('filters.reset')"
+      >
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        <span>{{ $t('filters.reset') }}</span>
+      </button>
     </div>
 
     <!-- Error Message -->
@@ -1398,6 +1409,7 @@ function resetFilters() {
     sort: 'desc',
     starredOnly: false
   };
+  selectedTag.value = 'all';
   isPinned.value = false;
   localStorage.removeItem('pinnedFilters');
 }

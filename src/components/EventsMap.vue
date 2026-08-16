@@ -330,8 +330,22 @@ function initMap() {
   renderMarkers();
 }
 
-function renderMarkers() {
+let lastEventsSignature = '';
+
+function getEventsSignature(eventsList) {
+  if (!Array.isArray(eventsList)) return '';
+  return eventsList.map(e => `${e.id || e.slug || e.name}_${e.time || ''}_${e.country || ''}`).join('|');
+}
+
+function renderMarkers(force = false) {
   if (!markersLayer || !map) return;
+
+  const currentSignature = getEventsSignature(props.events);
+  if (!force && currentSignature === lastEventsSignature) {
+    return;
+  }
+  lastEventsSignature = currentSignature;
+
   markersLayer.clearLayers();
 
   // Group events by location coordinates
@@ -421,7 +435,7 @@ function renderMarkers() {
       </div>
     `;
 
-    marker.bindPopup(popupHtml, { maxWidth: 300 });
+    marker.bindPopup(popupHtml, { maxWidth: 300, autoPan: true });
 
     marker.on('popupopen', () => {
       group.events.forEach((ev, evIdx) => {
@@ -445,7 +459,7 @@ function escapeHtml(str) {
 
 watch(() => props.events, () => {
   renderMarkers();
-}, { deep: true });
+});
 
 onMounted(() => {
   initMap();
