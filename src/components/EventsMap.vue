@@ -330,6 +330,11 @@ function initMap() {
   renderMarkers();
 }
 
+function getEventUniqueKey(ev) {
+  if (!ev) return '';
+  return String(ev.slug || ev.metaId || ev.id || `${ev.name}_${ev.time}`);
+}
+
 let lastEventsSignature = '';
 
 function getEventsSignature(eventsList) {
@@ -395,27 +400,33 @@ function renderMarkers(force = false) {
     const marker = L.marker([lat, lng], { icon: customIcon });
 
     // Generate rich popup HTML with single or multiple events
-    const eventsHtml = group.events.map((ev, evIdx) => {
+    const eventsHtml = group.events.map((ev) => {
       const concluded = isConcluded(ev);
       const isDeadline = ev.type === 'deadline';
       const statusColor = concluded ? '#059669' : (isDeadline ? '#e11d48' : '#2563eb');
       const statusText = concluded ? '✓ Concluded' : formatDate(ev.time);
       const typeBadgeBg = isDeadline ? '#ffe4e6' : '#eff6ff';
       const typeBadgeColor = isDeadline ? '#9f1239' : '#1e40af';
+      const eventKey = encodeURIComponent(getEventUniqueKey(ev));
       
       return `
-        <div style="padding: 8px; border-radius: 8px; background: #f9fafb; margin-bottom: 6px; border: 1px solid #f3f4f6;">
-          <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 4px; margin-bottom: 4px;">
-            <span style="font-weight: 700; font-size: 12px; color: #111827; line-height: 1.3;">${escapeHtml(ev.name)}</span>
-            <span style="font-size: 9px; font-weight: 700; text-transform: uppercase; background: ${typeBadgeBg}; color: ${typeBadgeColor}; padding: 2px 5px; border-radius: 4px; white-space: nowrap;">
+        <div style="padding: 10px; border-radius: 10px; background: #f9fafb; margin-bottom: 8px; border: 1px solid #e5e7eb;">
+          <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; margin-bottom: 4px;">
+            <span style="font-weight: 700; font-size: 12px; color: #111827; line-height: 1.35;">${escapeHtml(ev.name)}</span>
+            <span style="font-size: 9px; font-weight: 700; text-transform: uppercase; background: ${typeBadgeBg}; color: ${typeBadgeColor}; padding: 2px 6px; border-radius: 4px; white-space: nowrap;">
               ${ev.type || 'Event'}
             </span>
           </div>
-          <div style="font-size: 11px; font-weight: 600; color: ${statusColor}; margin-bottom: 6px;">
+          <div style="font-size: 11px; font-weight: 600; color: ${statusColor}; margin-bottom: 8px;">
             📅 ${statusText}
           </div>
-          <button id="map-btn-${groupIdx}-${evIdx}" style="width: 100%; background: #3b82f6; color: white; border: none; border-radius: 6px; padding: 5px 8px; font-size: 11px; font-weight: 600; cursor: pointer; transition: background 0.2s;">
-            View Details & Timer →
+          <button
+            type="button"
+            data-event-key="${eventKey}"
+            onclick="window.__wikitimer_select_event &amp;&amp; window.__wikitimer_select_event('${eventKey}')"
+            style="width: 100%; background: #2563eb; color: #ffffff; border: none; border-radius: 8px; padding: 6px 10px; font-size: 11px; font-weight: 700; cursor: pointer; text-align: center; display: block; box-shadow: 0 1px 3px rgba(0,0,0,0.12);"
+          >
+            View Details &amp; Timer →
           </button>
         </div>
       `;
@@ -429,24 +440,13 @@ function renderMarkers(force = false) {
           </div>
           ${count > 1 ? `<span style="font-size: 10px; font-weight: 700; background: #e0e7ff; color: #3730a3; padding: 1px 6px; border-radius: 9999px;">${count} events</span>` : ''}
         </div>
-        <div style="max-height: 220px; overflow-y: auto; padding-right: 2px;">
+        <div style="max-height: 240px; overflow-y: auto; padding-right: 2px;">
           ${eventsHtml}
         </div>
       </div>
     `;
 
     marker.bindPopup(popupHtml, { maxWidth: 300, autoPan: true });
-
-    marker.on('popupopen', () => {
-      group.events.forEach((ev, evIdx) => {
-        const btn = document.getElementById(`map-btn-${groupIdx}-${evIdx}`);
-        if (btn) {
-          btn.onclick = () => {
-            emit('select-event', ev);
-          };
-        }
-      });
-    });
 
     markersLayer.addLayer(marker);
   });
@@ -462,10 +462,32 @@ watch(() => props.events, () => {
 });
 
 onMounted(() => {
+  window.__wikitimer_select_event = (encodedKey) => {
+    const rawKey = decodeURIComponent(encodedKey || '');
+    const found = props.events.find(ev => getEventUniqueKey(ev) === rawKey || String(ev.id) === rawKey || String(ev.slug) === rawKey);
+    if (found) {
+      emit('select-event', found);
+    }
+  };
+
   initMap();
+
+  if (mapContainer.value) {
+    mapContainer.value.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-event-key]');
+      if (btn) {
+        e.preventDefault();
+        const encodedKey = btn.getAttribute('data-event-key');
+        if (encodedKey && window.__wikitimer_select_event) {
+          window.__wikitimer_select_event(encodedKey);
+        }
+      }
+    });
+  }
 });
 
 onUnmounted(() => {
+  delete window.__wikitimer_select_event;
   if (map) {
     map.remove();
   }
