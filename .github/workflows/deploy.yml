@@ -57,6 +57,10 @@ jobs:
             echo "Build Status:"
             become wikitimer toolforge build show
             
-            echo "Restarting webservice with newly built container..."
-            become wikitimer toolforge webservice buildservice restart || become wikitimer toolforge webservice --mount=none buildservice start
+            echo "Stopping webservice to force pulling new container image..."
+            become wikitimer toolforge webservice stop || true
+            sleep 5
+            
+            echo "Starting webservice with newly built container image..."
+            become wikitimer toolforge webservice --mount=none buildservice start || become wikitimer toolforge webservice buildservice start
             echo "WikiTimer deployment complete!"
