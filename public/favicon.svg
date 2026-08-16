@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="timerGrad" x1="4" y1="4" x2="60" y2="60" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3366cc"/>
+      <stop offset="0.5" stop-color="#2a4b8d"/>
+      <stop offset="1" stop-color="#0b2447"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#00af89"/>
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="64" height="64" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Base Rounded Hexagon/Squircle -->
+  <rect x="4" y="4" width="56" height="56" rx="16" fill="url(#timerGrad)" filter="url(#shadow)"/>
+  
+  <!-- Outer Timer Ring Track -->
+  <circle cx="32" cy="34" r="19" stroke="#ffffff" stroke-opacity="0.2" stroke-width="3.5" fill="none"/>
+  
+  <!-- Glowing Timer Progress Arc (Wikimedia Green & Cyan) -->
+  <path d="M 32 15 A 19 19 0 1 1 14.5 41.5" stroke="url(#accentGrad)" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+  
+  <!-- Stopwatch Top Stem & Button -->
+  <rect x="30" y="8" width="4" height="4" rx="1" fill="#ffffff"/>
+  <path d="M 27 8 L 37 8" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Stopwatch Side Buttons -->
+  <path d="M 47 19 L 49.5 16.5" stroke="#ffffff" stroke-opacity="0.8" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Center Pin -->
+  <circle cx="32" cy="34" r="3" fill="#ffffff"/>
+  
+  <!-- Clock / Timer Hands (10:10 angle) -->
+  <line x1="32" y1="34" x2="32" y2="23" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="32" y1="34" x2="42" y2="34" stroke="url(#accentGrad)" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Wikimedia Sparkle Dot (Wikimedia Red / Gold) -->
+  <circle cx="45" cy="21" r="2.5" fill="#ffcc00"/>
+</svg>
