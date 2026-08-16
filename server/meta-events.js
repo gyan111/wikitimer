@@ -196,10 +196,8 @@ async function fetchMetaEvents() {
   return [...byKey.values()];
 }
 
-import { PrismaClient } from '@prisma/client';
+import prisma from './db.js';
 import { createHash } from 'crypto';
-
-const prisma = process.env.DATABASE_URL ? new PrismaClient() : null;
 
 function getEventHash(rawIdOrLink) {
   return createHash('sha256').update(String(rawIdOrLink)).digest('hex');

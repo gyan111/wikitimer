@@ -1,10 +1,8 @@
 // Seed major historical Wikimedia events (Wikimania, global campaigns, hackathons, summits)
 // into the database so the "Past Events" archive is immediately populated and useful.
 
-import { PrismaClient } from '@prisma/client';
+import prisma from './db.js';
 import { createHash } from 'crypto';
-
-const prisma = new PrismaClient();
 
 function getEventHash(rawIdOrLink) {
   return createHash('sha256').update(String(rawIdOrLink)).digest('hex');

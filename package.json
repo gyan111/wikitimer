@@ -9,7 +9,7 @@
     "serve": "vite preview",
     "test": "vitest run",
     "start:server": "node server/index.js",
-    "start": "prisma migrate deploy && node server/index.js",
+    "start": "npx prisma db push --skip-generate --accept-data-loss && node server/index.js",
     "postinstall": "prisma generate"
   },
   "engines": {

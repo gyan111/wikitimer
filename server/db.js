@@ -1,16 +1,19 @@
 import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+const prisma = process.env.DATABASE_URL ? new PrismaClient() : null;
 
 // Graceful shutdown
-process.on('SIGINT', async () => {
-  await prisma.$disconnect();
-  process.exit();
-});
+if (prisma) {
+  process.on('SIGINT', async () => {
+    await prisma.$disconnect();
+    process.exit();
+  });
 
-process.on('SIGTERM', async () => {
-  await prisma.$disconnect();
-  process.exit();
-});
+  process.on('SIGTERM', async () => {
+    await prisma.$disconnect();
+    process.exit();
+  });
+}
 
 export default prisma;
+
