@@ -315,6 +315,10 @@ app.use(express.static(distPath, {
 }));
 
 app.get('*', (req, res) => {
+  // If requesting a missing asset or static file (e.g. /assets/old-chunk.js, /favicon.ico), return 404
+  if (req.path.startsWith('/assets/') || req.path.match(/\.(js|css|json|png|jpg|jpeg|svg|ico|woff|woff2|ttf|wasm)$/i)) {
+    return res.status(404).type('text/plain').send('Asset not found');
+  }
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.setHeader('Pragma', 'no-cache');
   res.setHeader('Expires', '0');
