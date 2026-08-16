@@ -651,36 +651,34 @@
                   </div>
                 </div>
 
-                <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800/40 rounded-xl border border-gray-100 dark:border-gray-800">
-                  <div class="p-2 rounded-lg bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400">
+                <!-- Host City / Location Card -->
+                <div class="flex items-center gap-3 p-3.5 bg-gray-50 dark:bg-gray-800/40 rounded-xl border border-gray-100 dark:border-gray-800">
+                  <div class="p-2 rounded-lg bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 shrink-0">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                   </div>
-                  <div>
-                    <div class="text-xs text-gray-400">Location / Participation</div>
-                    <div class="font-semibold text-gray-800 dark:text-gray-200">
-                      {{ selectedEvent.participation || selectedEvent.country || selectedEvent.region || 'Online' }}
+                  <div class="min-w-0 flex-1">
+                    <div class="text-xs text-gray-400 font-medium">Host City / Location</div>
+                    <div class="font-bold text-gray-900 dark:text-gray-100 text-sm flex items-center gap-1.5 flex-wrap mt-0.5">
+                      <span>{{ selectedEvent.country || selectedEvent.region || 'Online / Virtual' }}</span>
+                      <span
+                        v-if="selectedEvent.participation"
+                        class="text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase tracking-wider bg-purple-100/70 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 border border-purple-200/60 dark:border-purple-800/60"
+                      >
+                        {{ selectedEvent.participation }}
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                <div v-if="selectedEvent.organizers" class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800/40 rounded-xl border border-gray-100 dark:border-gray-800">
-                  <div class="p-2 rounded-lg bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400">
+                <div v-if="selectedEvent.organizers" class="flex items-center gap-3 p-3.5 bg-gray-50 dark:bg-gray-800/40 rounded-xl border border-gray-100 dark:border-gray-800">
+                  <div class="p-2 rounded-lg bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 shrink-0">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                   </div>
-                  <div class="min-w-0">
-                    <div class="text-xs text-gray-400">Organizers</div>
-                    <div class="font-semibold text-gray-800 dark:text-gray-200 truncate">{{ selectedEvent.organizers }}</div>
+                  <div class="min-w-0 flex-1">
+                    <div class="text-xs text-gray-400 font-medium">Organizers</div>
+                    <div class="font-semibold text-gray-800 dark:text-gray-200 truncate mt-0.5">{{ selectedEvent.organizers }}</div>
                   </div>
                 </div>
-              </div>
-
-              <!-- Mini Location Map (Only rendered for in-person / hybrid host cities) -->
-              <div v-if="hasPhysicalLocation(selectedEvent)" class="rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 shadow-2xs">
-                <div class="px-3.5 py-2 bg-gray-100/70 dark:bg-gray-800/80 border-b border-gray-200/60 dark:border-gray-700/60 flex items-center justify-between text-xs font-semibold text-gray-700 dark:text-gray-300">
-                  <span class="flex items-center gap-1.5 font-bold">📍 {{ selectedEvent.country || selectedEvent.region }}</span>
-                  <span class="text-[11px] text-gray-400 font-normal">Host City Map</span>
-                </div>
-                <div ref="modalMapContainer" class="h-36 w-full z-10"></div>
               </div>
 
               <!-- Action Buttons Row 1: Main Actions -->
@@ -812,9 +810,6 @@ import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuth } from '../store/auth';
 import EventsMap from './EventsMap.vue';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import { getEventCoordinates } from '@/utils/geo.js';
 
 const route = useRoute();
 const router = useRouter();
@@ -1123,83 +1118,7 @@ async function copyEmbedCode(event) {
   }
 }
 
-// 6. Modal Mini-Map (for in-person events)
-const modalMapContainer = ref(null);
-let modalMapInstance = null;
-
-function hasPhysicalLocation(event) {
-  if (!event) return false;
-  const country = (event.country || '').toLowerCase();
-  const participation = (event.participation || '').toLowerCase();
-  if (country === 'online' || country === 'virtual' || participation === 'online') {
-    return false;
-  }
-  return !!getEventCoordinates(event);
-}
-
-function initModalMiniMap(event) {
-  if (modalMapInstance) {
-    try {
-      modalMapInstance.remove();
-    } catch (e) {
-      console.warn('Error removing map instance:', e);
-    }
-    modalMapInstance = null;
-  }
-  if (!event || !hasPhysicalLocation(event)) return;
-
-  const coords = getEventCoordinates(event);
-  if (!coords) return;
-
-  const container = modalMapContainer.value || document.getElementById('modal-mini-map');
-  if (!container) return;
-
-  try {
-    modalMapInstance = L.map(container, {
-      center: coords,
-      zoom: 11,
-      zoomControl: false,
-      attributionControl: false,
-      dragging: false,
-      scrollWheelZoom: false,
-      doubleClickZoom: false,
-      touchZoom: false
-    });
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18
-    }).addTo(modalMapInstance);
-
-    const markerBg = event.type === 'deadline' ? '#f43f5e' : '#3b82f6';
-    const customIcon = L.divIcon({
-      html: `<div style="background: ${markerBg}; width: 22px; height: 22px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; color: white; font-size: 11px;">📍</div>`,
-      className: 'modal-map-pin',
-      iconSize: [22, 22],
-      iconAnchor: [11, 11]
-    });
-
-    L.marker(coords, { icon: customIcon }).addTo(modalMapInstance);
-
-    setTimeout(() => {
-      if (modalMapInstance) modalMapInstance.invalidateSize();
-    }, 100);
-    setTimeout(() => {
-      if (modalMapInstance) modalMapInstance.invalidateSize();
-    }, 300);
-  } catch (err) {
-    console.error('Failed to init modal mini-map:', err);
-  }
-}
-
-watch(modalMapContainer, (el) => {
-  if (el && selectedEvent.value && hasPhysicalLocation(selectedEvent.value)) {
-    setTimeout(() => {
-      initModalMiniMap(selectedEvent.value);
-    }, 50);
-  }
-});
-
-// 7. Browser Notifications & Reminder
+// 6. Browser Notifications & Reminder
 const reminderIds = ref(new Set(JSON.parse(localStorage.getItem('wikitimer_reminders') || '[]')));
 
 function hasReminder(event) {
@@ -1560,18 +1479,11 @@ function viewEvent(event) {
   if (targetParam && route.params.id !== targetParam) {
     router.push({ name: 'TimerDetail', params: { id: targetParam } });
   }
-  nextTick(() => {
-    initModalMiniMap(event);
-  });
 }
 
 function closeModal() {
   selectedEvent.value = null;
   showEmbedDrawer.value = false;
-  if (modalMapInstance) {
-    modalMapInstance.remove();
-    modalMapInstance = null;
-  }
   if (route.name === 'TimerDetail') {
     router.push({ name: 'WikiTimer' });
   }
@@ -1614,9 +1526,6 @@ function syncSelectedEventFromRoute() {
     );
     if (found) {
       selectedEvent.value = found;
-      nextTick(() => {
-        initModalMiniMap(found);
-      });
     }
   } else if (!route.params.id) {
     selectedEvent.value = null;
