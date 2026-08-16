@@ -1,170 +1,82 @@
-# 📖 WikiTimer Documentation & Community Guide
+# 📖 WikiTimer — User & Community Guide
 
-**WikiTimer** is a dedicated countdown, deadline tracker, and event coordination hub built specifically for the global Wikimedia movement. It automatically aggregates events across Wikimedia projects, provides real-time countdowns, timezone conversions, cross-platform calendar synchronization, and embeddable wikitext markdown snippets for Wikipedia and Meta-Wiki project pages.
+**WikiTimer** is a countdown and event tracker built specifically for the global Wikimedia movement. It helps organizers, volunteers, and participants stay updated with upcoming conferences, editathons, and important submission deadlines across all Wikimedia projects.
+
+🔗 **Live Tool:** [https://wikitimer.toolforge.org](https://wikitimer.toolforge.org)
 
 ---
 
-## 🌟 Key Features
+## 🎯 What is WikiTimer?
 
-### 1. ⏱️ Real-Time Countdowns & Multi-Day Tracking
-- **Live Precision Countdown:** Displays real-time Days, Hours, Minutes, and Seconds remaining until an event begins or a deadline closes.
-- **Deadlines vs. Multi-Day Events:** 
-  - **Deadlines (⏰ Crimson/Rose):** Emphasizes application cutoffs, scholarship submissions, call for proposals, and grant cycles (e.g. AoE / UTC-12:00 deadlines).
-  - **Events (🎉 Ocean Blue):** Accurately tracks both the start and conclusion of multi-day conferences (e.g. Wikimania, Hackathons, Regional Summits), displaying `🎉 Ongoing: Ends in Xd Yh`.
-- **Concluded Events Badge:** Clearly displays `✓ Ended` with the completion date once an event concludes.
+Across the Wikimedia movement, hundreds of events happen every month—from global conferences like **Wikimania** to local editathons, scholarship applications, and photo contests like **Wiki Loves Monuments**. 
 
-### 2. 🌍 Universal Timezone Converter (UTC ↔ Local)
-- Solves the #1 coordination challenge in the international Wikimedia community: **timezone confusion**.
-- In the event details modal, users can seamlessly toggle between **Local Time** (matching the viewer's device) and **UTC** (official Wikimedia standard).
+WikiTimer solves the common challenges volunteers face:
+- **Timezone Confusion:** Displays event times in both your **Local Time** and **UTC**.
+- **Missing Deadlines:** Highlights scholarship cutoffs and submission dates with dedicated countdowns.
+- **Calendar Integration:** Lets you export any event to **Google Calendar** or **Apple / Outlook Calendar (`.ics`)** with a single click.
+- **Wikitext Promotion:** Generates ready-to-paste wikitext markdown links for your Meta-Wiki / Wikipedia campaign banners.
+- **Historical Record:** Preserves past events in a searchable archive so community milestones are never lost.
 
-### 3. 📅 1-Click Cross-Platform Calendar Sync
-- **Google Calendar:** 1-click URL generator that pre-fills event title, start/end dates, location, and wiki links.
-- **Universal Apple / Outlook / iCalendar (`.ics`):** Instant `.ics` file generation formatted according to RFC 5545, compatible with Apple Calendar, Outlook, Mozilla Thunderbird, and mobile device calendars.
+---
 
-### 4. 📝 MediaWiki Wikitext Embed Generator
-- Allows organizers to generate standard MediaWiki wikitext with 1 click to embed on Meta-Wiki, Wikipedia, or outreach project pages:
+## ✨ Features & How to Use Them
+
+### 1. 🔍 Browsing & Searching Events
+- **Real-Time Search:** Type any keyword in the search bar (e.g. *Wikimania*, *Africa*, *Scholarship*, *Monuments*) to instantly filter matching events.
+- **Filter by Region & Country:** Narrow down events by continent (Africa, Asia, Europe, Latin America, North America, etc.) or specific country.
+- **Filter by Type:**
+  - **Events:** Multi-day conferences, workshops, and meetups.
+  - **Deadlines:** Grant applications, scholarship forms, and call for submissions.
+- **Upcoming vs. Past Archive:** Use the time status filter to view active upcoming events or browse the historical archive of concluded events.
+
+---
+
+### 2. 📋 Event Details Modal & Actions
+Clicking any event card opens the **Event Details Modal** with rich actions:
+
+- **🌍 Timezone Switcher:** Click **"Local"** or **"UTC"** to toggle how dates and times are displayed.
+- **📅 Add to Google Calendar:** Opens Google Calendar with the title, dates, and event link pre-filled.
+- **📥 Download `.ics` File:** Downloads an iCalendar file compatible with Apple Calendar, iPhone/iPad, Outlook, and Android.
+- **📝 Copy Wikitext Embed:** Copies a formatted MediaWiki link snippet:
   ```wikitext
   [https://wikitimer.toolforge.org ⏱️ View Live Countdown on WikiTimer]
   ```
-
-### 5. ⭐ Star / Favorite Events & Push Alerts
-- **Star / Bookmark:** Save events of interest locally with a live toggle in the filter bar to isolate your bookmarked watchlist.
-- **Browser Reminders:** Set a browser notification to receive an alert 15 minutes before an event kicks off.
-
-### 6. 🗄️ Permanent Historical Archive
-- MediaWiki's `CampaignEvents` extension removes events from `Special:AllEvents` as soon as they conclude.
-- WikiTimer automatically **archives completed events into MariaDB ToolsDB**, ensuring that past editathons, conferences, and campaigns remain searchable forever under the **"Past Events"** filter.
-
-### 7. 🌐 Multi-Lingual Interface (i18n)
-- Localized into multiple languages including English, Deutsch, Français, ଓଡ଼ିଆ (Odia), മലയാളം (Malayalam), and తెలుగు (Telugu).
+  Paste this directly into your Wikipedia or Meta-Wiki project page!
+- **🔗 Copy Direct Link:** Copies the event's direct URL to share with others.
+- **🔔 Set Reminder:** Allows you to receive a browser notification alert 15 minutes before the event starts.
+- **⭐ Bookmark Favorite:** Click the star icon on any card to save it to your local favorites watchlist.
 
 ---
 
-## 🏗️ Architecture & Technology Stack
+### 3. ➕ Creating a Community Timer
+Any Wikimedia user can create a timer for their local event or campaign:
 
-```
-   ┌─────────────────────────────────────────────────────────┐
-   │                  WikiTimer Architecture                 │
-   └─────────────────────────────────────────────────────────┘
-                               │
-            ┌──────────────────┴──────────────────┐
-            ▼                                     ▼
-   ┌─────────────────┐                   ┌─────────────────┐
-   │ Vue 3 Frontend  │                   │ Express Backend │
-   │ (Vite, Tailwind)│ ◄──[Same-Origin]─► │  (Port 8000)    │
-   └─────────────────┘                   └────────┬────────┘
-                                                  │
-            ┌─────────────────────────────────────┼────────────────────┐
-            ▼                                     ▼                    ▼
-   ┌───────────────────┐               ┌───────────────────┐  ┌───────────────────┐
-   │ Wikimedia OAuth 2 │               │ MariaDB (ToolsDB) │  │  Meta-Wiki Action │
-   │  Authentication   │               │ (Prisma + MySQL)  │  │ API Scraper & Syn │
-   └───────────────────┘               └───────────────────┘  └───────────────────┘
-```
-
-| Layer | Technology | Purpose |
-| :--- | :--- | :--- |
-| **Frontend** | Vue 3 (Composition & Options API) + Vite | High-performance reactive UI |
-| **Styling** | Tailwind CSS + Vanilla CSS tokens | Responsive glassmorphism interface |
-| **Localization** | `vue-i18n` | Multi-language translation support |
-| **Backend** | Express.js (Node.js 20+) | REST API and static SPA fallback |
-| **Database** | MariaDB (ToolsDB) via Prisma ORM | Persistent timers, user sessions, and event archives |
-| **Auth** | Passport.js + `passport-oauth2` | Wikimedia OAuth 2.0 single sign-on |
-| **CI/CD** | GitHub Actions + Toolforge Buildpack | Automated testing, container build, and deploy |
+1. Click **`+ Add Timer`** at the top of the page.
+2. Log in securely with your Wikimedia account using **Wikimedia OAuth 2.0**.
+3. Fill in the event details:
+   - **Type:** Event or Deadline
+   - **Title:** Event name (e.g. *Odia Wikipedia 20th Anniversary*)
+   - **Meta-Wiki Link:** Full URL to your project or registration page
+   - **Date & Time:** Start time and optional end time
+   - **Region & Country:** Location or *Online*
+4. Click **Launch Tracker** to publish your timer live for everyone!
 
 ---
 
-## 📡 REST API Reference
+## 🌐 Supported Languages
+WikiTimer is localized in multiple languages:
+- English
+- Deutsch (German)
+- Français (French)
+- ଓଡ଼ିଆ (Odia)
+- മലയാളം (Malayalam)
+- తెలుగు (Telugu)
 
-### 1. `GET /meta-events`
-Returns all active, upcoming, and archived Wikimedia events.
-- **Response Format:**
-  ```json
-  [
-    {
-      "id": "meta:meta.wikimedia.org/wiki/Event:Wikimania_2026",
-      "slug": "wikimania-2026-a1b2",
-      "name": "Wikimania 2026",
-      "link": "https://meta.wikimedia.org/wiki/Event:Wikimania_2026",
-      "time": "2026-08-05T09:00:00.000Z",
-      "endTime": "2026-08-09T18:00:00.000Z",
-      "region": "Europe",
-      "country": "France",
-      "type": "event",
-      "isMeta": true
-    }
-  ]
-  ```
-
-### 2. `GET /timers`
-Returns community-created timers merged with global events.
-
-### 3. `POST /timers` *(Authenticated)*
-Creates a new custom community timer or deadline.
-- **Request Body:**
-  ```json
-  {
-    "type": "event | deadline",
-    "name": "My Community Editathon",
-    "link": "https://meta.wikimedia.org/wiki/...",
-    "time": "2026-10-01T10:00:00Z",
-    "endTime": "2026-10-01T18:00:00Z",
-    "region": "Asia",
-    "country": "India",
-    "timeZone": "UTC+05:30"
-  }
-  ```
-
-### 4. `DELETE /timers/:id` *(Authenticated Creator/Admin)*
-Deletes a community-created timer.
+Switch your preferred language using the dropdown in the top header.
 
 ---
 
-## 💻 Local Development Setup
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/gyan111/wikitimer.git
-   cd wiki-timer
-   npm install
-   ```
-
-2. **Configure environment variables:**
-   ```bash
-   cp .env.example .env
-   ```
-   Provide `DATABASE_URL`, `SESSION_COOKIE_SECRET`, `WIKI_CLIENT_ID`, and `WIKI_CLIENT_SECRET`.
-
-3. **Start development servers:**
-   ```bash
-   npm run start:server   # Backend API on port 3000
-   npm run dev            # Vite frontend on port 5173 (proxies /api to backend)
-   ```
-
-4. **Run automated test suite:**
-   ```bash
-   npm test               # Runs Vitest unit & API integration tests
-   ```
-
----
-
-## 🚀 Toolforge Deployment & CI/CD
-
-WikiTimer is deployed on **Wikimedia Toolforge** using the Build Service.
-
-When changes are pushed to `main` on GitHub:
-1. GitHub Actions automatically executes the test suite (`vitest`).
-2. Connects to `login.toolforge.org` over SSH.
-3. Triggers a Toolforge buildpack compilation: `toolforge build start https://github.com/gyan111/wikitimer`.
-4. Polls the build until completion and performs a clean restart of the Kubernetes webservice.
-
----
-
-## 🤝 Contributing & Community Feedback
-
-- **Tool URL:** [https://wikitimer.toolforge.org](https://wikitimer.toolforge.org)
-- **Source Code:** [GitHub Repository](https://github.com/gyan111/wikitimer)
-- **Issues & Suggestions:** [GitHub Issues](https://github.com/gyan111/wikitimer/issues)
-- **Author:** [User:Jnanaranjan_sahu](https://meta.wikimedia.org/wiki/User:Jnanaranjan_sahu) on Meta-Wiki
-
-*Licensed under the Apache License 2.0.*
+## 🤝 Feedback & Support
+- **Author:** [Gyana (Jnanaranjan Sahu)](https://meta.wikimedia.org/wiki/User:Jnanaranjan_sahu)
+- **Hosted on:** Wikimedia Toolforge
+- **Report an Issue:** [GitHub Issues](https://github.com/gyan111/wikitimer/issues)

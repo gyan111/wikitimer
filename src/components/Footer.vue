@@ -11,7 +11,7 @@
           rel="noopener noreferrer"
           class="text-primary-600 dark:text-primary-400 hover:underline font-semibold transition-colors duration-200"
         >
-          Jnanaranjan Sahu (Gyan)
+          Gyana (Jnanaranjan Sahu)
         </a>
       </div>
 

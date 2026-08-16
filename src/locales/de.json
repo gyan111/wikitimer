@@ -1,50 +1,108 @@
 {
-    "app": {
-        "title": "WikiTimer",
-        "login": "Anmelden",
-        "themeLight": "Helles Design",
-        "themeDark": "Dunkles Design",
-        "language": "Sprache",
-        "addTimer": "Timer hinzufügen",
-        "backToTimers": "Zurück zu Timern",
-        "viewDashboard": "Dashboard anzeigen"
-    },
-    "timers": {
-        "allTimers": "Alle Timer",
-        "events": "Veranstaltungen",
-        "deadlines": "Fristen",
-        "search": "Veranstaltungen suchen...",
-        "noTimers": "Keine Timer gefunden.",
-        "noTimersDesc": "Erstellen Sie als Erster einen für Ihre Community!",
-        "createNew": "Neuen Timer erstellen"
-    },
-    "time": {
-        "days": "Tage",
-        "hours": "Stunden",
-        "minutes": "Minuten",
-        "seconds": "Sekunden"
-    },
-    "form": {
-        "title": "Neuen Timer hinzufügen",
-        "subtitle": "Erstellen Sie einen Countdown für Ihren nächsten Wiki-Meilenstein.",
-        "type": "Ereignistyp",
-        "typePlaceholder": "Typ auswählen",
-        "typeEvent": "Veranstaltung",
-        "typeDeadline": "Frist",
-        "name": "Titel",
-        "namePlaceholder": "z. B. Wikimania 2024",
-        "link": "Meta-Wiki Link",
-        "linkPlaceholder": "https://meta.wikimedia.org/wiki/...",
-        "dateTime": "Datum & Uhrzeit",
-        "timeZone": "Zeitzone",
-        "timeZonePlaceholder": "Zeitzone auswählen",
-        "region": "Region",
-        "regionPlaceholder": "Region auswählen",
-        "country": "Land",
-        "countryPlaceholder": "Tippen beginnen...",
-        "logo": "Logo-URL (Optional)",
-        "logoPlaceholder": "https://example.com/logo.png",
-        "logoInvalid": "Ungültige Bild-URL. Standard-Symbol wird verwendet.",
-        "submit": "Tracker starten"
-    }
+  "app": {
+    "title": "WikiTimer",
+    "login": "Anmelden",
+    "themeLight": "Helles Design",
+    "themeDark": "Dunkles Design",
+    "language": "Sprache",
+    "addTimer": "Timer hinzufügen",
+    "backToTimers": "Zurück zur Übersicht",
+    "viewDashboard": "Dashboard anzeigen"
+  },
+  "timers": {
+    "allTimers": "Alle Timer",
+    "events": "Veranstaltungen",
+    "deadlines": "Fristen",
+    "search": "Veranstaltungen suchen...",
+    "noTimers": "Keine Timer gefunden.",
+    "noTimersDesc": "Erstelle als Erster einen Timer für deine Community!",
+    "createNew": "Neuen Timer erstellen"
+  },
+  "tags": {
+    "all": "Alle",
+    "wikimania": "Wikimania",
+    "hackathon": "Hackathons",
+    "editathon": "Edit-a-thons",
+    "wikiloves": "Wiki Loves",
+    "conference": "Konferenzen & Gipfel",
+    "glam": "GLAM",
+    "education": "Bildung"
+  },
+  "map": {
+    "gridView": "Rasteransicht",
+    "mapView": "Kartenansicht",
+    "onlineEvents": "Online & Globale Events",
+    "viewDetails": "Details ansehen"
+  },
+  "filters": {
+    "allRegions": "Alle Regionen",
+    "allCountries": "Alle Länder",
+    "allTypes": "Alle Typen",
+    "event": "Veranstaltung",
+    "deadline": "Frist",
+    "upcoming": "Bevorstehende Events",
+    "past": "Vergangene Events",
+    "all": "Alle Events",
+    "recentFirst": "Neueste zuerst",
+    "oldestFirst": "Älteste zuerst",
+    "pin": "Ansicht anheften",
+    "pinned": "Angeheftet",
+    "reset": "Zurücksetzen",
+    "favoritesOnly": "Favoriten",
+    "showAll": "Alle",
+    "sourceBoth": "Alle Quellen",
+    "sourceCommunity": "Nur Community",
+    "sourceMeta": "Nur Meta-Events"
+  },
+  "status": {
+    "ongoing": "Läuft gerade",
+    "ended": "Beendet",
+    "startsIn": "Beginnt in",
+    "deadlineIn": "Frist endet in",
+    "endsIn": "Endet in"
+  },
+  "sections": {
+    "upcomingMatches": "Bevorstehende & Aktive Events",
+    "pastMatches": "Vergangene & Archivierte Events"
+  },
+  "modal": {
+    "addToGoogleCalendar": "Google Kalender",
+    "downloadIcs": ".ics herunterladen",
+    "copyWikitext": "Wikitext kopieren",
+    "copyLink": "Link kopieren",
+    "remindMe": "Erinnern",
+    "reminderSet": "Erinnerung gesetzt",
+    "timezoneLocal": "Lokale Zeit",
+    "timezoneUtc": "UTC",
+    "close": "Schließen"
+  },
+  "time": {
+    "days": "Tage",
+    "hours": "Stunden",
+    "minutes": "Minuten",
+    "seconds": "Sekunden"
+  },
+  "form": {
+    "title": "Neuen Timer hinzufügen",
+    "subtitle": "Erstelle einen Countdown für deinen nächsten Wiki-Meilenstein.",
+    "type": "Ereignistyp",
+    "typePlaceholder": "Typ auswählen",
+    "typeEvent": "Veranstaltung",
+    "typeDeadline": "Frist",
+    "name": "Titel",
+    "namePlaceholder": "z.B. Wikimania 2026",
+    "link": "Meta-Wiki-Link",
+    "linkPlaceholder": "https://meta.wikimedia.org/wiki/...",
+    "dateTime": "Datum & Uhrzeit",
+    "timeZone": "Zeitzone",
+    "timeZonePlaceholder": "Zeitzone auswählen",
+    "region": "Region",
+    "regionPlaceholder": "Region auswählen",
+    "country": "Land",
+    "countryPlaceholder": "Land eingeben...",
+    "logo": "Logo-URL (Optional)",
+    "logoPlaceholder": "https://example.com/logo.png",
+    "logoInvalid": "Ungültige Bild-URL.",
+    "submit": "Tracker starten"
+  }
 }

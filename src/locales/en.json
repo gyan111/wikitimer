@@ -1,50 +1,108 @@
 {
-    "app": {
-        "title": "WikiTimer",
-        "login": "Log In",
-        "themeLight": "Light Theme",
-        "themeDark": "Dark Theme",
-        "language": "Language",
-        "addTimer": "Add Timer",
-        "backToTimers": "Back to Timers",
-        "viewDashboard": "View Dashboard"
-    },
-    "timers": {
-        "allTimers": "All Timers",
-        "events": "Events",
-        "deadlines": "Deadlines",
-        "search": "Search events...",
-        "noTimers": "No timers found.",
-        "noTimersDesc": "Be the first to create one for your community!",
-        "createNew": "Create New Timer"
-    },
-    "time": {
-        "days": "Days",
-        "hours": "Hours",
-        "minutes": "Minutes",
-        "seconds": "Seconds"
-    },
-    "form": {
-        "title": "Add New Timer",
-        "subtitle": "Create a countdown for your next wiki milestone.",
-        "type": "Event Type",
-        "typePlaceholder": "Select Type",
-        "typeEvent": "Event",
-        "typeDeadline": "Deadline",
-        "name": "Title",
-        "namePlaceholder": "e.g. Wikimania 2024",
-        "link": "Meta-Wiki Link",
-        "linkPlaceholder": "https://meta.wikimedia.org/wiki/...",
-        "dateTime": "Date & Time",
-        "timeZone": "Time Zone",
-        "timeZonePlaceholder": "Select Time Zone",
-        "region": "Region",
-        "regionPlaceholder": "Select Region",
-        "country": "Country",
-        "countryPlaceholder": "Start typing...",
-        "logo": "Logo URL (Optional)",
-        "logoPlaceholder": "https://example.com/logo.png",
-        "logoInvalid": "Invalid image URL. Will use default icon.",
-        "submit": "Launch Tracker"
-    }
+  "app": {
+    "title": "WikiTimer",
+    "login": "Log In",
+    "themeLight": "Light Theme",
+    "themeDark": "Dark Theme",
+    "language": "Language",
+    "addTimer": "Add Timer",
+    "backToTimers": "Back to Timers",
+    "viewDashboard": "View Dashboard"
+  },
+  "timers": {
+    "allTimers": "All Timers",
+    "events": "Events",
+    "deadlines": "Deadlines",
+    "search": "Search events...",
+    "noTimers": "No timers found.",
+    "noTimersDesc": "Be the first to create one for your community!",
+    "createNew": "Create New Timer"
+  },
+  "tags": {
+    "all": "All",
+    "wikimania": "Wikimania",
+    "hackathon": "Hackathons",
+    "editathon": "Edit-a-thons",
+    "wikiloves": "Wiki Loves",
+    "conference": "Conferences & Summits",
+    "glam": "GLAM",
+    "education": "Education"
+  },
+  "map": {
+    "gridView": "Grid View",
+    "mapView": "Map View",
+    "onlineEvents": "Online & Global Events",
+    "viewDetails": "View Details"
+  },
+  "filters": {
+    "allRegions": "All Regions",
+    "allCountries": "All Countries",
+    "allTypes": "All Types",
+    "event": "Event",
+    "deadline": "Deadline",
+    "upcoming": "Upcoming Events",
+    "past": "Past Events",
+    "all": "All Events",
+    "recentFirst": "Recent First",
+    "oldestFirst": "Oldest First",
+    "pin": "Pin View",
+    "pinned": "Pinned",
+    "reset": "Reset",
+    "favoritesOnly": "Favorites",
+    "showAll": "All",
+    "sourceBoth": "All Sources",
+    "sourceCommunity": "Community Only",
+    "sourceMeta": "Meta Events Only"
+  },
+  "status": {
+    "ongoing": "Ongoing",
+    "ended": "Concluded",
+    "startsIn": "Starts in",
+    "deadlineIn": "Deadline in",
+    "endsIn": "Ends in"
+  },
+  "sections": {
+    "upcomingMatches": "Upcoming & Active Events",
+    "pastMatches": "Past & Archived Events"
+  },
+  "modal": {
+    "addToGoogleCalendar": "Google Calendar",
+    "downloadIcs": "Download .ics",
+    "copyWikitext": "Copy Wikitext",
+    "copyLink": "Copy Link",
+    "remindMe": "Remind Me",
+    "reminderSet": "Reminder Set",
+    "timezoneLocal": "Local Time",
+    "timezoneUtc": "UTC",
+    "close": "Close"
+  },
+  "time": {
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "seconds": "Seconds"
+  },
+  "form": {
+    "title": "Add New Timer",
+    "subtitle": "Create a countdown for your next wiki milestone.",
+    "type": "Event Type",
+    "typePlaceholder": "Select Type",
+    "typeEvent": "Event",
+    "typeDeadline": "Deadline",
+    "name": "Title",
+    "namePlaceholder": "e.g. Wikimania 2026",
+    "link": "Meta-Wiki Link",
+    "linkPlaceholder": "https://meta.wikimedia.org/wiki/...",
+    "dateTime": "Date & Time",
+    "timeZone": "Time Zone",
+    "timeZonePlaceholder": "Select Time Zone",
+    "region": "Region",
+    "regionPlaceholder": "Select Region",
+    "country": "Country",
+    "countryPlaceholder": "Start typing...",
+    "logo": "Logo URL (Optional)",
+    "logoPlaceholder": "https://example.com/logo.png",
+    "logoInvalid": "Invalid image URL. Will use default icon.",
+    "submit": "Launch Tracker"
+  }
 }

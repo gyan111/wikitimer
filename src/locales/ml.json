@@ -1,50 +1,108 @@
 {
-    "app": {
-        "title": "WikiTimer",
-        "login": "ലോഗിൻ ചെയ്യുക",
-        "themeLight": "ലൈറ്റ് തീം",
-        "themeDark": "ഡാർക്ക് തീം",
-        "language": "ഭാഷ",
-        "addTimer": "ടൈമർ ചേർക്കുക",
-        "backToTimers": "ടൈമറുകളിലേക്ക് മടങ്ങുക",
-        "viewDashboard": "ഡാഷ്‌ബോർഡ് കാണുക"
-    },
-    "timers": {
-        "allTimers": "എല്ലാ ടൈമറുകളും",
-        "events": "ഇവന്റുകൾ",
-        "deadlines": "സമയപരിധികൾ",
-        "search": "ഇവന്റുകൾ തിരയുക...",
-        "noTimers": "ടൈമറുകളൊന്നും കണ്ടെത്തിയില്ല.",
-        "noTimersDesc": "നിങ്ങളുടെ കമ്മ്യൂണിറ്റിക്കായി ഒരെണ്ണം സൃഷ്ടിക്കുന്ന ആദ്യത്തെയാളാകൂ!",
-        "createNew": "പുതിയ ടൈമർ സൃഷ്ടിക്കുക"
-    },
-    "time": {
-        "days": "ദിവസങ്ങൾ",
-        "hours": "മണിക്കൂറുകൾ",
-        "minutes": "മിനിറ്റുകൾ",
-        "seconds": "സെക്കൻഡുകൾ"
-    },
-    "form": {
-        "title": "പുതിയ ടൈമർ ചേർക്കുക",
-        "subtitle": "നിങ്ങളുടെ അടുത്ത വിക്കി നാഴികക്കല്ലിനായി ഒരു കൗണ്ട്‌ഡൗൺ സൃഷ്ടിക്കുക.",
-        "type": "ഇവന്റ് തരം",
-        "typePlaceholder": "തരം തിരഞ്ഞെടുക്കുക",
-        "typeEvent": "ഇവന്റ്",
-        "typeDeadline": "സമയപരിധി",
-        "name": "തലക്കെട്ട്",
-        "namePlaceholder": "ഉദാ. വികിമാനിയ 2024",
-        "link": "മെറ്റാ-വിക്കി ലിങ്ക്",
-        "linkPlaceholder": "https://meta.wikimedia.org/wiki/...",
-        "dateTime": "തീയതിയും സമയവും",
-        "timeZone": "സമയ മേഖല",
-        "timeZonePlaceholder": "സമയ മേഖല തിരഞ്ഞെടുക്കുക",
-        "region": "പ്രദേശം",
-        "regionPlaceholder": "പ്രദേശം തിരഞ്ഞെടുക്കുക",
-        "country": "രാജ്യം",
-        "countryPlaceholder": "ടൈപ്പിംഗ് ആരംഭിക്കുക...",
-        "logo": "ലോഗോ URL (ഓപ്ഷണൽ)",
-        "logoPlaceholder": "https://example.com/logo.png",
-        "logoInvalid": "അസാധുവായ ചിത്ര URL. സ്ഥിരസ്ഥിതി ഐക്കൺ ഉപയോഗിക്കും.",
-        "submit": "ട്രാക്കർ സമാരംഭിക്കുക"
-    }
+  "app": {
+    "title": "വിക്കിടൈമർ",
+    "login": "ലോഗിൻ ചെയ്യുക",
+    "themeLight": "ലൈറ്റ് തീം",
+    "themeDark": "ഡാർക്ക് തീം",
+    "language": "ഭാഷ",
+    "addTimer": "ടൈമർ ചേർക്കുക",
+    "backToTimers": "ടൈമറുകളിലേക്ക് മടങ്ങുക",
+    "viewDashboard": "ഡാഷ്‌ബോർഡ് കാണുക"
+  },
+  "timers": {
+    "allTimers": "എല്ലാ ടൈമറുകളും",
+    "events": "പരിപാടികൾ",
+    "deadlines": "അവസാന തീയതികൾ",
+    "search": "പരിപാടികൾ തിരയുക...",
+    "noTimers": "ടൈമറുകളൊന്നും കണ്ടെത്തിയില്ല.",
+    "noTimersDesc": "നിങ്ങളുടെ കമ്മ്യൂണിറ്റിക്കായി ആദ്യം ഒരെണ്ണം സൃഷ്ടിക്കൂ!",
+    "createNew": "പുതിയ ടൈമർ സൃഷ്ടിക്കുക"
+  },
+  "tags": {
+    "all": "എല്ലാം",
+    "wikimania": "വിക്കിമാനിയ",
+    "hackathon": "ഹാക്കത്തോൺ",
+    "editathon": "എഡിറ്റത്തോൺ",
+    "wikiloves": "വിക്കി ലവ്സ്",
+    "conference": "സമ്മേളനങ്ങൾ & ഉച്ചകോടികൾ",
+    "glam": "GLAM",
+    "education": "വിദ്യാഭ്യാസം"
+  },
+  "map": {
+    "gridView": "ഗ്രിഡ് കാഴ്ച",
+    "mapView": "മാപ്പ് കാഴ്ച",
+    "onlineEvents": "ഓൺലൈൻ & ആഗോള പരിപാടികൾ",
+    "viewDetails": "വിശദാംശങ്ങൾ കാണുക"
+  },
+  "filters": {
+    "allRegions": "എല്ലാ മേഖലകളും",
+    "allCountries": "എല്ലാ രാജ്യങ്ങളും",
+    "allTypes": "എല്ലാ തരങ്ങളും",
+    "event": "പരിപാടി",
+    "deadline": "അവസാന തീയതി",
+    "upcoming": "വരാനിരിക്കുന്നവ",
+    "past": "കഴിഞ്ഞ പരിപാടികൾ",
+    "all": "എല്ലാ പരിപാടികളും",
+    "recentFirst": "ഏറ്റവും പുതിയത് ആദ്യം",
+    "oldestFirst": "പഴയത് ആദ്യം",
+    "pin": "പിൻ ചെയ്യുക",
+    "pinned": "പിൻ ചെയ്തു",
+    "reset": "റീസെറ്റ്",
+    "favoritesOnly": "പ്രിയപ്പെട്ടവ",
+    "showAll": "എല്ലാം",
+    "sourceBoth": "എല്ലാ ഉറവിടങ്ങളും",
+    "sourceCommunity": "കമ്മ്യൂണിറ്റി മാത്രം",
+    "sourceMeta": "മെറ്റാ പരിപാടികൾ മാത്രം"
+  },
+  "status": {
+    "ongoing": "നടന്നുകൊണ്ടിരിക്കുന്നു",
+    "ended": "സമാപിച്ചു",
+    "startsIn": "ആരംഭിക്കാൻ ബാക്കി",
+    "deadlineIn": "അവസാന തീയതിക്ക് ബാക്കി",
+    "endsIn": "അവസാനിക്കാൻ ബാക്കി"
+  },
+  "sections": {
+    "upcomingMatches": "വരാനിരിക്കുന്നതും സജീവവുമായവ",
+    "pastMatches": "കഴിഞ്ഞതും ശേഖരിച്ചതുമായ പരിപാടികൾ"
+  },
+  "modal": {
+    "addToGoogleCalendar": "ഗൂഗിൾ കലണ്ടർ",
+    "downloadIcs": ".ics ഡൗൺലോഡ്",
+    "copyWikitext": "വിക്കിടെക്സ്റ്റ് പകർത്തു",
+    "copyLink": "ലിങ്ക് പകർത്തു",
+    "remindMe": "ഓർമ്മിപ്പിക്കുക",
+    "reminderSet": "ഓർമ്മപ്പെടുത്തൽ സജ്ജമാക്കി",
+    "timezoneLocal": "പ്രാദേശിക സമയം",
+    "timezoneUtc": "UTC സമയം",
+    "close": "അടയ്ക്കുക"
+  },
+  "time": {
+    "days": "ദിവസങ്ങൾ",
+    "hours": "മണിക്കൂറുകൾ",
+    "minutes": "മിനിറ്റുകൾ",
+    "seconds": "സെക്കൻഡുകൾ"
+  },
+  "form": {
+    "title": "പുതിയ ടൈമർ ചേർക്കുക",
+    "subtitle": "നിങ്ങളുടെ അടുത്ത വിക്കി നാഴികക്കല്ലിനായി ഒരു കൗണ്ട്ഡൗൺ സൃഷ്ടിക്കൂ.",
+    "type": "പരിപാടിയുടെ തരം",
+    "typePlaceholder": "തരം തിരഞ്ഞെടുക്കുക",
+    "typeEvent": "പരിപാടി",
+    "typeDeadline": "അവസാന തീയതി",
+    "name": "തലക്കെട്ട്",
+    "namePlaceholder": "ഉദാ: വിക്കിമാനിയ 2026",
+    "link": "മെറ്റാ-വിക്കി ലിങ്ക്",
+    "linkPlaceholder": "https://meta.wikimedia.org/wiki/...",
+    "dateTime": "തീയതിയും സമയവും",
+    "timeZone": "സമയ മേഖല",
+    "timeZonePlaceholder": "സമയ മേഖല തിരഞ്ഞെടുക്കുക",
+    "region": "മേഖല",
+    "regionPlaceholder": "മേഖല തിരഞ്ഞെടുക്കുക",
+    "country": "രാജ്യം",
+    "countryPlaceholder": "രാജ്യം നൽകുക...",
+    "logo": "ലോഗോ URL (ഓപ്ഷണൽ)",
+    "logoPlaceholder": "https://example.com/logo.png",
+    "logoInvalid": "അസാധുവായ ചിത്ര URL.",
+    "submit": "ട്രാക്കർ സമാരംഭിക്കുക"
+  }
 }

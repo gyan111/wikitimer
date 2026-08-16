@@ -27,7 +27,7 @@ function slugify(name, href = '') {
   return `${base}-${hex}`;
 }
 
-const HISTORICAL_EVENTS = [
+export const HISTORICAL_EVENTS = [
   // --- Wikimania Editions ---
   {
     name: 'Wikimania 2026',

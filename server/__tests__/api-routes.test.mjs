@@ -77,7 +77,6 @@ beforeAll(async () => {
   app.get('/timers', async (req, res) => {
     try {
       const timers = await prisma.timer.findMany({
-        where: { time: { gt: new Date() } },
         include: { creator: { select: { id: true, username: true } } },
         orderBy: { time: 'asc' },
       });

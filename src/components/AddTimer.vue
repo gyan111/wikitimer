@@ -280,11 +280,34 @@
             </div>
           </div>
 
+          <!-- Participation Format & Tags Row -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Region / Topic (Required) -->
+            <!-- Event Format / Participation -->
+            <div class="form-group relative">
+              <label for="participation" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">
+                Event Format <span class="text-xs font-normal text-gray-400">(In-person / Online)</span>
+              </label>
+              <div class="relative">
+                <select
+                  id="participation"
+                  v-model="newTimer.participation"
+                  :disabled="!isAuthenticated"
+                  class="w-full py-3.5 pl-4 pr-10 bg-white/70 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none transition-all"
+                >
+                  <option value="Hybrid">🌐 Hybrid (In-person & Online Streaming)</option>
+                  <option value="In-person">📍 In-person Only</option>
+                  <option value="Online">💻 Online / Virtual Only</option>
+                </select>
+                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-400">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Scope / Region -->
             <div class="form-group relative">
               <label for="region" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">
-                Topic / Region <span class="text-red-500">*</span>
+                Event Scope / Region <span class="text-red-500">*</span>
               </label>
               <div class="relative">
                 <select
@@ -294,8 +317,7 @@
                   :disabled="!isAuthenticated"
                   class="w-full py-3.5 pl-4 pr-10 bg-white/70 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none transition-all"
                 >
-                  <option value="" disabled>Select Region or Topic</option>
-                  <option value="Global">Global / Worldwide</option>
+                  <option value="Global">🌍 Global / Worldwide (e.g. Wikimania, Hackathon)</option>
                   <option value="Africa">Africa</option>
                   <option value="Asia">Asia</option>
                   <option value="Europe">Europe</option>
@@ -310,43 +332,92 @@
                 </div>
               </div>
             </div>
+          </div>
 
-            <!-- Country / Location (Required) -->
-            <div class="form-group relative z-30">
-              <label for="country" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">
-                Location / Country <span class="text-red-500">*</span>
+          <!-- Location / Host City & Country -->
+          <div class="form-group relative z-30">
+            <div class="flex items-center justify-between mb-1.5 ml-1">
+              <label for="country" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                Host Location / City & Country <span class="text-red-500">*</span>
               </label>
-              <div class="relative">
-                <input
-                  id="country"
-                  v-model="newTimer.country"
-                  @input="filterCountries"
-                  type="text"
-                  required
-                  :disabled="!isAuthenticated"
-                  placeholder="e.g. Online, Nigeria, India, United States"
-                  class="w-full py-3.5 px-4 bg-white/70 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                >
-                <transition
-                  enter-active-class="transition duration-200 ease-out"
-                  enter-from-class="opacity-0 translate-y-2"
-                  enter-to-class="opacity-100 translate-y-0"
-                  leave-active-class="transition duration-150 ease-in"
-                  leave-from-class="opacity-100 translate-y-0"
-                  leave-to-class="opacity-0 translate-y-2"
-                >
-                  <ul v-if="filteredCountries.length" class="absolute bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl mt-2 max-h-60 overflow-y-auto w-full z-50 py-1 divide-y divide-gray-100 dark:divide-gray-700">
-                    <li
-                      v-for="c in filteredCountries"
-                      :key="c"
-                      @click="selectCountry(c)"
-                      class="py-3 px-4 hover:bg-primary-50 dark:hover:bg-gray-700 cursor-pointer transition-colors text-sm"
-                    >
-                      {{ c }}
-                    </li>
-                  </ul>
-                </transition>
+              <span class="text-xs text-primary-600 dark:text-primary-400 font-medium">Auto-mapped on Globe 🗺️</span>
+            </div>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
               </div>
+              <input
+                id="country"
+                v-model="newTimer.country"
+                @input="filterCountries"
+                type="text"
+                required
+                :disabled="!isAuthenticated"
+                placeholder="e.g. Katowice, Poland or Nairobi, Kenya or Online"
+                class="w-full py-3.5 pl-11 pr-4 bg-white/70 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+              >
+              <transition
+                enter-active-class="transition duration-200 ease-out"
+                enter-from-class="opacity-0 translate-y-2"
+                enter-to-class="opacity-100 translate-y-0"
+                leave-active-class="transition duration-150 ease-in"
+                leave-from-class="opacity-100 translate-y-0"
+                leave-to-class="opacity-0 translate-y-2"
+              >
+                <ul v-if="filteredCountries.length" class="absolute bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl mt-2 max-h-60 overflow-y-auto w-full z-50 py-1 divide-y divide-gray-100 dark:divide-gray-700">
+                  <li
+                    v-for="c in filteredCountries"
+                    :key="c"
+                    @click="selectCountry(c)"
+                    class="py-3 px-4 hover:bg-primary-50 dark:hover:bg-gray-700 cursor-pointer transition-colors text-sm"
+                  >
+                    {{ c }}
+                  </li>
+                </ul>
+              </transition>
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1.5 ml-1">
+              Tip: For global events (e.g. Wikimania, Hackathon), enter the physical host city & country (e.g. <em>Paris, France</em> or <em>Katowice, Poland</em>) so it pins precisely on the map!
+            </p>
+          </div>
+
+          <!-- Tags & Topic Categories (1-Click Chips) -->
+          <div class="form-group relative">
+            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">
+              Category Tags & Topics <span class="text-xs font-normal text-gray-400">(Select all that apply)</span>
+            </label>
+            <div class="flex flex-wrap gap-2 mb-3">
+              <button
+                v-for="tag in availableTags"
+                :key="tag.name"
+                type="button"
+                @click="toggleFormTag(tag.name)"
+                :class="selectedTags.includes(tag.name) ? 'bg-primary-600 text-white shadow-sm border-primary-600' : 'bg-white/80 dark:bg-gray-800/80 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700'"
+                class="px-3.5 py-1.5 rounded-full border text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer"
+              >
+                <span>{{ tag.icon }}</span>
+                <span>{{ tag.name }}</span>
+                <span v-if="selectedTags.includes(tag.name)" class="ml-0.5">✓</span>
+              </button>
+            </div>
+
+            <!-- Custom Topic Input -->
+            <div class="flex gap-2">
+              <input
+                v-model="customTagInput"
+                @keydown.enter.prevent="addCustomTag"
+                type="text"
+                :disabled="!isAuthenticated"
+                placeholder="Add custom topic/tag (press Enter)..."
+                class="flex-1 py-2.5 px-3.5 bg-white/70 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl text-xs shadow-xs focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+              >
+              <button
+                type="button"
+                @click="addCustomTag"
+                class="px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-xl text-xs border border-gray-200 dark:border-gray-700 transition-all"
+              >
+                Add Tag
+              </button>
             </div>
           </div>
 
@@ -415,6 +486,36 @@ import { useAuth } from '../store/auth';
 const router = useRouter();
 const { user, isAuthenticated, login, checkAuth } = useAuth();
 
+const availableTags = [
+  { name: 'Wikimania', icon: '🎉' },
+  { name: 'Hackathon', icon: '💻' },
+  { name: 'Edit-a-thon', icon: '📚' },
+  { name: 'Wiki Loves', icon: '📷' },
+  { name: 'Conference', icon: '🤝' },
+  { name: 'GLAM', icon: '🏛️' },
+  { name: 'Education', icon: '🎓' }
+];
+
+const selectedTags = ref([]);
+const customTagInput = ref('');
+
+function toggleFormTag(tagName) {
+  const index = selectedTags.value.indexOf(tagName);
+  if (index > -1) {
+    selectedTags.value.splice(index, 1);
+  } else {
+    selectedTags.value.push(tagName);
+  }
+}
+
+function addCustomTag() {
+  const tag = customTagInput.value.trim();
+  if (tag && !selectedTags.value.includes(tag)) {
+    selectedTags.value.push(tag);
+    customTagInput.value = '';
+  }
+}
+
 const newTimer = ref({
   type: 'event',
   name: '',
@@ -422,8 +523,10 @@ const newTimer = ref({
   time: '',
   endTime: '',
   region: 'Global',
-  country: 'Online',
+  country: '',
   timeZone: 'UTC+00:00',
+  participation: 'Hybrid',
+  topics: '',
   organizers: '',
   logo: ''
 });
@@ -476,6 +579,8 @@ async function addTimer() {
   isSubmitting.value = true;
 
   try {
+    newTimer.value.topics = selectedTags.value.join(', ');
+
     const response = await fetch('/add-timer', {
       method: 'POST',
       headers: {
@@ -491,6 +596,8 @@ async function addTimer() {
 
     const data = await response.json();
     successMessage.value = data.message || 'Timer created successfully!';
+    selectedTags.value = [];
+    customTagInput.value = '';
     newTimer.value = {
       type: 'event',
       name: '',
@@ -498,8 +605,10 @@ async function addTimer() {
       time: '',
       endTime: '',
       region: 'Global',
-      country: 'Online',
+      country: '',
       timeZone: 'UTC+00:00',
+      participation: 'Hybrid',
+      topics: '',
       organizers: '',
       logo: ''
     };

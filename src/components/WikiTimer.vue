@@ -1,8 +1,8 @@
 <template>
   <div class="container mx-auto p-2 sm:p-6 w-full max-w-none">
     <!-- Toolbar -->
-    <div class="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4 px-2">
-      <div class="flex items-center gap-3 w-full sm:w-auto flex-1">
+    <div class="flex flex-col md:flex-row items-center justify-between mb-6 gap-4 px-2">
+      <div class="flex items-center gap-3 w-full md:w-auto flex-1">
         <input 
           id="search-input"
           type="text" 
@@ -12,13 +12,35 @@
           :class="{ 'animate-pulse opacity-80': !filters.searchQuery }"
         >
       </div>
-      <div class="flex items-center gap-3">
+      <div class="flex flex-wrap items-center gap-3 w-full md:w-auto justify-between md:justify-end">
+        <!-- View Switcher (Grid / Map) -->
+        <div class="flex items-center bg-gray-100/80 dark:bg-gray-800/80 p-1 rounded-xl border border-gray-200/80 dark:border-gray-700/80">
+          <button
+            @click="viewMode = 'grid'"
+            :class="viewMode === 'grid' ? 'bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-400 shadow-xs' : 'text-gray-500 hover:text-gray-800 dark:hover:text-gray-200'"
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all"
+            :title="$t('map.gridView')"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+            <span>{{ $t('map.gridView') }}</span>
+          </button>
+          <button
+            @click="viewMode = 'map'"
+            :class="viewMode === 'map' ? 'bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-400 shadow-xs' : 'text-gray-500 hover:text-gray-800 dark:hover:text-gray-200'"
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all"
+            :title="$t('map.mapView')"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+            <span>{{ $t('map.mapView') }}</span>
+          </button>
+        </div>
+
         <router-link 
           to="/add" 
-          class="relative inline-flex items-center justify-center px-5 sm:px-6 py-2.5 overflow-hidden font-semibold text-white rounded-xl shadow-md group bg-gradient-to-br from-primary-500 to-indigo-600 hover:from-primary-600 hover:to-indigo-700 transition-all duration-300 text-sm sm:text-base"
+          class="relative inline-flex items-center justify-center px-4 sm:px-5 py-2.5 overflow-hidden font-semibold text-white rounded-xl shadow-md group bg-gradient-to-br from-primary-500 to-indigo-600 hover:from-primary-600 hover:to-indigo-700 transition-all duration-300 text-xs sm:text-sm"
         >
           <span class="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-56 group-hover:h-56 opacity-10"></span>
-          <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+          <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
           <span class="relative">{{ $t('app.addTimer') }}</span>
         </router-link>
         
@@ -27,7 +49,7 @@
           v-if="isAuthenticated"
           @click="logout"
           :disabled="isLoading"
-          class="flex items-center px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm hover:bg-red-50 dark:hover:bg-red-950/30 hover:border-red-200 dark:hover:border-red-900/50 hover:text-red-600 dark:hover:text-red-400 font-medium text-xs sm:text-sm shadow-xs transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed group"
+          class="flex items-center px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm hover:bg-red-50 dark:hover:bg-red-950/30 hover:border-red-200 dark:hover:border-red-900/50 hover:text-red-600 dark:hover:text-red-400 font-medium text-xs sm:text-sm shadow-xs transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed group"
           :title="`Logged in as ${user?.username}. Click to Logout`"
         >
           <span class="w-2 h-2 rounded-full bg-emerald-500 mr-2 group-hover:bg-red-500 transition-colors"></span>
@@ -35,6 +57,20 @@
           <span class="text-xs text-gray-400 ml-1.5 group-hover:text-red-500">(Logout)</span>
         </button>
       </div>
+    </div>
+
+    <!-- Quick Category Filter Chips -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-3 mb-6 scrollbar-none text-xs">
+      <button
+        v-for="tag in categoryTags"
+        :key="tag.id"
+        @click="toggleTag(tag.id)"
+        :class="selectedTag === tag.id ? 'bg-primary-600 text-white shadow-sm border-primary-600' : 'bg-white/70 dark:bg-gray-800/70 text-gray-700 dark:text-gray-300 border-gray-200/80 dark:border-gray-700/80 hover:bg-gray-100 dark:hover:bg-gray-700'"
+        class="flex-shrink-0 px-3.5 py-1.5 rounded-full border font-semibold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs"
+      >
+        <span>{{ tag.icon }}</span>
+        <span>{{ $t(tag.labelKey) }}</span>
+      </button>
     </div>
 
     <!-- Error Message -->
@@ -61,7 +97,7 @@
             @change="applyFilters" 
             class="w-full py-2.5 px-4 rounded-xl border-0 bg-white/50 dark:bg-gray-800/80 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-500 appearance-none backdrop-blur-md"
           >
-            <option value="">All Regions</option>
+            <option value="">{{ $t('filters.allRegions') }}</option>
             <option v-for="region in uniqueRegions" :key="region" :value="region">{{ region }}</option>
           </select>
           <select 
@@ -70,7 +106,7 @@
             @change="applyFilters" 
             class="w-full py-2.5 px-4 rounded-xl border-0 bg-white/50 dark:bg-gray-800/80 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-500 appearance-none backdrop-blur-md"
           >
-            <option value="">All Countries</option>
+            <option value="">{{ $t('filters.allCountries') }}</option>
             <option v-for="country in uniqueCountries" :key="country" :value="country">{{ country }}</option>
           </select>
         </div>
@@ -81,9 +117,9 @@
             @change="applyFilters" 
             class="w-full py-2.5 px-4 rounded-xl border-0 bg-white/50 dark:bg-gray-800/80 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-500 appearance-none backdrop-blur-md"
           >
-            <option value="">All Types</option>
-            <option value="event">Event</option>
-            <option value="deadline">Deadline</option>
+            <option value="">{{ $t('filters.allTypes') }}</option>
+            <option value="event">{{ $t('filters.event') }}</option>
+            <option value="deadline">{{ $t('filters.deadline') }}</option>
           </select>
           <select 
             id="timeStatus" 
@@ -91,9 +127,9 @@
             @change="applyFilters" 
             class="w-full py-2.5 px-4 rounded-xl border-0 bg-white/50 dark:bg-gray-800/80 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-500 appearance-none backdrop-blur-md"
           >
-            <option value="upcoming">Upcoming Events</option>
-            <option value="past">Past Events</option>
-            <option value="all">All Events</option>
+            <option value="upcoming">{{ $t('filters.upcoming') }}</option>
+            <option value="past">{{ $t('filters.past') }}</option>
+            <option value="all">{{ $t('filters.all') }}</option>
           </select>
           <select 
             id="sort" 
@@ -101,8 +137,8 @@
             @change="applyFilters" 
             class="w-full py-2.5 px-4 rounded-xl border-0 bg-white/50 dark:bg-gray-800/80 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-500 appearance-none backdrop-blur-md"
           >
-            <option value="desc">Recent First</option>
-            <option value="asc">Oldest First</option>
+            <option value="desc">{{ $t('filters.recentFirst') }}</option>
+            <option value="asc">{{ $t('filters.oldestFirst') }}</option>
           </select>
         </div>
         <div class="flex justify-center gap-4 mt-2">
@@ -112,13 +148,13 @@
             class="flex-1 py-2.5 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400 font-medium transition-all duration-300 flex items-center justify-center gap-2"
           >
             <svg v-if="isPinned" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path></svg>
-            {{ isPinned ? 'Pinned' : 'Pin View' }}
+            {{ isPinned ? $t('filters.pinned') : $t('filters.pin') }}
           </button>
           <button 
             @click="resetFilters" 
             class="flex-1 py-2.5 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/30 hover:bg-red-100 dark:hover:bg-red-900/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 font-medium transition-all duration-300"
           >
-            Reset
+            {{ $t('filters.reset') }}
           </button>
         </div>
       </div>
@@ -135,7 +171,7 @@
             @change="applyFilters" 
             class="w-full py-2.5 pl-9 pr-6 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer truncate"
           >
-            <option value="">All Regions</option>
+            <option value="">{{ $t('filters.allRegions') }}</option>
             <option v-for="region in uniqueRegions" :key="region" :value="region">{{ region }}</option>
           </select>
         </div>
@@ -146,7 +182,7 @@
           @change="applyFilters" 
           class="flex-1 min-w-0 py-2.5 px-3 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer truncate"
         >
-          <option value="">All Countries</option>
+          <option value="">{{ $t('filters.allCountries') }}</option>
           <option v-for="country in uniqueCountries" :key="country" :value="country">{{ country }}</option>
         </select>
         
@@ -156,9 +192,9 @@
           @change="applyFilters" 
           class="flex-1 min-w-0 py-2.5 px-3 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer truncate"
         >
-          <option value="">All Types</option>
-          <option value="event">Event</option>
-          <option value="deadline">Deadline</option>
+          <option value="">{{ $t('filters.allTypes') }}</option>
+          <option value="event">{{ $t('filters.event') }}</option>
+          <option value="deadline">{{ $t('filters.deadline') }}</option>
         </select>
         
         <select 
@@ -167,9 +203,9 @@
           @change="applyFilters" 
           class="flex-1 min-w-0 py-2.5 px-3 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer truncate"
         >
-          <option value="upcoming">Upcoming Events</option>
-          <option value="past">Past Events</option>
-          <option value="all">All Events</option>
+          <option value="upcoming">{{ $t('filters.upcoming') }}</option>
+          <option value="past">{{ $t('filters.past') }}</option>
+          <option value="all">{{ $t('filters.all') }}</option>
         </select>
         
         <select 
@@ -178,8 +214,8 @@
           @change="applyFilters" 
           class="flex-1 min-w-0 py-2.5 px-3 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer truncate"
         >
-          <option value="desc">Recent First</option>
-          <option value="asc">Oldest First</option>
+          <option value="desc">{{ $t('filters.recentFirst') }}</option>
+          <option value="asc">{{ $t('filters.oldestFirst') }}</option>
         </select>
         
         <div class="flex items-center gap-1.5 border-l border-gray-200 dark:border-gray-700 pl-3 flex-shrink-0">
@@ -187,7 +223,7 @@
             @click="filters.starredOnly = !filters.starredOnly" 
             :class="filters.starredOnly ? 'text-amber-500 bg-amber-50 dark:bg-amber-900/30 border-amber-300 dark:border-amber-700' : 'text-gray-400 hover:text-amber-500 hover:bg-gray-100 dark:hover:bg-gray-800 border-gray-200 dark:border-gray-700'" 
             class="p-2.5 rounded-xl border transition-all flex items-center gap-1"
-            :title="filters.starredOnly ? 'Show All Events' : 'Show Starred Events Only'"
+            :title="filters.starredOnly ? $t('filters.showAll') : $t('filters.favoritesOnly')"
           >
             <svg class="w-4 h-4" :fill="filters.starredOnly ? 'currentColor' : 'none'" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
             <span v-if="starredIds.size > 0" class="text-xs font-bold">{{ starredIds.size }}</span>
@@ -197,7 +233,7 @@
             @click="pinFilters" 
             :class="isPinned ? 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800' : 'text-gray-500 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 border-gray-200 dark:border-gray-700'" 
             class="p-2.5 rounded-xl border transition-all"
-            :title="isPinned ? 'Filters Pinned' : 'Pin Filters'"
+            :title="isPinned ? $t('filters.pinned') : $t('filters.pin')"
           >
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path></svg>
           </button>
@@ -205,7 +241,7 @@
           <button 
             @click="resetFilters" 
             class="p-2.5 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl border border-red-200 dark:border-red-800/30 transition-all"
-            title="Reset Filters"
+            :title="$t('filters.reset')"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
           </button>
@@ -240,6 +276,7 @@
       leave-from-class="opacity-100"
       leave-to-class="opacity-0"
     >
+      <!-- Empty State -->
       <div v-if="sortedFilteredEvents.length === 0" class="mt-8 flex justify-center">
         <div class="glass-panel p-8 rounded-2xl max-w-lg text-center flex flex-col items-center">
           <div class="w-16 h-16 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 rounded-full flex items-center justify-center mb-4">
@@ -247,111 +284,209 @@
           </div>
           <h2 class="text-xl font-bold mb-2">{{ filters.starredOnly ? 'No Starred Events' : $t('timers.noTimers') }}</h2>
           <p class="text-gray-600 dark:text-gray-400 mb-6">{{ filters.starredOnly ? 'You haven\'t starred any events yet. Click the star icon on any card to save it here.' : $t('timers.noTimersDesc') }}</p>
-          <button v-if="filters.starredOnly" @click="filters.starredOnly = false" class="px-6 py-2.5 bg-primary-500 hover:bg-primary-600 text-white rounded-xl shadow-md font-medium transition-colors">Show All Events</button>
+          <button v-if="filters.starredOnly" @click="filters.starredOnly = false" class="px-6 py-2.5 bg-primary-500 hover:bg-primary-600 text-white rounded-xl shadow-md font-medium transition-colors">{{ $t('filters.showAll') }}</button>
           <router-link v-else to="/add" class="px-6 py-2.5 bg-primary-500 hover:bg-primary-600 text-white rounded-xl shadow-md font-medium transition-colors">{{ $t('timers.createNew') }}</router-link>
         </div>
       </div>
-      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
-        <transition-group name="list">
-          <div
-            v-for="(event, index) in sortedFilteredEvents"
-            :key="event.id || (event.name + event.time)"
-            class="glass-card !bg-white/80 dark:!bg-gray-900 rounded-2xl p-6 flex flex-col justify-between gap-5 cursor-pointer relative overflow-hidden group border-t-4 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
-            :class="event.type === 'event' ? 'border-t-blue-500' : 'border-t-purple-500'"
-            @click="viewEvent(event)"
-          >
-            <!-- Background Glow Effect on Hover -->
-            <div class="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                 :class="event.type === 'event' ? 'from-blue-500/10 via-indigo-500/5 to-transparent' : 'from-rose-500/15 via-pink-500/5 to-transparent'"></div>
-            
-            <div>
-              <div class="flex items-start gap-3 relative z-10">
-                <div class="flex-shrink-0 w-12 h-12 rounded-xl border p-2 shadow-sm overflow-hidden flex items-center justify-center"
-                     :class="event.type === 'event' ? 'border-blue-100 dark:border-blue-900/40 bg-blue-50/50 dark:bg-gray-800' : 'border-rose-100 dark:border-rose-900/40 bg-rose-50/50 dark:bg-gray-800'">
-                  <img :src="getEventLogo(event)" :alt="event.name" class="w-full h-full object-contain" @error="$event.target.src=fallbackLogo" />
-                </div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex justify-between items-start">
-                    <h3 class="font-bold text-base sm:text-lg leading-snug line-clamp-2 text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" :title="event.name">
-                      {{ event?.name }}
-                    </h3>
-                    <div class="flex items-center gap-1 ml-1 flex-shrink-0">
-                      <!-- Star Button -->
-                      <button
-                        @click.stop="toggleStar(event)"
-                        class="p-1 rounded-lg text-gray-300 hover:text-amber-400 dark:text-gray-600 dark:hover:text-amber-400 transition-colors"
-                        :class="{ '!text-amber-400': isStarred(event) }"
-                        :title="isStarred(event) ? 'Remove Star' : 'Star Event'"
-                      >
-                        <svg class="w-5 h-5" :fill="isStarred(event) ? 'currentColor' : 'none'" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
-                      </button>
 
-                      <button 
-                        v-if="!event.isMeta && user && (user.id === event.creatorId || user.isAdmin)"
-                        @click.stop="deleteEvent(event.id)"
-                        class="p-1 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-                        title="Delete Timer"
-                      >
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                      </button>
-                    </div>
+      <!-- Non-Empty State: Map or Grid View -->
+      <div v-else>
+        <!-- Interactive Map View -->
+        <div v-if="viewMode === 'map'" class="my-4">
+          <EventsMap :events="sortedFilteredEvents" @select-event="viewEvent" />
+        </div>
+
+        <!-- Events List (With Search / Multi-Section Display) -->
+        <div v-else class="space-y-12">
+          <!-- Section 1: Upcoming & Active Events -->
+          <div v-if="activeEvents.length > 0">
+            <div v-if="isSearchingOrAll && pastEvents.length > 0" class="flex items-center gap-2 mb-6">
+              <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+              <h2 class="text-xl font-extrabold text-gray-800 dark:text-gray-200 tracking-tight">
+                {{ $t('sections.upcomingMatches') }} ({{ activeEvents.length }})
+              </h2>
+            </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
+            <div
+              v-for="(event, index) in activeEvents"
+              :key="event.id || (event.name + event.time)"
+              class="glass-card rounded-2xl p-6 flex flex-col justify-between gap-5 cursor-pointer relative overflow-hidden group border-t-4 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+              :class="[
+                event.type === 'deadline' 
+                  ? '!bg-rose-50/20 dark:!bg-rose-950/15 border-t-rose-400/90 dark:border-t-rose-500/80 border border-rose-100/50 dark:border-rose-900/30' 
+                  : '!bg-white/80 dark:!bg-gray-900 border-t-blue-400/90 dark:border-t-blue-500/80 border border-gray-100 dark:border-gray-800'
+              ]"
+              @click="viewEvent(event)"
+            >
+              <div>
+                <div class="flex items-start gap-3 relative z-10">
+                  <div 
+                    class="flex-shrink-0 w-12 h-12 rounded-xl border p-2 shadow-xs overflow-hidden flex items-center justify-center"
+                    :class="event.type === 'deadline' ? 'border-rose-100 dark:border-rose-900/40 bg-rose-50/40 dark:bg-gray-800' : 'border-blue-100 dark:border-blue-900/40 bg-blue-50/40 dark:bg-gray-800'"
+                  >
+                    <img :src="getEventLogo(event)" :alt="event.name" class="w-full h-full object-contain" @error="$event.target.src=fallbackLogo" />
                   </div>
-                  <p v-if="event.creator?.username" class="text-xs text-primary-600 dark:text-primary-400 font-medium truncate mt-0.5">Added by {{ event.creator.username }}</p>
-                  <p class="text-sm text-gray-500 dark:text-gray-400 truncate mt-1">{{ event?.region }}</p>
-                  <p class="text-xs text-gray-400 dark:text-gray-500 truncate">{{ event?.country }}</p>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex justify-between items-start">
+                      <h3 class="font-bold text-base sm:text-lg leading-snug line-clamp-2 text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" :title="event.name">
+                        {{ event?.name }}
+                      </h3>
+                      <div class="flex items-center gap-1 ml-1 flex-shrink-0">
+                        <button
+                          @click.stop="toggleStar(event)"
+                          class="p-1 rounded-lg text-gray-300 hover:text-amber-400 dark:text-gray-600 dark:hover:text-amber-400 transition-colors"
+                          :class="{ '!text-amber-400': isStarred(event) }"
+                          :title="isStarred(event) ? 'Remove Star' : 'Star Event'"
+                        >
+                          <svg class="w-5 h-5" :fill="isStarred(event) ? 'currentColor' : 'none'" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+                        </button>
+
+                        <button 
+                          v-if="!event.isMeta && user && (user.id === event.creatorId || user.isAdmin)"
+                          @click.stop="deleteEvent(event.id)"
+                          class="p-1 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                          title="Delete Timer"
+                        >
+                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </button>
+                      </div>
+                    </div>
+                    <p v-if="event.creator?.username" class="text-xs text-primary-600 dark:text-primary-400 font-medium truncate mt-0.5">Added by {{ event.creator.username }}</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 truncate mt-1">{{ event?.region }}</p>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 truncate">{{ event?.country }}</p>
+                  </div>
+                </div>
+                
+                <div class="flex flex-wrap gap-2 items-center relative z-10 mt-4">
+                  <span 
+                    class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wider shadow-xs border"
+                    :class="event.type === 'deadline' ? 'bg-rose-50/80 border-rose-200 text-rose-800 dark:bg-rose-950/40 dark:border-rose-800/50 dark:text-rose-300' : 'bg-blue-50/80 border-blue-200 text-blue-800 dark:bg-blue-950/40 dark:border-blue-800/50 dark:text-blue-300'"
+                  >
+                    <span class="w-1.5 h-1.5 rounded-full mr-1.5 self-center inline-block" :class="event.type === 'deadline' ? 'bg-rose-500' : 'bg-blue-500'"></span>
+                    {{ event.type === 'deadline' ? $t('filters.deadline') : $t('filters.event') }}
+                  </span>
+                  <span
+                    v-if="isOngoing(event)"
+                    class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wider shadow-xs border bg-amber-50/80 border-amber-200 text-amber-800 dark:bg-amber-950/40 dark:border-amber-800/50 dark:text-amber-300 animate-pulse"
+                  >
+                    {{ $t('status.ongoing') }}
+                  </span>
+                  <span
+                    v-if="event.isMeta"
+                    class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wider shadow-xs border bg-sky-50/80 border-sky-200 text-sky-800 dark:bg-sky-950/40 dark:border-sky-800/50 dark:text-sky-300"
+                  >
+                    Meta
+                  </span>
+                  <a v-if="event && event.link" :href="event.link" target="_blank" rel="noopener" class="ml-auto inline-flex items-center text-xs font-medium text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors bg-white/50 dark:bg-gray-800/50 py-1 px-2 rounded-lg border border-gray-200 dark:border-gray-700 backdrop-blur-sm hover:shadow-xs" @click.stop>
+                    Link
+                    <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                  </a>
                 </div>
               </div>
               
-              <div class="flex flex-wrap gap-2 items-center relative z-10 mt-4">
-                <span 
-                  class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold uppercase tracking-wider shadow-sm border"
-                  :class="event.type === 'event' ? 'bg-blue-50/90 border-blue-200 text-blue-700 dark:bg-blue-900/30 dark:border-blue-800 dark:text-blue-300' : 'bg-rose-50/90 border-rose-200 text-rose-700 dark:bg-rose-900/30 dark:border-rose-800 dark:text-rose-300'"
-                >
-                  <span class="w-1.5 h-1.5 rounded-full mr-1.5 self-center inline-block" :class="event.type === 'event' ? 'bg-blue-500' : 'bg-rose-500'"></span>
-                  {{ event.type }}
-                </span>
-                <span
-                  v-if="isOngoing(event)"
-                  class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wider shadow-sm border bg-amber-50/80 border-amber-200 text-amber-700 dark:bg-amber-900/30 dark:border-amber-800 dark:text-amber-300 animate-pulse"
-                  title="Event is currently happening"
-                >
-                  Ongoing
-                </span>
-                <span
-                  v-if="event.isMeta"
-                  class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wider shadow-sm border bg-emerald-50/80 border-emerald-200 text-emerald-700 dark:bg-emerald-900/30 dark:border-emerald-800 dark:text-emerald-300"
-                  title="Imported from Meta-Wiki (Special:AllEvents)"
-                >
-                  Meta
-                </span>
-                <a v-if="event && event.link" :href="event.link" target="_blank" rel="noopener" class="ml-auto inline-flex items-center text-xs font-medium text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors bg-white/50 dark:bg-gray-800/50 py-1 px-2 rounded-lg border border-gray-200 dark:border-gray-700 backdrop-blur-sm hover:shadow-sm" @click.stop>
-                  Link
-                  <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                </a>
-              </div>
-            </div>
-            
-            <div class="pt-4 border-t border-gray-100 dark:border-gray-700/50 relative z-10">
-              <div class="flex items-center justify-between mb-1.5">
-                <span class="text-xs font-semibold uppercase tracking-wide" :class="event.type === 'deadline' ? 'text-rose-600 dark:text-rose-400 font-bold' : 'text-gray-600 dark:text-gray-400'">
-                  {{ isOngoing(event) ? 'Ends in' : (isPast(event) ? 'Status' : (event.type === 'deadline' ? '⏰ Deadline in' : 'Starts in')) }}
-                </span>
-                <span class="text-xs px-2 py-0.5 rounded border"
-                      :class="event.type === 'deadline' ? 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800/50' : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700'">
-                  {{ event?.timeZone }}
-                </span>
-              </div>
-              <div class="flex items-end gap-2">
-                <span class="text-sm font-bold text-gray-800 dark:text-gray-200 truncate">{{ formatEventDates(event) }}</span>
-              </div>
-              <div class="mt-1 font-mono text-sm tracking-wider tabular-nums font-bold" :class="isOngoing(event) ? 'text-amber-600 dark:text-amber-400' : (event.type === 'event' ? 'text-blue-600 dark:text-blue-400' : 'text-rose-600 dark:text-rose-400')">
-                {{ formatCountdown(event) }}
+              <div class="pt-4 border-t border-gray-100 dark:border-gray-800/80 relative z-10">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-xs font-semibold uppercase tracking-wide" :class="event.type === 'deadline' ? 'text-rose-600 dark:text-rose-400' : 'text-gray-500 dark:text-gray-400'">
+                    {{ isOngoing(event) ? $t('status.endsIn') : (event.type === 'deadline' ? '⏰ ' + $t('status.deadlineIn') : $t('status.startsIn')) }}
+                  </span>
+                  <span class="text-xs px-2 py-0.5 rounded border bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-gray-200/60 dark:border-gray-700">
+                    {{ event?.timeZone }}
+                  </span>
+                </div>
+                <div class="flex items-end gap-2">
+                  <span class="text-sm font-bold text-gray-800 dark:text-gray-200 truncate">{{ formatEventDates(event) }}</span>
+                </div>
+                <div class="mt-1 font-mono text-sm tracking-wider tabular-nums font-bold" :class="isOngoing(event) ? 'text-amber-600 dark:text-amber-400' : (event.type === 'deadline' ? 'text-rose-600 dark:text-rose-400' : 'text-blue-600 dark:text-blue-400')">
+                  {{ formatCountdown(event) }}
+                </div>
               </div>
             </div>
           </div>
-        </transition-group>
+        </div>
+
+        <!-- Section 2: Past & Archived Events (Distinct mild green styling) -->
+        <div v-if="pastEvents.length > 0">
+          <div class="flex items-center gap-2 mb-6" :class="{ 'pt-6 border-t border-gray-200/60 dark:border-gray-800/60': activeEvents.length > 0 }">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+            <h2 class="text-xl font-extrabold text-gray-800 dark:text-gray-200 tracking-tight">
+              {{ $t('sections.pastMatches') }} ({{ pastEvents.length }})
+            </h2>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
+            <div
+              v-for="(event, index) in pastEvents"
+              :key="event.id || (event.name + event.time)"
+              class="glass-card !bg-emerald-50/20 dark:!bg-emerald-950/15 rounded-2xl p-6 flex flex-col justify-between gap-5 cursor-pointer relative overflow-hidden group border-t-4 border-t-emerald-400/80 dark:border-t-emerald-500/70 border border-emerald-100/50 dark:border-emerald-900/30 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+              @click="viewEvent(event)"
+            >
+              <div>
+                <div class="flex items-start gap-3 relative z-10">
+                  <div class="flex-shrink-0 w-12 h-12 rounded-xl border border-emerald-100 dark:border-emerald-900/40 bg-emerald-50/40 dark:bg-gray-800 p-2 shadow-xs overflow-hidden flex items-center justify-center">
+                    <img :src="getEventLogo(event)" :alt="event.name" class="w-full h-full object-contain opacity-80" @error="$event.target.src=fallbackLogo" />
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex justify-between items-start">
+                      <h3 class="font-bold text-base sm:text-lg leading-snug line-clamp-2 text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors" :title="event.name">
+                        {{ event?.name }}
+                      </h3>
+                      <div class="flex items-center gap-1 ml-1 flex-shrink-0">
+                        <button
+                          @click.stop="toggleStar(event)"
+                          class="p-1 rounded-lg text-gray-300 hover:text-amber-400 dark:text-gray-600 dark:hover:text-amber-400 transition-colors"
+                          :class="{ '!text-amber-400': isStarred(event) }"
+                          :title="isStarred(event) ? 'Remove Star' : 'Star Event'"
+                        >
+                          <svg class="w-5 h-5" :fill="isStarred(event) ? 'currentColor' : 'none'" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+                        </button>
+                      </div>
+                    </div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 truncate mt-1">{{ event?.region }}</p>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 truncate">{{ event?.country }}</p>
+                  </div>
+                </div>
+                
+                <div class="flex flex-wrap gap-2 items-center relative z-10 mt-4">
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wider shadow-xs border bg-emerald-50/80 border-emerald-200 text-emerald-800 dark:bg-emerald-950/40 dark:border-emerald-800/50 dark:text-emerald-300">
+                    <span class="w-1.5 h-1.5 rounded-full mr-1.5 self-center inline-block bg-emerald-500"></span>
+                    {{ $t('status.ended') }}
+                  </span>
+                  <span
+                    v-if="event.isMeta"
+                    class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wider shadow-xs border bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700"
+                  >
+                    Meta Archive
+                  </span>
+                  <a v-if="event && event.link" :href="event.link" target="_blank" rel="noopener" class="ml-auto inline-flex items-center text-xs font-medium text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors bg-white/50 dark:bg-gray-800/50 py-1 px-2 rounded-lg border border-gray-200 dark:border-gray-700 backdrop-blur-sm hover:shadow-xs" @click.stop>
+                    Link
+                    <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                  </a>
+                </div>
+              </div>
+              
+              <div class="pt-4 border-t border-emerald-100/60 dark:border-emerald-900/30 relative z-10">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-xs font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
+                    {{ $t('status.ended') }}
+                  </span>
+                  <span class="text-xs px-2 py-0.5 rounded border bg-emerald-50/50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-emerald-200/50 dark:border-gray-700">
+                    {{ event?.timeZone }}
+                  </span>
+                </div>
+                <div class="flex items-end gap-2">
+                  <span class="text-sm font-bold text-gray-800 dark:text-gray-200 truncate">{{ formatEventDates(event) }}</span>
+                </div>
+                <div class="mt-1 font-mono text-sm tracking-wider tabular-nums font-bold text-emerald-700 dark:text-emerald-400">
+                  {{ formatCountdown(event) }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </transition>
+    </div>
+  </transition>
 
     <!-- Timer Detail Responsive Modal with Blurred Backdrop -->
     <teleport to="body">
@@ -545,22 +680,22 @@
                   @click="copyShareLink(selectedEvent)"
                   type="button"
                   class="inline-flex items-center justify-center gap-1.5 px-3.5 py-3 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 font-medium rounded-xl border border-gray-200 dark:border-gray-700 transition-all text-sm"
-                  title="Copy link to this timer"
+                  :title="$t('modal.copyLink')"
                 >
                   <svg v-if="!isCopied" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
                   <svg v-else class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                  <span>{{ isCopied ? 'Copied!' : 'Share' }}</span>
+                  <span>{{ isCopied ? 'Copied!' : $t('modal.copyLink') }}</span>
                 </button>
 
                 <button
                   @click="copyWikitext(selectedEvent)"
                   type="button"
                   class="inline-flex items-center justify-center gap-1.5 px-3.5 py-3 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 font-medium rounded-xl border border-gray-200 dark:border-gray-700 transition-all text-sm"
-                  title="Copy Wikitext snippet for Wikipedia event pages"
+                  :title="$t('modal.copyWikitext')"
                 >
                   <svg v-if="!isWikitextCopied" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                   <svg v-else class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                  <span>{{ isWikitextCopied ? 'Wikitext Copied!' : 'Wikitext' }}</span>
+                  <span>{{ isWikitextCopied ? 'Wikitext Copied!' : $t('modal.copyWikitext') }}</span>
                 </button>
 
                 <button
@@ -568,10 +703,10 @@
                   type="button"
                   class="inline-flex items-center justify-center gap-1.5 px-3.5 py-3 rounded-xl border transition-all text-sm font-medium"
                   :class="hasReminder(selectedEvent) ? 'bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 border-amber-300 dark:border-amber-700' : 'bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-200 dark:border-gray-700'"
-                  :title="hasReminder(selectedEvent) ? 'Reminder Active' : 'Set Browser Reminder'"
+                  :title="hasReminder(selectedEvent) ? $t('modal.reminderSet') : $t('modal.remindMe')"
                 >
                   <svg class="w-4 h-4" :fill="hasReminder(selectedEvent) ? 'currentColor' : 'none'" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                  <span>{{ hasReminder(selectedEvent) ? 'Reminder Set' : 'Remind Me' }}</span>
+                  <span>{{ hasReminder(selectedEvent) ? $t('modal.reminderSet') : $t('modal.remindMe') }}</span>
                 </button>
               </div>
 
@@ -585,7 +720,7 @@
                   class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/40 text-blue-600 dark:text-blue-300 text-xs font-semibold rounded-lg border border-blue-200 dark:border-blue-800/50 transition-all"
                 >
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                  <span>Google Calendar</span>
+                  <span>{{ $t('modal.addToGoogleCalendar') }}</span>
                 </a>
                 <button
                   @click="downloadICal(selectedEvent)"
@@ -594,7 +729,7 @@
                   title="Download .ics file for Apple Calendar, Outlook, etc."
                 >
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                  <span>iCal (.ics)</span>
+                  <span>{{ $t('modal.downloadIcs') }}</span>
                 </button>
               </div>
 
@@ -605,7 +740,7 @@
                   type="button"
                   class="w-full py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-xl text-sm transition-all shadow-xs"
                 >
-                  Close
+                  {{ $t('modal.close') }}
                 </button>
               </div>
             </div>
@@ -622,10 +757,36 @@
 import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuth } from '../store/auth';
+import EventsMap from './EventsMap.vue';
 
 const route = useRoute();
 const router = useRouter();
 const { user, isAuthenticated, isLoading, error: authError, login, logout, checkAuth } = useAuth();
+
+const viewMode = ref(localStorage.getItem('wikitimer_view_mode') || 'grid');
+watch(viewMode, (newVal) => {
+  localStorage.setItem('wikitimer_view_mode', newVal);
+});
+
+const categoryTags = [
+  { id: 'all', labelKey: 'tags.all', icon: '🌐' },
+  { id: 'wikimania', labelKey: 'tags.wikimania', icon: '🎉' },
+  { id: 'hackathon', labelKey: 'tags.hackathon', icon: '💻' },
+  { id: 'editathon', labelKey: 'tags.editathon', icon: '📚' },
+  { id: 'wikiloves', labelKey: 'tags.wikiloves', icon: '📷' },
+  { id: 'conference', labelKey: 'tags.conference', icon: '🤝' },
+  { id: 'glam', labelKey: 'tags.glam', icon: '🏛️' },
+  { id: 'education', labelKey: 'tags.education', icon: '🎓' }
+];
+const selectedTag = ref('all');
+
+function toggleTag(tagId) {
+  if (selectedTag.value === tagId) {
+    selectedTag.value = 'all';
+  } else {
+    selectedTag.value = tagId;
+  }
+}
 
 onMounted(() => {
   checkAuth();
@@ -914,7 +1075,7 @@ function isUpcoming(event) {
 }
 
 const filteredEvents = computed(() => {
-  const query = filters.value.searchQuery.toLowerCase();
+  const query = filters.value.searchQuery.trim().toLowerCase();
   
   return events.value.filter(event => {
     if (!event || typeof event !== 'object' || !event.link || !event.name || !event.time) return false;
@@ -924,7 +1085,10 @@ const filteredEvents = computed(() => {
     }
     
     let timeStatusMatch = true;
-    if (filters.value.timeStatus === 'upcoming') {
+    // When a search query is entered or a category tag chip is selected, we search across all events so past matching events display in their dedicated sub-section
+    if (query || (selectedTag.value && selectedTag.value !== 'all')) {
+      timeStatusMatch = true;
+    } else if (filters.value.timeStatus === 'upcoming') {
       timeStatusMatch = isUpcoming(event) || isOngoing(event);
     } else if (filters.value.timeStatus === 'past') {
       timeStatusMatch = isPast(event);
@@ -942,10 +1106,34 @@ const filteredEvents = computed(() => {
       }
     }
 
+    let tagMatch = true;
+    if (selectedTag.value && selectedTag.value !== 'all') {
+      const nameLower = (event.name || '').toLowerCase();
+      const topicsLower = (event.topics || '').toLowerCase();
+      const fullText = `${nameLower} ${topicsLower}`;
+      
+      if (selectedTag.value === 'wikimania') {
+        tagMatch = fullText.includes('wikimania');
+      } else if (selectedTag.value === 'hackathon') {
+        tagMatch = fullText.includes('hackathon') || fullText.includes('hack');
+      } else if (selectedTag.value === 'editathon') {
+        tagMatch = fullText.includes('editathon') || fullText.includes('edit-a-thon') || fullText.includes('edithon');
+      } else if (selectedTag.value === 'wikiloves') {
+        tagMatch = fullText.includes('wiki loves') || fullText.includes('wlm') || fullText.includes('wle') || fullText.includes('wlf');
+      } else if (selectedTag.value === 'conference') {
+        tagMatch = fullText.includes('conference') || fullText.includes('summit') || fullText.includes('convention') || fullText.includes('meeting');
+      } else if (selectedTag.value === 'glam') {
+        tagMatch = fullText.includes('glam') || fullText.includes('museum') || fullText.includes('library') || fullText.includes('archive');
+      } else if (selectedTag.value === 'education') {
+        tagMatch = fullText.includes('education') || fullText.includes('school') || fullText.includes('university') || fullText.includes('student');
+      }
+    }
+
     return (
       timeStatusMatch &&
       regionMatch &&
-      (!query || event.name.toLowerCase().includes(query)) &&
+      tagMatch &&
+      (!query || event.name.toLowerCase().includes(query) || (event.topics && event.topics.toLowerCase().includes(query)) || (event.country && event.country.toLowerCase().includes(query))) &&
       (!filters.value.country || event.country === filters.value.country) &&
       (!filters.value.type || event.type === filters.value.type)
     );
@@ -960,6 +1148,18 @@ const sortedFilteredEvents = computed(() => {
       const dateB = new Date(b.time);
       return filters.value.sort === 'asc' ? dateA - dateB : dateB - dateA;
     });
+});
+
+const activeEvents = computed(() => {
+  return sortedFilteredEvents.value.filter(e => !isPast(e));
+});
+
+const pastEvents = computed(() => {
+  return sortedFilteredEvents.value.filter(e => isPast(e));
+});
+
+const isSearchingOrAll = computed(() => {
+  return filters.value.timeStatus === 'all' || filters.value.searchQuery.trim().length > 0 || (selectedTag.value && selectedTag.value !== 'all');
 });
 
 async function fetchTimers() {

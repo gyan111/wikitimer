@@ -1,50 +1,108 @@
 {
-    "app": {
-        "title": "WikiTimer",
-        "login": "ଲଗ୍ ଇନ୍",
-        "themeLight": "ହାଲୁକା ଥିମ୍",
-        "themeDark": "କଳା ଥିମ୍",
-        "language": "ଭାଷା",
-        "addTimer": "ଟାଇମର୍ ଯୋଡନ୍ତୁ",
-        "backToTimers": "ଟାଇମର୍ କୁ ଫେରନ୍ତୁ",
-        "viewDashboard": "ଡ୍ୟାସବୋର୍ଡ ଦେଖନ୍ତୁ"
-    },
-    "timers": {
-        "allTimers": "ସମସ୍ତ ଟାଇମର୍",
-        "events": "ଇଭେଣ୍ଟଗୁଡିକ",
-        "deadlines": "ସମୟସୀମା",
-        "search": "ଇଭେଣ୍ଟ ଖୋଜନ୍ତୁ...",
-        "noTimers": "କୌଣସି ଟାଇମର୍ ମିଳିଲା ନାହିଁ।",
-        "noTimersDesc": "ଆପଣଙ୍କର ସମ୍ପ୍ରଦାୟ ପାଇଁ ଗୋଟିଏ ସୃଷ୍ଟି କରନ୍ତୁ!",
-        "createNew": "ନୂଆ ଟାଇମର୍ ସୃଷ୍ଟି କରନ୍ତୁ"
-    },
-    "time": {
-        "days": "ଦିନ",
-        "hours": "ଘଣ୍ଟା",
-        "minutes": "ମିନିଟ୍",
-        "seconds": "ସେକେଣ୍ଡ"
-    },
-    "form": {
-        "title": "ନୂଆ ଟାଇମର୍ ଯୋଡନ୍ତୁ",
-        "subtitle": "ଆପଣଙ୍କର ପରବର୍ତ୍ତୀ ଉଇକି ମାଇଲଖୁଣ୍ଟ ପାଇଁ ଏକ କାଉଣ୍ଟଡାଉନ୍ ସୃଷ୍ଟି କରନ୍ତୁ।",
-        "type": "ଇଭେଣ୍ଟ ପ୍ରକାର",
-        "typePlaceholder": "ପ୍ରକାର ଚୟନ କରନ୍ତୁ",
-        "typeEvent": "ଇଭେଣ୍ଟ",
-        "typeDeadline": "ସମୟସୀମା",
-        "name": "ଶୀର୍ଷକ",
-        "namePlaceholder": "ଉଦାହରଣ: Wikimania 2024",
-        "link": "ମେଟା-ଉଇକି ଲିଙ୍କ୍",
-        "linkPlaceholder": "https://meta.wikimedia.org/wiki/...",
-        "dateTime": "ତାରିଖ ଏବଂ ସମୟ",
-        "timeZone": "ସମୟ ମଣ୍ଡଳ",
-        "timeZonePlaceholder": "ସମୟ ମଣ୍ଡଳ ଚୟନ କରନ୍ତୁ",
-        "region": "ଅଞ୍ଚଳ",
-        "regionPlaceholder": "ଅଞ୍ଚଳ ଚୟନ କରନ୍ତୁ",
-        "country": "ଦେଶ",
-        "countryPlaceholder": "ଟାଇପ୍ କରିବା ଆରମ୍ଭ କରନ୍ତୁ...",
-        "logo": "ଲୋଗୋ URL (ବୈକଳ୍ପିକ)",
-        "logoPlaceholder": "https://example.com/logo.png",
-        "logoInvalid": "ଅବୈଧ ଛବି URL. ଡିଫଲ୍ଟ ଆଇକନ୍ ବ୍ୟବହାର ହେବ।",
-        "submit": "ଟ୍ରାକର୍ ଲଞ୍ଚ କରନ୍ତୁ"
-    }
+  "app": {
+    "title": "WikiTimer",
+    "login": "ଲଗ୍ ଇନ୍",
+    "themeLight": "ଲାଇଟ୍ ଥିମ୍",
+    "themeDark": "ଡାର୍କ ଥିମ୍",
+    "language": "ଭାଷା",
+    "addTimer": "ଟାଇମର୍ ଯୋଡନ୍ତୁ",
+    "backToTimers": "ମୁଖ୍ୟ ପୃଷ୍ଠାକୁ ଫେରନ୍ତୁ",
+    "viewDashboard": "ଡ୍ୟାସବୋର୍ଡ ଦେଖନ୍ତୁ"
+  },
+  "timers": {
+    "allTimers": "ସମସ୍ତ ଟାଇମର୍",
+    "events": "ଇଭେଣ୍ଟସ୍",
+    "deadlines": "ଶେଷ ସମୟସୀମା",
+    "search": "ଇଭେଣ୍ଟ ଖୋଜନ୍ତୁ...",
+    "noTimers": "କୌଣସି ଟାଇମର୍ ମିଳିଲା ନାହିଁ।",
+    "noTimersDesc": "ଆପଣଙ୍କ ସମ୍ପ୍ରଦାୟ ପାଇଁ ପ୍ରଥମେ ଗୋଟିଏ ଟାଇମର୍ ସୃଷ୍ଟି କରନ୍ତୁ!",
+    "createNew": "ନୂତନ ଟାଇମର୍ ସୃଷ୍ଟି କରନ୍ତୁ"
+  },
+  "tags": {
+    "all": "ସମସ୍ତ",
+    "wikimania": "ଉଇକିମାନିଆ",
+    "hackathon": "ହାକାଥନ୍",
+    "editathon": "ଏଡିଟାଥନ୍",
+    "wikiloves": "ଉଇକି ଲଭସ୍",
+    "conference": "ସମ୍ମିଳନୀ ଓ ବୈଠକ",
+    "glam": "GLAM",
+    "education": "ଶିକ୍ଷା"
+  },
+  "map": {
+    "gridView": "ଗ୍ରିଡ୍ ଦୃଶ୍ୟ",
+    "mapView": "ମାନଚିତ୍ର ଦୃଶ୍ୟ",
+    "onlineEvents": "ଅନଲାଇନ୍ ଓ ଗ୍ଲୋବାଲ୍ ଇଭେଣ୍ଟସ୍",
+    "viewDetails": "ବିବରଣୀ ଦେଖନ୍ତୁ"
+  },
+  "filters": {
+    "allRegions": "ସମସ୍ତ ଅଞ୍ଚଳ",
+    "allCountries": "ସମସ୍ତ ଦେଶ",
+    "allTypes": "ସମସ୍ତ ପ୍ରକାର",
+    "event": "ଇଭେଣ୍ଟ",
+    "deadline": "ସମୟସୀମା",
+    "upcoming": "ଆଗାମୀ ଇଭେଣ୍ଟ",
+    "past": "ଅତୀତ ଇଭେଣ୍ଟ",
+    "all": "ସମସ୍ତ ଇଭେଣ୍ଟ",
+    "recentFirst": "ନୂତନ ପ୍ରଥମେ",
+    "oldestFirst": "ପୁରୁଣା ପ୍ରଥମେ",
+    "pin": "ଦୃଶ୍ୟ ପିନ୍ କରନ୍ତୁ",
+    "pinned": "ପିନ୍ ହୋଇଛି",
+    "reset": "ରିସେଟ୍",
+    "favoritesOnly": "ପସନ୍ଦ",
+    "showAll": "ସମସ୍ତ",
+    "sourceBoth": "ସମସ୍ତ ଉତ୍ସ",
+    "sourceCommunity": "କେବଳ କମ୍ୟୁନିଟି",
+    "sourceMeta": "କେବଳ ମେଟା ଇଭେଣ୍ଟସ୍"
+  },
+  "status": {
+    "ongoing": "ଚାଲୁଅଛି",
+    "ended": "ସମାପ୍ତ",
+    "startsIn": "ଆରମ୍ଭ ହେବାକୁ",
+    "deadlineIn": "ସମୟସୀମା ବାକି",
+    "endsIn": "ଶେଷ ହେବାକୁ"
+  },
+  "sections": {
+    "upcomingMatches": "ଆଗାମୀ ଓ ସକ୍ରିୟ ଇଭେଣ୍ଟସ୍",
+    "pastMatches": "ଅତୀତ ଓ ଅଭିଲେଖିତ ଇଭେଣ୍ଟସ୍"
+  },
+  "modal": {
+    "addToGoogleCalendar": "ଗୁଗୁଲ୍ କ୍ୟାଲେଣ୍ଡର୍",
+    "downloadIcs": ".ics ଡାଉନଲୋଡ୍",
+    "copyWikitext": "ଉଇକିଟେକ୍ସଟ୍ କପି",
+    "copyLink": "ଲିଙ୍କ୍ କପି",
+    "remindMe": "ମନେ ପକାନ୍ତୁ",
+    "reminderSet": "ମନେପକାଇବା ସେଟ୍ ହେଲା",
+    "timezoneLocal": "ସ୍ଥାନୀୟ ସମୟ",
+    "timezoneUtc": "UTC ସମୟ",
+    "close": "ବନ୍ଦ କରନ୍ତୁ"
+  },
+  "time": {
+    "days": "ଦିନ",
+    "hours": "ଘଣ୍ଟା",
+    "minutes": "ମିନିଟ୍",
+    "seconds": "ସେକେଣ୍ଡ"
+  },
+  "form": {
+    "title": "ନୂତନ ଟାଇମର୍ ଯୋଡନ୍ତୁ",
+    "subtitle": "ଆପଣଙ୍କ ପରବର୍ତ୍ତୀ ଉଇକି କାର୍ଯ୍ୟକ୍ରମ ପାଇଁ କାଉଣ୍ଟଡାଉନ୍ ତିଆରି କରନ୍ତୁ।",
+    "type": "ଇଭେଣ୍ଟ ପ୍ରକାର",
+    "typePlaceholder": "ପ୍ରକାର ବାଛନ୍ତୁ",
+    "typeEvent": "ଇଭେଣ୍ଟ",
+    "typeDeadline": "ସମୟସୀମା",
+    "name": "ଶୀର୍ଷକ",
+    "namePlaceholder": "ଯଥା: Wikimania 2026",
+    "link": "ମେଟା-ଉଇକି ଲିଙ୍କ୍",
+    "linkPlaceholder": "https://meta.wikimedia.org/wiki/...",
+    "dateTime": "ତାରିଖ ଓ ସମୟ",
+    "timeZone": "ଟାଇମ୍ ଜୋନ୍",
+    "timeZonePlaceholder": "ଟାଇମ୍ ଜୋନ୍ ବାଛନ୍ତୁ",
+    "region": "ଅଞ୍ଚଳ",
+    "regionPlaceholder": "ଅଞ୍ଚଳ ବାଛନ୍ତୁ",
+    "country": "ଦେଶ",
+    "countryPlaceholder": "ଦେଶ ନାମ ଲେଖନ୍ତୁ...",
+    "logo": "ଲୋଗୋ URL (ଐଚ୍ଛିକ)",
+    "logoPlaceholder": "https://example.com/logo.png",
+    "logoInvalid": "ଅବୈଧ ଛବି URL।",
+    "submit": "ଟ୍ରାକର୍ ଆରମ୍ଭ କରନ୍ତୁ"
+  }
 }

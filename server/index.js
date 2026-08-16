@@ -8,7 +8,7 @@ import { fileURLToPath } from 'url';
 import auth from './auth.js';
 import prisma from './db.js';
 import { getMetaEvents } from './meta-events.js';
-import { seedHistoricalEvents } from './seed-historical.js';
+import { seedHistoricalEvents, HISTORICAL_EVENTS } from './seed-historical.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distPath = path.join(__dirname, '..', 'dist');
@@ -52,24 +52,40 @@ if (!isProd) {
   });
 }
 
-// Session store: persist sessions in MariaDB (ToolsDB) so they survive restarts
-// and work across replicas. Falls back to the in-memory store if no database
-// URL is configured (local development only).
+// Session store configuration:
+// - In production (or when DATABASE_URL is set), persist sessions to MariaDB.
+// - In development without DATABASE_URL, fall back to the default in-memory store.
 function buildSessionStore() {
   if (!process.env.DATABASE_URL) {
-    console.warn('DATABASE_URL not set; using in-memory session store (dev only).');
+    console.log('Using in-memory session store (dev only)');
     return undefined;
   }
-  const dbUrl = new URL(process.env.DATABASE_URL);
-  const MySQLStore = MySQLStoreFactory(session);
-  return new MySQLStore({
-    host: dbUrl.hostname,
-    port: Number(dbUrl.port) || 3306,
-    user: decodeURIComponent(dbUrl.username),
-    password: decodeURIComponent(dbUrl.password),
-    database: dbUrl.pathname.replace(/^\//, ''),
-    createDatabaseTable: true
-  });
+  try {
+    const dbUrl = new URL(process.env.DATABASE_URL);
+    const MySQLStore = MySQLStoreFactory(session);
+    return new MySQLStore({
+      host: dbUrl.hostname,
+      port: Number(dbUrl.port) || 3306,
+      user: decodeURIComponent(dbUrl.username),
+      password: decodeURIComponent(dbUrl.password),
+      database: dbUrl.pathname.replace(/^\//, ''),
+      clearExpired: true,
+      checkExpirationInterval: 900000,
+      expiration: 86400000,
+      createDatabaseTable: true,
+      schema: {
+        tableName: 'sessions',
+        columnNames: {
+          session_id: 'session_id',
+          expires: 'expires',
+          data: 'data'
+        }
+      }
+    });
+  } catch (err) {
+    console.error('Failed to initialize MariaDB session store:', err);
+    return undefined;
+  }
 }
 
 if (!process.env.SESSION_COOKIE_SECRET) {
@@ -112,18 +128,31 @@ app.get('/test', (req, res) => {
   res.json({ message: 'Server is working', origin: req.headers.origin });
 });
 
-// In-memory timers store when DATABASE_URL is not set (local dev)
-let devTimerCounter = 1;
-const devTimers = [];
+// In-memory timers store with historical events when DATABASE_URL is not set (local dev)
+const devTimers = HISTORICAL_EVENTS.map((e, idx) => ({
+  id: idx + 1,
+  type: e.type || 'event',
+  name: e.name,
+  link: e.link,
+  time: new Date(e.time),
+  endTime: e.endTime ? new Date(e.endTime) : null,
+  region: e.region || 'Global',
+  country: e.country || 'Online',
+  timeZone: e.timeZone || 'UTC',
+  organizers: e.organizers || null,
+  topics: e.topics || null,
+  isMeta: true,
+  creatorId: null
+}));
+let devTimerCounter = devTimers.length + 1;
 
-// Timers created by users.
+// Timers created by users and seeded archive.
 app.get('/timers', async (req, res) => {
   if (!process.env.DATABASE_URL) {
     return res.json(devTimers);
   }
   try {
     const timers = await prisma.timer.findMany({
-      where: { time: { gt: new Date() } },
       include: { creator: { select: { id: true, username: true } } },
       orderBy: { time: 'asc' }
     });
@@ -159,7 +188,9 @@ function validateTimerInput(body) {
     country: str(body.country),
     timeZone: str(body.timeZone),
     organizers: body.organizers != null ? str(body.organizers) : null,
-    logo: body.logo != null ? str(body.logo) : null
+    logo: body.logo != null ? str(body.logo) : null,
+    topics: body.topics != null ? str(body.topics) : null,
+    participation: body.participation != null ? str(body.participation) : null
   };
 
   if (!['event', 'deadline'].includes(data.type)) errors.push('type must be "event" or "deadline"');
@@ -170,6 +201,7 @@ function validateTimerInput(body) {
   if (data.timeZone.length > 50) errors.push('timeZone too long (max 50 chars)');
   if (data.organizers && data.organizers.length > 255) errors.push('organizers too long (max 255 chars)');
   if (data.logo && data.logo.length > 255) errors.push('logo too long (max 255 chars)');
+  if (data.participation && data.participation.length > 100) errors.push('participation too long (max 100 chars)');
 
   const parsedTime = new Date(data.time);
   if (isNaN(parsedTime.getTime())) errors.push('time is not a valid date');
