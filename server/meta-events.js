@@ -196,10 +196,81 @@ async function fetchMetaEvents() {
   return [...byKey.values()];
 }
 
-// Returns cached events, refreshing in the background once the cache is stale.
-// On a cold cache it awaits the first fetch; afterwards it never blocks on
-// failures, serving the last-known-good list instead, and backs off between
-// retry attempts so a persistent failure doesn't turn into a retry storm.
+import { PrismaClient } from '@prisma/client';
+import { createHash } from 'crypto';
+
+const prisma = process.env.DATABASE_URL ? new PrismaClient() : null;
+
+function getEventHash(rawIdOrLink) {
+  return createHash('sha256').update(String(rawIdOrLink)).digest('hex');
+}
+
+// Syncs live scraped events to MariaDB so historical/past events are permanently archived.
+async function syncEventsToDatabase(events) {
+  if (!prisma || !events || events.length === 0) return;
+  try {
+    const scrapedMetaHashes = new Set(events.map(e => getEventHash(e.id)));
+    
+    // 1. Upsert each scraped live event
+    for (const e of events) {
+      const metaHash = getEventHash(e.id);
+      await prisma.timer.upsert({
+        where: { metaId: metaHash },
+        update: {
+          name: e.name,
+          link: e.link,
+          time: new Date(e.time),
+          endTime: e.endTime ? new Date(e.endTime) : null,
+          region: e.region || 'Global',
+          country: e.country || 'Online',
+          timeZone: 'UTC',
+          participation: e.participation || null,
+          eventTypes: e.eventTypes || null,
+          topics: e.topics || null,
+          wikiProject: e.wikiProject || null,
+          organizers: e.organizers || null,
+          slug: e.slug,
+          isCancelled: false
+        },
+        create: {
+          type: 'event',
+          name: e.name,
+          link: e.link,
+          time: new Date(e.time),
+          endTime: e.endTime ? new Date(e.endTime) : null,
+          region: e.region || 'Global',
+          country: e.country || 'Online',
+          timeZone: 'UTC',
+          participation: e.participation || null,
+          eventTypes: e.eventTypes || null,
+          topics: e.topics || null,
+          wikiProject: e.wikiProject || null,
+          organizers: e.organizers || null,
+          slug: e.slug,
+          isMeta: true,
+          metaId: metaHash,
+          isCancelled: false
+        }
+      });
+    }
+
+    // 2. If a future event disappears before starting, mark as cancelled
+    const now = new Date();
+    await prisma.timer.updateMany({
+      where: {
+        isMeta: true,
+        isCancelled: false,
+        time: { gt: now },
+        metaId: { notIn: [...scrapedMetaHashes] }
+      },
+      data: { isCancelled: true }
+    });
+  } catch (err) {
+    console.error('Error syncing meta events to database:', err.message);
+  }
+}
+
+// Returns cached and archived events, refreshing in the background once stale.
 export async function getMetaEvents() {
   const now = Date.now();
   const isStale = now - cache.fetchedAt > CACHE_TTL_MS;
@@ -208,7 +279,11 @@ export async function getMetaEvents() {
   if (cache.fetchedAt === 0) {
     if (!inFlight) {
       cache.lastAttemptAt = now;
-      inFlight = fetchMetaEvents();
+      inFlight = fetchMetaEvents()
+        .then(async (events) => {
+          await syncEventsToDatabase(events);
+          return events;
+        });
     }
     try {
       const events = await inFlight;
@@ -218,19 +293,54 @@ export async function getMetaEvents() {
     } finally {
       inFlight = null;
     }
-    return cache.events;
-  }
-
-  if (isStale && canRetry && !inFlight) {
+  } else if (isStale && canRetry && !inFlight) {
     cache.lastAttemptAt = now;
     inFlight = fetchMetaEvents()
-      .then((events) => { cache = { events, fetchedAt: Date.now(), lastAttemptAt: cache.lastAttemptAt }; })
+      .then(async (events) => {
+        await syncEventsToDatabase(events);
+        cache = { events, fetchedAt: Date.now(), lastAttemptAt: cache.lastAttemptAt };
+      })
       .catch((err) => { console.error('Meta events refresh failed:', err.message); })
       .finally(() => { inFlight = null; });
+  }
+
+  // If database is available, return all active AND archived past events
+  if (prisma) {
+    try {
+      const dbMetaTimers = await prisma.timer.findMany({
+        where: { isMeta: true, isCancelled: false },
+        orderBy: { time: 'desc' }
+      });
+      if (dbMetaTimers && dbMetaTimers.length > 0) {
+        return dbMetaTimers.map(t => ({
+          id: t.link ? 'meta:' + t.link.replace(/^https?:\/\//, '') : (t.metaId || `meta:${t.id}`),
+          slug: t.slug || slugify(t.name, t.link),
+          isMeta: true,
+          source: 'meta-allevents',
+          type: t.type || 'event',
+          name: t.name,
+          link: t.link,
+          time: t.time.toISOString(),
+          endTime: t.endTime ? t.endTime.toISOString() : null,
+          region: t.region,
+          country: t.country,
+          timeZone: t.timeZone || 'UTC',
+          organizers: t.organizers,
+          participation: t.participation,
+          eventTypes: t.eventTypes,
+          topics: t.topics,
+          wikiProject: t.wikiProject,
+          logo: t.logo
+        }));
+      }
+    } catch (e) {
+      console.error('Failed to query meta events from database:', e.message);
+    }
   }
 
   return cache.events;
 }
 
 // Expose internal helpers for unit tests. Not part of the public API.
-export const _testing = { decodeEntities, parseDate, parseWidgets, parseRow, slugify };
+export const _testing = { decodeEntities, parseDate, parseWidgets, parseRow, slugify, syncEventsToDatabase };
+

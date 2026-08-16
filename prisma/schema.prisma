@@ -18,17 +18,35 @@ model User {
 }
 
 model Timer {
-  id         Int       @id @default(autoincrement())
-  type       String    @db.VarChar(50)
-  name       String    @db.VarChar(255)
-  link       String    @db.VarChar(255)
-  time       DateTime
-  endTime    DateTime?
-  region     String    @db.VarChar(100)
-  country    String    @db.VarChar(100)
-  timeZone   String    @db.VarChar(50)
-  organizers String?   @db.VarChar(255)
-  logo       String?   @db.VarChar(255)
-  creatorId  Int?
-  creator    User?     @relation(fields: [creatorId], references: [id])
+  id            Int       @id @default(autoincrement())
+  type          String    @db.VarChar(50)
+  name          String    @db.VarChar(255)
+  link          String    @db.Text
+  time          DateTime
+  endTime       DateTime?
+  region        String    @db.VarChar(100)
+  country       String    @db.VarChar(100)
+  timeZone      String    @db.VarChar(50)
+  organizers    String?   @db.Text
+  logo          String?   @db.VarChar(500)
+  slug          String?   @db.VarChar(100)
+  isMeta        Boolean   @default(false)
+  metaId        String?   @unique @db.VarChar(255)
+  participation String?   @db.VarChar(100)
+  eventTypes    String?   @db.Text
+  topics        String?   @db.Text
+  wikiProject   String?   @db.VarChar(100)
+  isCancelled   Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt
+  creatorId     Int?
+  creator       User?     @relation(fields: [creatorId], references: [id])
+}
+
+model Session {
+  session_id String  @id @db.VarChar(128)
+  expires    Int     @db.UnsignedInt
+  data       String? @db.MediumText
+
+  @@map("sessions")
 }
