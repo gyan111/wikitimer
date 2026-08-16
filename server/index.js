@@ -8,6 +8,7 @@ import { fileURLToPath } from 'url';
 import auth from './auth.js';
 import prisma from './db.js';
 import { getMetaEvents } from './meta-events.js';
+import { seedHistoricalEvents } from './seed-historical.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distPath = path.join(__dirname, '..', 'dist');
@@ -18,6 +19,11 @@ const port = process.env.PORT || 3000;
 const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
 
 console.log('Starting server:', { port, clientUrl, nodeEnv: process.env.NODE_ENV });
+
+// Auto-seed historical Wikimedia events in background on startup if database is connected
+if (process.env.DATABASE_URL) {
+  seedHistoricalEvents().catch(e => console.error('Historical events seed error:', e.message));
+}
 
 // Behind the Toolforge nginx proxy, trust the first hop so secure cookies work.
 app.set('trust proxy', 1);
