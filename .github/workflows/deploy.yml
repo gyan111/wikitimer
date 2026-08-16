@@ -46,8 +46,17 @@ jobs:
           script: |
             echo "Starting build on Toolforge..."
             become wikitimer toolforge build start https://github.com/gyan111/wikitimer
-            echo "Streaming build logs until complete..."
-            become wikitimer toolforge build logs --follow
-            echo "Restarting webservice..."
-            become wikitimer toolforge webservice buildservice restart
+            
+            echo "Waiting for build to finish building container..."
+            sleep 10
+            while become wikitimer toolforge build show 2>&1 | grep -iq "running\|pending\|scheduled"; do
+              echo "Build in progress... waiting 10s"
+              sleep 10
+            done
+            
+            echo "Build Status:"
+            become wikitimer toolforge build show
+            
+            echo "Restarting webservice with newly built container..."
+            become wikitimer toolforge webservice buildservice restart || become wikitimer toolforge webservice --mount=none buildservice start
             echo "WikiTimer deployment complete!"
