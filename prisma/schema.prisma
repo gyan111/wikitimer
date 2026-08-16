@@ -9,12 +9,24 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  wikiId    String   @unique
+  id        Int        @id @default(autoincrement())
+  wikiId    String     @unique
   username  String
-  isAdmin   Boolean  @default(false)
-  createdAt DateTime @default(now())
+  isAdmin   Boolean    @default(false)
+  createdAt DateTime   @default(now())
   timers    Timer[]
+  favorites Favorite[]
+}
+
+model Favorite {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  eventKey  String   @db.VarChar(255)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, eventKey])
+  @@index([userId])
 }
 
 model Timer {

@@ -832,32 +832,92 @@ const fallbackLogo = 'https://upload.wikimedia.org/wikipedia/commons/7/75/Wikime
 const userTimers = ref([]);
 const metaEvents = ref([]);
 
-// 1. Star / Bookmark State & Persistence
+// 1. Star / Bookmark State & Persistence (Hybrid Local + Account Sync)
 const starredIds = ref(new Set(JSON.parse(localStorage.getItem('wikitimer_starred') || '[]')));
 
 function getEventKey(event) {
   if (!event) return '';
-  return String(event.slug || event.id || event.name || '');
+  return String(event.slug || event.metaId || event.id || event.name || '');
 }
 
 function isStarred(event) {
   if (!event) return false;
   const key = getEventKey(event);
   const rawId = String(event.id || '');
-  return starredIds.value.has(key) || starredIds.value.has(rawId);
+  const metaId = String(event.metaId || '');
+  return starredIds.value.has(key) || starredIds.value.has(rawId) || (metaId && starredIds.value.has(metaId));
 }
 
-function toggleStar(event) {
+async function toggleStar(event) {
   if (!event) return;
   const key = getEventKey(event);
-  if (isStarred(event)) {
+  const currentlyStarred = isStarred(event);
+
+  // Optimistic local UI update
+  if (currentlyStarred) {
     starredIds.value.delete(key);
     if (event.id) starredIds.value.delete(String(event.id));
+    if (event.metaId) starredIds.value.delete(String(event.metaId));
   } else {
     starredIds.value.add(key);
   }
   localStorage.setItem('wikitimer_starred', JSON.stringify([...starredIds.value]));
+
+  // Sync to account if logged in
+  if (isAuthenticated.value) {
+    try {
+      await fetch('/api/favorites/toggle', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ eventKey: key })
+      });
+    } catch (err) {
+      console.warn('Failed to sync favorite with account:', err);
+    }
+  }
 }
+
+async function loadAndSyncFavorites() {
+  if (!isAuthenticated.value) return;
+
+  try {
+    const localKeys = [...starredIds.value];
+    if (localKeys.length > 0) {
+      // Sync offline / local favourites to account
+      const syncRes = await fetch('/api/favorites/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ eventKeys: localKeys })
+      });
+      if (syncRes.ok) {
+        const data = await syncRes.json();
+        if (Array.isArray(data.favorites)) {
+          data.favorites.forEach(k => starredIds.value.add(k));
+          localStorage.setItem('wikitimer_starred', JSON.stringify([...starredIds.value]));
+          return;
+        }
+      }
+    }
+
+    // Fetch user account favourites
+    const res = await fetch('/api/favorites');
+    if (res.ok) {
+      const serverFavs = await res.json();
+      if (Array.isArray(serverFavs)) {
+        serverFavs.forEach(k => starredIds.value.add(k));
+        localStorage.setItem('wikitimer_starred', JSON.stringify([...starredIds.value]));
+      }
+    }
+  } catch (err) {
+    console.warn('Failed to load user account favorites:', err);
+  }
+}
+
+watch(isAuthenticated, (authed) => {
+  if (authed) {
+    loadAndSyncFavorites();
+  }
+});
 
 // 2. Modal Timezone & Schedule Formatting
 const modalTimezone = ref('UTC');
@@ -1443,7 +1503,7 @@ onMounted(async () => {
   }
   
   isLoadingEvents.value = true;
-  await Promise.all([fetchTimers(), fetchMetaEvents()]);
+  await Promise.all([fetchTimers(), fetchMetaEvents(), loadAndSyncFavorites()]);
   isLoadingEvents.value = false;
   syncSelectedEventFromRoute();
 });

@@ -292,6 +292,130 @@ app.get('/api/user', (req, res) => {
   res.json(req.user);
 });
 
+// --- Favorites Endpoints ---
+const devFavorites = new Map(); // userId -> Set of eventKey (for dev when no DATABASE_URL)
+
+// Get all favorites for current authenticated user
+app.get('/api/favorites', async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.json([]);
+  }
+  if (!process.env.DATABASE_URL) {
+    const userFavs = devFavorites.get(req.user.id) || new Set();
+    return res.json([...userFavs]);
+  }
+  try {
+    const favs = await prisma.favorite.findMany({
+      where: { userId: req.user.id },
+      select: { eventKey: true }
+    });
+    res.json(favs.map(f => f.eventKey));
+  } catch (err) {
+    console.error('Error fetching favorites:', err.message);
+    res.json([]);
+  }
+});
+
+// Toggle a favorite item
+app.post('/api/favorites/toggle', async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ error: 'Not authenticated' });
+  }
+  const eventKey = typeof req.body.eventKey === 'string' ? req.body.eventKey.trim() : '';
+  if (!eventKey || eventKey.length > 255) {
+    return res.status(400).json({ error: 'Invalid eventKey' });
+  }
+
+  if (!process.env.DATABASE_URL) {
+    if (!devFavorites.has(req.user.id)) {
+      devFavorites.set(req.user.id, new Set());
+    }
+    const userFavs = devFavorites.get(req.user.id);
+    let isStarred = false;
+    if (userFavs.has(eventKey)) {
+      userFavs.delete(eventKey);
+      isStarred = false;
+    } else {
+      userFavs.add(eventKey);
+      isStarred = true;
+    }
+    return res.json({ success: true, isStarred, eventKey });
+  }
+
+  try {
+    const existing = await prisma.favorite.findUnique({
+      where: {
+        userId_eventKey: {
+          userId: req.user.id,
+          eventKey
+        }
+      }
+    });
+
+    if (existing) {
+      await prisma.favorite.delete({
+        where: { id: existing.id }
+      });
+      return res.json({ success: true, isStarred: false, eventKey });
+    } else {
+      await prisma.favorite.create({
+        data: {
+          userId: req.user.id,
+          eventKey
+        }
+      });
+      return res.json({ success: true, isStarred: true, eventKey });
+    }
+  } catch (err) {
+    console.error('Error toggling favorite:', err.message);
+    res.status(500).json({ error: 'Failed to update favorite' });
+  }
+});
+
+// Sync local localStorage favorites to account upon login
+app.post('/api/favorites/sync', async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ error: 'Not authenticated' });
+  }
+  const eventKeys = Array.isArray(req.body.eventKeys) ? req.body.eventKeys.filter(k => typeof k === 'string' && k.length <= 255) : [];
+
+  if (!process.env.DATABASE_URL) {
+    if (!devFavorites.has(req.user.id)) {
+      devFavorites.set(req.user.id, new Set());
+    }
+    const userFavs = devFavorites.get(req.user.id);
+    eventKeys.forEach(k => userFavs.add(k));
+    return res.json({ success: true, favorites: [...userFavs] });
+  }
+
+  try {
+    for (const key of eventKeys) {
+      await prisma.favorite.upsert({
+        where: {
+          userId_eventKey: {
+            userId: req.user.id,
+            eventKey: key
+          }
+        },
+        update: {},
+        create: {
+          userId: req.user.id,
+          eventKey: key
+        }
+      }).catch(() => {});
+    }
+
+    const allFavs = await prisma.favorite.findMany({
+      where: { userId: req.user.id },
+      select: { eventKey: true }
+    });
+    res.json({ success: true, favorites: allFavs.map(f => f.eventKey) });
+  } catch (err) {
+    console.error('Error syncing favorites:', err.message);
+    res.status(500).json({ error: 'Failed to sync favorites' });
+  }
+});
+
 // Health check endpoints (Toolforge uses one via service.template).
 const healthHandler = (req, res) => res.json({ status: 'ok' });
 app.get('/health', healthHandler);

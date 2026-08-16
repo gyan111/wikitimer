@@ -116,6 +116,27 @@ beforeAll(async () => {
     res.json(req.user);
   });
 
+  app.get('/api/favorites', (req, res) => {
+    if (!req.isAuthenticated || !req.isAuthenticated()) {
+      return res.json([]);
+    }
+    res.json([]);
+  });
+
+  app.post('/api/favorites/toggle', (req, res) => {
+    if (!req.isAuthenticated || !req.isAuthenticated()) {
+      return res.status(401).json({ error: 'Not authenticated' });
+    }
+    res.json({ success: true, isStarred: true });
+  });
+
+  app.post('/api/favorites/sync', (req, res) => {
+    if (!req.isAuthenticated || !req.isAuthenticated()) {
+      return res.status(401).json({ error: 'Not authenticated' });
+    }
+    res.json({ success: true, favorites: [] });
+  });
+
   const healthHandler = (req, res) => res.json({ status: 'ok' });
   app.get('/health', healthHandler);
   app.get('/healthz', healthHandler);
@@ -230,6 +251,22 @@ describe('Auth-protected routes (unauthenticated)', () => {
 
   it('GET /api/user returns 401', async () => {
     const res = await request('GET', '/api/user');
+    expect(res.status).toBe(401);
+  });
+
+  it('GET /api/favorites returns empty array when unauthenticated', async () => {
+    const res = await request('GET', '/api/favorites');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual([]);
+  });
+
+  it('POST /api/favorites/toggle returns 401 when unauthenticated', async () => {
+    const res = await request('POST', '/api/favorites/toggle', { eventKey: 'test-event' });
+    expect(res.status).toBe(401);
+  });
+
+  it('POST /api/favorites/sync returns 401 when unauthenticated', async () => {
+    const res = await request('POST', '/api/favorites/sync', { eventKeys: ['test-event'] });
     expect(res.status).toBe(401);
   });
 });
