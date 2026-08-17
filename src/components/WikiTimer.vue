@@ -191,21 +191,38 @@
             <option value="asc">{{ $t('filters.oldestFirst') }}</option>
           </select>
         </div>
-        <div class="flex items-center gap-2 mt-1">
+        <!-- Mobile Action Buttons: Show Results & Pin/Reset -->
+        <div class="flex flex-col gap-2 mt-1 pt-2 border-t border-gray-200/50 dark:border-gray-700/60">
           <button 
-            @click="pinFilters" 
-            :class="isPinned ? 'bg-green-500 text-white shadow-green-500/30' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200'" 
-            class="flex-1 py-2 rounded-xl text-xs font-semibold shadow-xs focus:outline-none transition-all flex items-center justify-center gap-1.5"
+            @click="applyMobileFiltersAndClose" 
+            :disabled="totalFilteredEventsCount === 0"
+            class="w-full py-2.5 px-4 rounded-xl font-bold text-xs transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
+            :class="totalFilteredEventsCount > 0 ? 'bg-primary-600 hover:bg-primary-700 active:scale-[0.99] text-white shadow-primary-500/25' : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed shadow-none'"
           >
-            <svg v-if="isPinned" class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path></svg>
-            {{ isPinned ? $t('filters.pinned') : $t('filters.pin') }}
+            <span v-if="totalFilteredEventsCount > 0">
+              🔍 Show {{ totalFilteredEventsCount }} Matching {{ totalFilteredEventsCount === 1 ? 'Event' : 'Events' }} →
+            </span>
+            <span v-else>
+              ⚠️ No Events Found for this Filter
+            </span>
           </button>
-          <button 
-            @click="resetFilters" 
-            class="flex-1 py-2 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/30 font-semibold text-xs transition-all"
-          >
-            {{ $t('filters.reset') }}
-          </button>
+
+          <div class="flex items-center gap-2">
+            <button 
+              @click="pinFilters" 
+              :class="isPinned ? 'bg-green-500 text-white shadow-green-500/30' : 'bg-gray-200/80 dark:bg-gray-700 text-gray-700 dark:text-gray-200'" 
+              class="flex-1 py-2 rounded-xl text-xs font-semibold shadow-xs focus:outline-none transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+            >
+              <svg v-if="isPinned" class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path></svg>
+              {{ isPinned ? $t('filters.pinned') : $t('filters.pin') }}
+            </button>
+            <button 
+              @click="resetFilters" 
+              class="flex-1 py-2 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/30 font-semibold text-xs transition-all cursor-pointer"
+            >
+              {{ $t('filters.reset') }}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -340,7 +357,7 @@
       </div>
 
       <!-- Non-Empty State: Map or Grid View -->
-      <div v-else>
+      <div v-else id="events-container">
         <!-- Interactive Map View -->
         <div v-if="viewMode === 'map'" class="my-4">
           <EventsMap :events="sortedFilteredEvents" @select-event="viewEvent" />
@@ -1417,6 +1434,25 @@ const pastEvents = computed(() => {
 const isSearchingOrAll = computed(() => {
   return filters.value.timeStatus === 'all' || filters.value.searchQuery.trim().length > 0 || (selectedTag.value && selectedTag.value !== 'all');
 });
+
+const totalFilteredEventsCount = computed(() => {
+  if (filters.value.timeStatus === 'upcoming') {
+    return activeEvents.value.length;
+  } else if (filters.value.timeStatus === 'past') {
+    return pastEvents.value.length;
+  }
+  return sortedFilteredEvents.value.length;
+});
+
+function applyMobileFiltersAndClose() {
+  isMobileFilterOpen.value = false;
+  nextTick(() => {
+    const container = document.getElementById('events-container');
+    if (container) {
+      container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+}
 
 async function fetchTimers() {
   try {
