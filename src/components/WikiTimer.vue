@@ -59,28 +59,64 @@
       </div>
     </div>
 
-    <!-- Quick Category Filter Chips -->
-    <div class="flex items-center gap-2 overflow-x-auto pb-3 mb-6 scrollbar-none text-xs">
-      <button
-        v-for="tag in categoryTags"
-        :key="tag.id"
-        @click="toggleTag(tag.id)"
-        :class="selectedTag === tag.id ? 'bg-primary-600 text-white shadow-sm border-primary-600' : 'bg-white/70 dark:bg-gray-800/70 text-gray-700 dark:text-gray-300 border-gray-200/80 dark:border-gray-700/80 hover:bg-gray-100 dark:hover:bg-gray-700'"
-        class="flex-shrink-0 px-3.5 py-1.5 rounded-full border font-semibold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs"
+    <!-- Quick Category Filter Chips & Right-Aligned Reset Bar -->
+    <div class="relative flex items-center mb-4">
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs flex-1 pr-1">
+        <button
+          v-for="tag in categoryTags"
+          :key="tag.id"
+          @click="toggleTag(tag.id)"
+          :class="selectedTag === tag.id ? 'bg-primary-600 text-white shadow-sm border-primary-600' : 'bg-white/70 dark:bg-gray-800/70 text-gray-700 dark:text-gray-300 border-gray-200/80 dark:border-gray-700/80 hover:bg-gray-100 dark:hover:bg-gray-700'"
+          class="flex-shrink-0 px-3.5 py-1.5 rounded-full border font-semibold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs"
+        >
+          <span>{{ tag.icon }}</span>
+          <span>{{ $t(tag.labelKey) }}</span>
+        </button>
+      </div>
+
+      <!-- Quick Reset Button (Pinned on the right whenever filters or tags are active) -->
+      <transition enter-active-class="transition duration-150 ease-out" enter-from-class="opacity-0 scale-90" enter-to-class="opacity-100 scale-100" leave-active-class="transition duration-100 ease-in" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-90">
+        <button
+          v-if="hasActiveFilters"
+          @click="resetFilters"
+          class="flex-shrink-0 ml-1.5 px-3 py-1.5 rounded-full border border-red-200 dark:border-red-800/50 bg-red-50/90 dark:bg-red-950/50 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/60 font-semibold transition-all flex items-center gap-1 cursor-pointer shadow-xs text-xs whitespace-nowrap z-10"
+          :title="$t('filters.reset')"
+        >
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          <span>{{ $t('filters.reset') }}</span>
+        </button>
+      </transition>
+    </div>
+
+    <!-- Mobile Collapsible Filter Trigger Bar -->
+    <div class="md:hidden flex items-center gap-2 mb-4">
+      <button 
+        @click="isMobileFilterOpen = !isMobileFilterOpen" 
+        type="button"
+        class="flex-1 py-2 px-3.5 bg-white/70 dark:bg-gray-800/70 border border-gray-200/80 dark:border-gray-700/80 rounded-xl text-xs font-semibold text-gray-700 dark:text-gray-200 flex items-center justify-between shadow-2xs hover:bg-white dark:hover:bg-gray-800 transition-all cursor-pointer"
       >
-        <span>{{ tag.icon }}</span>
-        <span>{{ $t(tag.labelKey) }}</span>
+        <span class="flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+          <span>Advanced Filters</span>
+          <span v-if="activeFilterCount > 0" class="px-1.5 py-0.2 rounded-full bg-primary-600 text-white text-[10px] font-bold">
+            {{ activeFilterCount }}
+          </span>
+        </span>
+        <span class="text-[11px] text-gray-400 flex items-center gap-1">
+          <span>{{ isMobileFilterOpen ? 'Hide' : 'Show' }}</span>
+          <svg class="w-3.5 h-3.5 transition-transform duration-200" :class="{ 'rotate-180': isMobileFilterOpen }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </span>
       </button>
 
-      <!-- Quick Reset Button on Tags Line -->
-      <button
-        v-if="selectedTag !== 'all' || filters.searchQuery || filters.region || filters.country || filters.type || filters.starredOnly || filters.timeStatus !== 'upcoming'"
-        @click="resetFilters"
-        class="flex-shrink-0 px-3 py-1.5 rounded-full border border-red-200 dark:border-red-800/40 bg-red-50/80 dark:bg-red-950/30 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 font-semibold transition-all flex items-center gap-1 cursor-pointer shadow-2xs"
-        :title="$t('filters.reset')"
+      <!-- Starred Only Mobile Toggle Button -->
+      <button 
+        @click="filters.starredOnly = !filters.starredOnly" 
+        :class="filters.starredOnly ? 'text-amber-500 bg-amber-50 dark:bg-amber-900/30 border-amber-300 dark:border-amber-700' : 'text-gray-400 hover:text-amber-500 bg-white/70 dark:bg-gray-800/70 border-gray-200/80 dark:border-gray-700/80'" 
+        class="py-2 px-3 rounded-xl border transition-all flex items-center gap-1 shadow-2xs text-xs font-semibold shrink-0 cursor-pointer"
+        :title="filters.starredOnly ? $t('filters.showAll') : $t('filters.favoritesOnly')"
       >
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-        <span>{{ $t('filters.reset') }}</span>
+        <svg class="w-3.5 h-3.5" :fill="filters.starredOnly ? 'currentColor' : 'none'" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+        <span v-if="starredIds.size > 0" class="text-[11px] font-bold">{{ starredIds.size }}</span>
       </button>
     </div>
 
@@ -97,16 +133,19 @@
       </button>
     </div>
 
-    <!-- Filters Bar - Glassmorphic -->
-    <div class="mb-10 w-full glass-panel !bg-white/60 dark:!bg-gray-900/60 rounded-2xl p-4 sm:p-6 transition-all duration-300 relative z-20">
-      <!-- Mobile Filters -->
-      <div class="flex flex-col gap-4 md:hidden">
-        <div class="grid grid-cols-1 gap-4">
+    <!-- Filters Bar - Glassmorphic (Always visible on desktop, collapsible on mobile) -->
+    <div 
+      class="mb-8 w-full glass-panel !bg-white/60 dark:!bg-gray-900/60 rounded-2xl p-4 sm:p-6 transition-all duration-300 relative z-20"
+      :class="{ 'hidden md:block': !isMobileFilterOpen, 'block': isMobileFilterOpen }"
+    >
+      <!-- Mobile Filters Content (Only shown when expanded) -->
+      <div class="flex flex-col gap-3 md:hidden">
+        <div class="grid grid-cols-1 gap-2.5">
           <select 
             id="region" 
             v-model="filters.region" 
             @change="applyFilters" 
-            class="w-full py-2.5 px-4 rounded-xl border-0 bg-white/50 dark:bg-gray-800/80 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-500 appearance-none backdrop-blur-md"
+            class="w-full py-2 px-3.5 rounded-xl border border-gray-200/60 dark:border-gray-700/60 bg-white/70 dark:bg-gray-800/90 text-gray-900 dark:text-gray-100 text-xs shadow-xs focus:ring-2 focus:ring-primary-500 appearance-none backdrop-blur-md"
           >
             <option value="">{{ $t('filters.allRegions') }}</option>
             <option v-for="region in uniqueRegions" :key="region" :value="region">{{ region }}</option>
@@ -115,18 +154,18 @@
             id="country" 
             v-model="filters.country" 
             @change="applyFilters" 
-            class="w-full py-2.5 px-4 rounded-xl border-0 bg-white/50 dark:bg-gray-800/80 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-500 appearance-none backdrop-blur-md"
+            class="w-full py-2 px-3.5 rounded-xl border border-gray-200/60 dark:border-gray-700/60 bg-white/70 dark:bg-gray-800/90 text-gray-900 dark:text-gray-100 text-xs shadow-xs focus:ring-2 focus:ring-primary-500 appearance-none backdrop-blur-md"
           >
             <option value="">{{ $t('filters.allCountries') }}</option>
             <option v-for="country in uniqueCountries" :key="country" :value="country">{{ country }}</option>
           </select>
         </div>
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-3 gap-2">
           <select 
             id="type" 
             v-model="filters.type" 
             @change="applyFilters" 
-            class="w-full py-2.5 px-4 rounded-xl border-0 bg-white/50 dark:bg-gray-800/80 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-500 appearance-none backdrop-blur-md"
+            class="w-full py-2 px-2.5 rounded-xl border border-gray-200/60 dark:border-gray-700/60 bg-white/70 dark:bg-gray-800/90 text-gray-900 dark:text-gray-100 text-xs shadow-xs focus:ring-2 focus:ring-primary-500 appearance-none backdrop-blur-md"
           >
             <option value="">{{ $t('filters.allTypes') }}</option>
             <option value="event">{{ $t('filters.event') }}</option>
@@ -136,7 +175,7 @@
             id="timeStatus" 
             v-model="filters.timeStatus" 
             @change="applyFilters" 
-            class="w-full py-2.5 px-4 rounded-xl border-0 bg-white/50 dark:bg-gray-800/80 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-500 appearance-none backdrop-blur-md"
+            class="w-full py-2 px-2.5 rounded-xl border border-gray-200/60 dark:border-gray-700/60 bg-white/70 dark:bg-gray-800/90 text-gray-900 dark:text-gray-100 text-xs shadow-xs focus:ring-2 focus:ring-primary-500 appearance-none backdrop-blur-md"
           >
             <option value="upcoming">{{ $t('filters.upcoming') }}</option>
             <option value="past">{{ $t('filters.past') }}</option>
@@ -146,24 +185,24 @@
             id="sort" 
             v-model="filters.sort" 
             @change="applyFilters" 
-            class="w-full py-2.5 px-4 rounded-xl border-0 bg-white/50 dark:bg-gray-800/80 text-gray-900 dark:text-gray-100 shadow-sm focus:ring-2 focus:ring-primary-500 appearance-none backdrop-blur-md"
+            class="w-full py-2 px-2.5 rounded-xl border border-gray-200/60 dark:border-gray-700/60 bg-white/70 dark:bg-gray-800/90 text-gray-900 dark:text-gray-100 text-xs shadow-xs focus:ring-2 focus:ring-primary-500 appearance-none backdrop-blur-md"
           >
             <option value="desc">{{ $t('filters.recentFirst') }}</option>
             <option value="asc">{{ $t('filters.oldestFirst') }}</option>
           </select>
         </div>
-        <div class="flex justify-center gap-4 mt-2">
+        <div class="flex items-center gap-2 mt-1">
           <button 
             @click="pinFilters" 
             :class="isPinned ? 'bg-green-500 text-white shadow-green-500/30' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200'" 
-            class="flex-1 py-2.5 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400 font-medium transition-all duration-300 flex items-center justify-center gap-2"
+            class="flex-1 py-2 rounded-xl text-xs font-semibold shadow-xs focus:outline-none transition-all flex items-center justify-center gap-1.5"
           >
-            <svg v-if="isPinned" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path></svg>
+            <svg v-if="isPinned" class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path></svg>
             {{ isPinned ? $t('filters.pinned') : $t('filters.pin') }}
           </button>
           <button 
             @click="resetFilters" 
-            class="flex-1 py-2.5 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/30 hover:bg-red-100 dark:hover:bg-red-900/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 font-medium transition-all duration-300"
+            class="flex-1 py-2 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/30 font-semibold text-xs transition-all"
           >
             {{ $t('filters.reset') }}
           </button>
@@ -877,6 +916,24 @@ const filters = ref({
   timeStatus: 'upcoming',
   sort: 'desc',
   starredOnly: false
+});
+
+const isMobileFilterOpen = ref(false);
+
+const activeFilterCount = computed(() => {
+  let count = 0;
+  if (filters.value.region) count++;
+  if (filters.value.country) count++;
+  if (filters.value.type) count++;
+  if (filters.value.timeStatus !== 'upcoming') count++;
+  if (filters.value.starredOnly) count++;
+  return count;
+});
+
+const hasActiveFilters = computed(() => {
+  return selectedTag.value !== 'all' || 
+         Boolean(filters.value.searchQuery.trim()) || 
+         activeFilterCount.value > 0;
 });
 
 const isPinned = ref(false);
