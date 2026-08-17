@@ -1413,13 +1413,31 @@ const filteredEvents = computed(() => {
   });
 });
 
+function getNextMilestoneDate(event) {
+  if (!event || !event.time) return new Date(0);
+  const now = currentTime.value;
+  const startTime = new Date(event.time);
+  const endTime = event.endTime ? new Date(event.endTime) : null;
+  
+  // If ongoing: next milestone is when it finishes (endTime)
+  if (startTime <= now && endTime !== null && endTime >= now) {
+    return endTime;
+  }
+  // If upcoming: next milestone is when it begins (startTime)
+  if (startTime > now) {
+    return startTime;
+  }
+  // If concluded: milestone is when it ended (endTime or startTime)
+  return endTime || startTime;
+}
+
 const sortedFilteredEvents = computed(() => {
   return filteredEvents.value
     .filter(event => event && typeof event === 'object' && event.link && event.name && event.time)
     .sort((a, b) => {
-      const dateA = new Date(a.time);
-      const dateB = new Date(b.time);
-      return filters.value.sort === 'asc' ? dateA - dateB : dateB - dateA;
+      const dateA = getNextMilestoneDate(a);
+      const dateB = getNextMilestoneDate(b);
+      return filters.value.sort === 'desc' ? dateB - dateA : dateA - dateB;
     });
 });
 
@@ -1427,8 +1445,8 @@ const activeEvents = computed(() => {
   return sortedFilteredEvents.value
     .filter(e => !isPast(e))
     .sort((a, b) => {
-      const dateA = new Date(a.time);
-      const dateB = new Date(b.time);
+      const dateA = getNextMilestoneDate(a);
+      const dateB = getNextMilestoneDate(b);
       return filters.value.sort === 'desc' ? dateB - dateA : dateA - dateB;
     });
 });
@@ -1437,9 +1455,9 @@ const pastEvents = computed(() => {
   return sortedFilteredEvents.value
     .filter(e => isPast(e))
     .sort((a, b) => {
-      const dateA = new Date(a.time);
-      const dateB = new Date(b.time);
-      // Past events: most recent past event first by default
+      const dateA = getNextMilestoneDate(a);
+      const dateB = getNextMilestoneDate(b);
+      // For past events: most recently concluded first by default (desc in UI means furthest past)
       return filters.value.sort === 'desc' ? dateA - dateB : dateB - dateA;
     });
 });
