@@ -61,25 +61,25 @@
 
     <!-- Quick Category Filter Chips & Right-Aligned Reset Bar -->
     <div class="flex items-center mb-4 gap-2">
-      <div class="flex items-center gap-2 overflow-x-auto scrollbar-none text-xs flex-1 py-0.5">
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs flex-1">
         <button
           v-for="tag in categoryTags"
           :key="tag.id"
           @click="toggleTag(tag.id)"
           :class="selectedTag === tag.id ? 'bg-primary-600 text-white shadow-sm border-primary-600' : 'bg-white/70 dark:bg-gray-800/70 text-gray-700 dark:text-gray-300 border-gray-200/80 dark:border-gray-700/80 hover:bg-gray-100 dark:hover:bg-gray-700'"
-          class="flex-shrink-0 h-7.5 px-3.5 rounded-full border font-semibold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs leading-none"
+          class="flex-shrink-0 px-3.5 py-1.5 rounded-full border font-semibold transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs"
         >
           <span>{{ tag.icon }}</span>
           <span>{{ $t(tag.labelKey) }}</span>
         </button>
       </div>
 
-      <!-- Quick Tag Reset Button (Only appears when a tag is selected, perfectly aligned with tags) -->
+      <!-- Quick Tag Reset Button (Reverted to original tag dimensions, shifted higher to align) -->
       <transition enter-active-class="transition duration-150 ease-out" enter-from-class="opacity-0 scale-90" enter-to-class="opacity-100 scale-100" leave-active-class="transition duration-100 ease-in" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-90">
         <button
           v-if="selectedTag !== 'all'"
           @click="selectedTag = 'all'"
-          class="flex-shrink-0 h-7.5 px-3 rounded-full border border-red-200 dark:border-red-800/50 bg-red-50/90 dark:bg-red-950/50 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/60 font-semibold transition-all flex items-center gap-1 cursor-pointer shadow-xs text-xs whitespace-nowrap leading-none self-center"
+          class="flex-shrink-0 -mt-1 px-3 py-1.5 rounded-full border border-red-200 dark:border-red-800/50 bg-red-50/90 dark:bg-red-950/50 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/60 font-semibold transition-all flex items-center gap-1 cursor-pointer shadow-xs text-xs whitespace-nowrap"
           :title="$t('filters.reset')"
         >
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
