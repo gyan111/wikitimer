@@ -5,157 +5,70 @@
 [![Node.js](https://img.shields.io/badge/Node.js-20+-green.svg)](https://nodejs.org)
 [![Vue 3](https://img.shields.io/badge/Vue.js-3.x-emerald.svg)](https://vuejs.org)
 
-**WikiTimer** is an event coordination hub and countdown tracker designed for the global Wikimedia movement. It aggregates upcoming conferences, campaigns, and deadlines across Wikimedia projects, provides real-time countdowns, timezone conversion, calendar synchronization, and embeddable wikitext snippets.
+**WikiTimer** is an event coordination hub and countdown tracker designed for the global Wikimedia movement. It aggregates upcoming conferences, campaigns, and deadlines across Wikimedia projects with real-time countdowns, timezone conversion, interactive maps, calendar sync, and embed widgets.
 
-🔗 **Live Tool:** [https://wikitimer.toolforge.org](https://wikitimer.toolforge.org)  
-📖 **Full Documentation:** [Read DOCS.md](DOCS.md)
-
----
-
-## ✨ Features at a Glance
-
-- ⏰ **Live Countdowns & Deadlines:** Precision tracking for multi-day events (e.g. Wikimania) and strict deadlines (e.g. scholarship cutoffs).
-- 🌍 **UTC ↔ Local Timezone Toggle:** Instant conversion to eliminate timezone confusion.
-- 📅 **1-Click Calendar Sync:** Export to Google Calendar and universal Apple/Outlook `.ics` files.
-- 📝 **Wikitext Markdown Embeds:** 1-click embed snippet for Meta-Wiki and Wikipedia project banners.
-- 🗄️ **Permanent Historical Archive:** Automatically captures and archives concluded Wikimedia events in MariaDB.
-- 🔐 **Wikimedia OAuth 2.0:** Secure login with your Wikimedia account.
-- 🌐 **Multi-Lingual (i18n):** English, Deutsch, Français, ଓଡ଼ିଆ, മലയാളം, and తెలుగు.
+🔗 **Live Tool:** [https://wikitimer.toolforge.org](https://wikitimer.toolforge.org)
 
 ---
 
-## 🛠️ Tech Stack
+## 🚀 Quick Start (Running Locally)
 
-- **Frontend:** Vue 3 (Vite), Tailwind CSS, `vue-i18n`, `vue-router`
-- **Backend:** Express.js, Node.js 20+, Passport.js (OAuth 2.0)
-- **Database:** MariaDB (ToolsDB) via Prisma ORM
-- **Infrastructure:** Wikimedia Toolforge (Build Service & Kubernetes)
+### Prerequisites
+- **Node.js** 20+ and **npm**
+- **MariaDB** or **MySQL** (optional in dev; falls back to in-memory store if `DATABASE_URL` is unset)
 
----
-
-## Installation
-
-1. Clone the repository and install dependencies:
-   ```bash
-   git clone [repository-url]
-   cd wiki-timer
-   npm install
-   ```
-
-2. Create a `.env` file from the template and fill in the values:
-   ```bash
-   cp .env.example .env
-   ```
-   At minimum set `DATABASE_URL`, `SESSION_COOKIE_SECRET`, `WIKI_CLIENT_ID`,
-   and `WIKI_CLIENT_SECRET`.
-
-3. Set up the database schema (Prisma manages the tables):
-   ```bash
-   npx prisma migrate deploy   # apply migrations to the database
-   npx prisma generate         # generate the Prisma client (also runs on install)
-   ```
-
-## Running the Application
-
-Development (two processes):
+### 1. Clone & Install Dependencies
 ```bash
-npm run start:server   # backend API on http://localhost:3000
-npm run dev            # Vite dev server on http://localhost:5173
-```
-The Vite dev server proxies API/auth routes to the backend, so the frontend
-uses same-origin relative paths (no CORS needed).
-
-Production (single process — Express serves the built frontend and the API):
-```bash
-npm run build
-npm start              # runs `prisma migrate deploy` then starts the server
+git clone https://github.com/gyan111/wikitimer.git
+cd wikitimer
+npm install
 ```
 
-## Scripts
+### 2. Configure Environment Variables
+Copy the example `.env` file:
+```bash
+cp .env.example .env
+```
 
-- `npm run dev` - Vite dev server (frontend only)
-- `npm run build` - Build frontend into `dist/`
-- `npm run start:server` - Start the backend without running migrations
-- `npm start` - Apply DB migrations then start the server (serves `dist/` + API)
+### 3. Database Setup (Optional for local dev)
+If you have a local MariaDB/MySQL database running:
+```bash
+npx prisma db push
+```
 
-## Authentication Setup
+### 4. Start Development Servers
+Run the backend and frontend:
+```bash
+# Terminal 1: Backend API
+npm run start:server
 
-1. Register an OAuth2 consumer on Wikimedia:
-   - Go to https://meta.wikimedia.org/wiki/Special:OAuthConsumerRegistration
-   - Set the callback URL to `<your-base-url>/auth/mediawiki/callback`
-     (dev: `http://localhost:3000/auth/mediawiki/callback`)
-   - Copy the Client ID and Secret into your `.env` file
-2. Set `SESSION_COOKIE_SECRET`, `WIKI_CLIENT_ID`, `WIKI_CLIENT_SECRET`, and
-   `CLIENT_URL` in `.env`.
+# Terminal 2: Frontend Vite dev server
+npm run dev
+```
 
-## Deploying to Wikimedia Toolforge (Build Service)
+Visit **`http://localhost:5173`** in your browser. The Vite dev server automatically proxies API requests to the backend.
 
-This repo is configured for the Toolforge Build Service (`Procfile`,
-`service.template`, `npm start`, and Prisma migrations).
+---
 
-1. Push this repo to your tool's GitLab mirror
-   (`https://gitlab.wikimedia.org/toolforge-repos/<toolname>`).
-2. SSH in and build the image:
-   ```bash
-   ssh login.toolforge.org
-   become <toolname>
-   toolforge build start https://gitlab.wikimedia.org/toolforge-repos/<toolname>.git
-   toolforge build show   # wait until the build succeeds
-   ```
-3. Create a ToolsDB database (once) and set environment variables:
-   ```bash
-   # In `sql tools` create a database like s#####__wikitimer, then:
-   toolforge envvars create DATABASE_URL
-   #   mysql://$TOOL_TOOLSDB_USER:$TOOL_TOOLSDB_PASSWORD@tools.db.svc.wikimedia.cloud:3306/<db>
-   toolforge envvars create SESSION_COOKIE_SECRET
-   toolforge envvars create WIKI_CLIENT_ID
-   toolforge envvars create WIKI_CLIENT_SECRET
-   toolforge envvars create WIKI_CALLBACK_URL   # https://<toolname>.toolforge.org/auth/mediawiki/callback
-   toolforge envvars create CLIENT_URL          # https://<toolname>.toolforge.org
-   toolforge envvars create NODE_ENV            # production
-   ```
-   Register the OAuth consumer's callback URL to match `WIKI_CALLBACK_URL`.
-4. Start the web service (uses `service.template`):
-   ```bash
-   toolforge webservice buildservice start
-   ```
-   `npm start` runs `prisma migrate deploy` on boot, creating the schema on
-   first run. The app will be available at `https://<toolname>.toolforge.org`.
+## 📜 Available Scripts
 
-## Troubleshooting
+- `npm run dev` — Starts the Vite frontend dev server with hot reload
+- `npm run start:server` — Starts the Express backend server
+- `npm run build` — Builds the production bundle to `dist/`
+- `npm start` — Runs migrations and starts the production server
+- `npm test` — Runs the test suite with Vitest
 
-### Common Issues
+---
 
-1. Database Connection Errors:
-   - Verify MariaDB is running
-   - Check database credentials in `.env`
-   - Ensure database and tables are created
+## 🔐 Wikimedia OAuth2 Setup (Optional for Login)
 
-2. Port Conflicts:
-   - Ensure ports 3000 and 5173 are available
-   - Change ports in `.env` if needed
+To test Wikimedia login locally:
+1. Register a consumer at [Meta-Wiki OAuth Consumer Registration](https://meta.wikimedia.org/wiki/Special:OAuthConsumerRegistration).
+2. Set the OAuth Callback URL to: `http://localhost:8000/callback` (or your local backend callback URL).
+3. Add your `WIKI_CLIENT_ID` and `WIKI_CLIENT_SECRET` in `.env`.
 
-3. Authentication Issues:
-   - Verify OAuth2 credentials
-   - Check callback URL configuration
-   - Clear browser cookies
-   - Check server logs for specific errors
+---
 
-### Debug Logs
+## 📄 License
 
-To enable detailed logging:
-1. Set `DEBUG=true` in `.env`
-2. Check browser console for frontend logs
-3. Check terminal for backend logs
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
-
-## License
-
-This project is licensed under the Apache License 2.0 - see the LICENSE file for details.
+Apache License 2.0. See [LICENSE](LICENSE) for details.
