@@ -61,7 +61,7 @@
 
     <!-- Quick Category Filter Chips & Right-Aligned Reset Bar -->
     <div class="flex items-center mb-4 gap-2">
-      <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs flex-1">
+      <div class="flex items-center gap-2 overflow-x-auto no-scrollbar text-xs flex-1 py-0.5">
         <button
           v-for="tag in categoryTags"
           :key="tag.id"
@@ -74,12 +74,12 @@
         </button>
       </div>
 
-      <!-- Quick Tag Reset Button (Reverted to original tag dimensions, shifted higher to align) -->
+      <!-- Quick Tag Reset Button (Seamlessly aligned with tag pills) -->
       <transition enter-active-class="transition duration-150 ease-out" enter-from-class="opacity-0 scale-90" enter-to-class="opacity-100 scale-100" leave-active-class="transition duration-100 ease-in" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-90">
         <button
           v-if="selectedTag !== 'all'"
           @click="selectedTag = 'all'"
-          class="flex-shrink-0 -mt-1 px-3 py-1.5 rounded-full border border-red-200 dark:border-red-800/50 bg-red-50/90 dark:bg-red-950/50 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/60 font-semibold transition-all flex items-center gap-1 cursor-pointer shadow-xs text-xs whitespace-nowrap"
+          class="flex-shrink-0 px-3 py-1.5 rounded-full border border-red-200 dark:border-red-800/50 bg-red-50/90 dark:bg-red-950/50 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/60 font-semibold transition-all flex items-center gap-1 cursor-pointer shadow-xs text-xs whitespace-nowrap self-center"
           :title="$t('filters.reset')"
         >
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -931,7 +931,7 @@ const filters = ref({
   country: '',
   type: '',
   timeStatus: 'upcoming',
-  sort: 'desc',
+  sort: 'asc',
   starredOnly: false
 });
 
@@ -1424,11 +1424,24 @@ const sortedFilteredEvents = computed(() => {
 });
 
 const activeEvents = computed(() => {
-  return sortedFilteredEvents.value.filter(e => !isPast(e));
+  return sortedFilteredEvents.value
+    .filter(e => !isPast(e))
+    .sort((a, b) => {
+      const dateA = new Date(a.time);
+      const dateB = new Date(b.time);
+      return filters.value.sort === 'desc' ? dateB - dateA : dateA - dateB;
+    });
 });
 
 const pastEvents = computed(() => {
-  return sortedFilteredEvents.value.filter(e => isPast(e));
+  return sortedFilteredEvents.value
+    .filter(e => isPast(e))
+    .sort((a, b) => {
+      const dateA = new Date(a.time);
+      const dateB = new Date(b.time);
+      // Past events: most recent past event first by default
+      return filters.value.sort === 'desc' ? dateA - dateB : dateB - dateA;
+    });
 });
 
 const isSearchingOrAll = computed(() => {
