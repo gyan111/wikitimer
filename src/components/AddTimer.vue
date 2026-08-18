@@ -23,7 +23,7 @@
           <!-- User Status Badge -->
           <div v-if="isAuthenticated && user" class="mt-4 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800">
             <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-            <span>Logged in as <strong>User:{{ user.username }}</strong></span>
+            <span>{{ $t('auth.loggedInAs') }} <strong>User:{{ user.username }}</strong></span>
           </div>
         </div>
       </div>
@@ -37,8 +37,8 @@
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
             </div>
             <div>
-              <h4 class="font-bold text-amber-900 dark:text-amber-200 text-base">Authentication Required</h4>
-              <p class="text-sm text-amber-800 dark:text-amber-300 mt-0.5">Please log in with your Wikimedia account to add and manage timers.</p>
+              <h4 class="font-bold text-amber-900 dark:text-amber-200 text-base">{{ $t('auth.requiredTitle') }}</h4>
+              <p class="text-sm text-amber-800 dark:text-amber-300 mt-0.5">{{ $t('auth.requiredDesc') }}</p>
             </div>
           </div>
           <button 
@@ -46,7 +46,7 @@
             type="button"
             class="w-full sm:w-auto px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-xl shadow-md transition-all font-semibold whitespace-nowrap hover:shadow-lg flex items-center justify-center gap-2"
           >
-            <span>Log in with Wikimedia</span>
+            <span>{{ $t('auth.loginWithWiki') }}</span>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
           </button>
         </div>
@@ -80,7 +80,7 @@
           <div class="glass-panel !bg-indigo-50/50 dark:!bg-indigo-900/10 border-indigo-100 dark:border-indigo-800/30 p-5 rounded-2xl mb-2 relative">
             <label for="wikidata-search" class="flex items-center text-sm font-semibold text-indigo-700 dark:text-indigo-300 mb-2 ml-1">
               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-              Auto-fill from Wikidata (Optional)
+              {{ $t('form.wikidataAutofill') }}
             </label>
             <div class="relative z-40">
               <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-indigo-400">
@@ -93,7 +93,7 @@
                 @input="handleWikidataInput"
                 :disabled="!isAuthenticated"
                 type="text"
-                placeholder="Search Wikidata entities (e.g., Wikimania 2026)..."
+                :placeholder="$t('form.wikidataPlaceholder')"
                 class="w-full py-3.5 pl-11 pr-10 bg-white/80 dark:bg-gray-900/80 border border-indigo-200 dark:border-indigo-700/50 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 backdrop-blur-md placeholder-gray-400"
               >
               <button 
@@ -144,8 +144,8 @@
                   class="w-full py-3.5 pl-4 pr-10 bg-white/70 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none transition-all"
                 >
                   <option value="" disabled>{{ $t('form.typePlaceholder') }}</option>
-                  <option value="event">Event (e.g. Conference, Edit-a-thon)</option>
-                  <option value="deadline">Deadline (e.g. Submission, Registration)</option>
+                  <option value="event">{{ $t('form.typeEventDesc') }}</option>
+                  <option value="deadline">{{ $t('form.typeDeadlineDesc') }}</option>
                 </select>
                 <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-400">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -185,7 +185,7 @@
                 type="url"
                 required
                 :disabled="!isAuthenticated"
-                placeholder="https://meta.wikimedia.org/wiki/..."
+                :placeholder="$t('form.linkPlaceholder')"
                 class="w-full py-3.5 pl-11 pr-4 bg-white/70 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
               >
             </div>
@@ -195,7 +195,7 @@
             <!-- Start Date & Time (Required) -->
             <div class="form-group relative">
               <label for="time" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">
-                Start Date & Time <span class="text-red-500">*</span>
+                {{ $t('form.startDateTime') }} <span class="text-red-500">*</span>
               </label>
               <input
                 id="time"
@@ -210,7 +210,7 @@
             <!-- End Date & Time (Optional) -->
             <div class="form-group relative">
               <label for="endTime" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">
-                End Date & Time <span class="text-xs font-normal text-gray-400">(Optional)</span>
+                {{ $t('form.endDateTime') }} <span class="text-xs font-normal text-gray-400">({{ $t('form.optional') }})</span>
               </label>
               <input
                 id="endTime"
@@ -262,7 +262,7 @@
             <!-- Organizers / Affiliates (Optional) -->
             <div class="form-group relative">
               <label for="organizers" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">
-                Organizers / Affiliates <span class="text-xs font-normal text-gray-400">(Optional)</span>
+                {{ $t('form.organizers') }} <span class="text-xs font-normal text-gray-400">({{ $t('form.optional') }})</span>
               </label>
               <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
@@ -273,7 +273,7 @@
                   v-model="newTimer.organizers"
                   type="text"
                   :disabled="!isAuthenticated"
-                  placeholder="e.g. Wikimedia Nigeria, Wiki Women UG, User:Organizer"
+                  :placeholder="$t('form.organizersPlaceholder')"
                   class="w-full py-3.5 pl-11 pr-4 bg-white/70 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                 >
               </div>
@@ -285,7 +285,7 @@
             <!-- Event Format / Participation -->
             <div class="form-group relative">
               <label for="participation" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">
-                Event Format <span class="text-xs font-normal text-gray-400">(In-person / Online)</span>
+                {{ $t('form.format') }} <span class="text-xs font-normal text-gray-400">({{ $t('form.formatHint') }})</span>
               </label>
               <div class="relative">
                 <select
@@ -294,9 +294,9 @@
                   :disabled="!isAuthenticated"
                   class="w-full py-3.5 pl-4 pr-10 bg-white/70 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none transition-all"
                 >
-                  <option value="Hybrid">🌐 Hybrid (In-person & Online Streaming)</option>
-                  <option value="In-person">📍 In-person Only</option>
-                  <option value="Online">💻 Online / Virtual Only</option>
+                  <option value="Hybrid">{{ $t('form.formatHybrid') }}</option>
+                  <option value="In-person">{{ $t('form.formatInPerson') }}</option>
+                  <option value="Online">{{ $t('form.formatOnline') }}</option>
                 </select>
                 <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-400">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -307,7 +307,7 @@
             <!-- Scope / Region -->
             <div class="form-group relative">
               <label for="region" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">
-                Event Scope / Region <span class="text-red-500">*</span>
+                {{ $t('form.regionScope') }} <span class="text-red-500">*</span>
               </label>
               <div class="relative">
                 <select
@@ -317,7 +317,7 @@
                   :disabled="!isAuthenticated"
                   class="w-full py-3.5 pl-4 pr-10 bg-white/70 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none transition-all"
                 >
-                  <option value="Global">🌍 Global / Worldwide (e.g. Wikimania, Hackathon)</option>
+                  <option value="Global">{{ $t('form.regionGlobal') }}</option>
                   <option value="Africa">Africa</option>
                   <option value="Asia">Asia</option>
                   <option value="Europe">Europe</option>
@@ -338,9 +338,9 @@
           <div class="form-group relative z-30">
             <div class="flex items-center justify-between mb-1.5 ml-1">
               <label for="country" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
-                Host Location / City & Country <span class="text-red-500">*</span>
+                {{ $t('form.hostLocation') }} <span class="text-red-500">*</span>
               </label>
-              <span class="text-xs text-primary-600 dark:text-primary-400 font-medium">Auto-mapped on Globe 🗺️</span>
+              <span class="text-xs text-primary-600 dark:text-primary-400 font-medium">{{ $t('form.autoMapped') }}</span>
             </div>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
@@ -353,7 +353,7 @@
                 type="text"
                 required
                 :disabled="!isAuthenticated"
-                placeholder="e.g. Katowice, Poland or Nairobi, Kenya or Online"
+                :placeholder="$t('form.locationPlaceholder')"
                 class="w-full py-3.5 pl-11 pr-4 bg-white/70 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
               >
               <transition
@@ -377,14 +377,14 @@
               </transition>
             </div>
             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1.5 ml-1">
-              Tip: For global events (e.g. Wikimania, Hackathon), enter the physical host city & country (e.g. <em>Paris, France</em> or <em>Katowice, Poland</em>) so it pins precisely on the map!
+              {{ $t('form.locationTip') }}
             </p>
           </div>
 
           <!-- Tags & Topic Categories (1-Click Chips) -->
           <div class="form-group relative">
             <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">
-              Category Tags & Topics <span class="text-xs font-normal text-gray-400">(Select all that apply)</span>
+              {{ $t('form.categoryTags') }} <span class="text-xs font-normal text-gray-400">({{ $t('form.selectAllThatApply') }})</span>
             </label>
             <div class="flex flex-wrap gap-2 mb-3">
               <button
@@ -408,7 +408,7 @@
                 @keydown.enter.prevent="addCustomTag"
                 type="text"
                 :disabled="!isAuthenticated"
-                placeholder="Add custom topic/tag (press Enter)..."
+                :placeholder="$t('form.customTagPlaceholder')"
                 class="flex-1 py-2.5 px-3.5 bg-white/70 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl text-xs shadow-xs focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
               >
               <button
@@ -416,7 +416,7 @@
                 @click="addCustomTag"
                 class="px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-xl text-xs border border-gray-200 dark:border-gray-700 transition-all"
               >
-                Add Tag
+                {{ $t('form.addTag') }}
               </button>
             </div>
           </div>
@@ -424,7 +424,7 @@
           <!-- Logo URL (Optional) -->
           <div class="form-group relative">
             <label for="logo" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">
-              Logo / Image URL <span class="text-xs font-normal text-gray-400">(Optional)</span>
+              {{ $t('form.logo') }} <span class="text-xs font-normal text-gray-400">({{ $t('form.optional') }})</span>
             </label>
             <div class="flex gap-4 items-start sm:items-center flex-col sm:flex-row">
               <div class="relative flex-1 w-full">
@@ -464,7 +464,7 @@
             >
               <span v-if="isSubmitting" class="flex items-center gap-2">
                 <svg class="animate-spin w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                Saving timer...
+                {{ $t('form.saving') }}
               </span>
               <span v-else class="flex items-center gap-3">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>

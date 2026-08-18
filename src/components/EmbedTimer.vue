@@ -2,11 +2,11 @@
   <div class="embed-wrapper min-h-screen flex items-center justify-center p-3 font-sans" :class="{ 'dark': isDark }">
     <div v-if="loading" class="flex items-center justify-center p-6 text-gray-500 dark:text-gray-400 text-sm">
       <div class="w-5 h-5 border-2 border-primary-500 border-t-transparent rounded-full animate-spin mr-2"></div>
-      Loading countdown...
+      {{ $t('timers.loading') }}
     </div>
 
     <div v-else-if="!event" class="text-center p-6 text-gray-500 dark:text-gray-400 text-sm">
-      Timer not found
+      {{ $t('timers.notFound') }}
     </div>
 
     <div
@@ -44,32 +44,32 @@
         <!-- Concluded State -->
         <div v-if="isConcluded" class="py-1 text-emerald-600 dark:text-emerald-400 font-bold text-sm flex items-center justify-center gap-1.5">
           <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-          Event Concluded
+          {{ $t('status.ended') }}
         </div>
 
         <!-- Ongoing State -->
         <div v-else-if="isOngoing" class="py-1 text-amber-600 dark:text-amber-400 font-bold text-sm flex items-center justify-center gap-1.5">
           <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-          Event In Progress
+          {{ $t('status.inProgress') }}
         </div>
 
         <!-- Active Countdown Digits -->
         <div v-else class="grid grid-cols-4 gap-2">
           <div class="bg-white dark:bg-gray-900 rounded-lg p-2 shadow-2xs border border-gray-200/50 dark:border-gray-700/50">
             <div class="text-lg font-black text-primary-600 dark:text-primary-400 font-mono leading-none">{{ countdown.days }}</div>
-            <div class="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mt-1">Days</div>
+            <div class="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mt-1">{{ $t('time.days') }}</div>
           </div>
           <div class="bg-white dark:bg-gray-900 rounded-lg p-2 shadow-2xs border border-gray-200/50 dark:border-gray-700/50">
             <div class="text-lg font-black text-gray-800 dark:text-gray-100 font-mono leading-none">{{ countdown.hours }}</div>
-            <div class="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mt-1">Hours</div>
+            <div class="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mt-1">{{ $t('time.hours') }}</div>
           </div>
           <div class="bg-white dark:bg-gray-900 rounded-lg p-2 shadow-2xs border border-gray-200/50 dark:border-gray-700/50">
             <div class="text-lg font-black text-gray-800 dark:text-gray-100 font-mono leading-none">{{ countdown.minutes }}</div>
-            <div class="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mt-1">Mins</div>
+            <div class="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mt-1">{{ $t('time.minutes') }}</div>
           </div>
           <div class="bg-white dark:bg-gray-900 rounded-lg p-2 shadow-2xs border border-gray-200/50 dark:border-gray-700/50">
             <div class="text-lg font-black text-gray-800 dark:text-gray-100 font-mono leading-none">{{ countdown.seconds }}</div>
-            <div class="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mt-1">Secs</div>
+            <div class="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mt-1">{{ $t('time.seconds') }}</div>
           </div>
         </div>
       </div>

@@ -349,8 +349,8 @@
           <div class="w-16 h-16 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 rounded-full flex items-center justify-center mb-4">
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
           </div>
-          <h2 class="text-xl font-bold mb-2">{{ filters.starredOnly ? 'No Starred Events' : $t('timers.noTimers') }}</h2>
-          <p class="text-gray-600 dark:text-gray-400 mb-6">{{ filters.starredOnly ? 'You haven\'t starred any events yet. Click the star icon on any card to save it here.' : $t('timers.noTimersDesc') }}</p>
+          <h2 class="text-xl font-bold mb-2">{{ filters.starredOnly ? $t('timers.noStarred') : $t('timers.noTimers') }}</h2>
+          <p class="text-gray-600 dark:text-gray-400 mb-6">{{ filters.starredOnly ? $t('timers.noStarredDesc') : $t('timers.noTimersDesc') }}</p>
           <button v-if="filters.starredOnly" @click="filters.starredOnly = false" class="px-6 py-2.5 bg-primary-500 hover:bg-primary-600 text-white rounded-xl shadow-md font-medium transition-colors">{{ $t('filters.showAll') }}</button>
           <router-link v-else to="/add" class="px-6 py-2.5 bg-primary-500 hover:bg-primary-600 text-white rounded-xl shadow-md font-medium transition-colors">{{ $t('timers.createNew') }}</router-link>
         </div>
@@ -404,7 +404,7 @@
                           @click.stop="toggleStar(event)"
                           class="p-1 rounded-lg text-gray-300 hover:text-amber-400 dark:text-gray-600 dark:hover:text-amber-400 transition-colors"
                           :class="{ '!text-amber-400': isStarred(event) }"
-                          :title="isStarred(event) ? 'Remove Star' : 'Star Event'"
+                          :title="isStarred(event) ? $t('timers.removeStar') : $t('timers.starEvent')"
                         >
                           <svg class="w-5 h-5" :fill="isStarred(event) ? 'currentColor' : 'none'" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
                         </button>
@@ -413,13 +413,13 @@
                           v-if="!event.isMeta && user && (user.id === event.creatorId || user.isAdmin)"
                           @click.stop="deleteEvent(event.id)"
                           class="p-1 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-                          title="Delete Timer"
+                          :title="$t('timers.deleteTimer')"
                         >
                           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                         </button>
                       </div>
                     </div>
-                    <p v-if="event.creator?.username" class="text-xs text-primary-600 dark:text-primary-400 font-medium truncate mt-0.5">Added by {{ event.creator.username }}</p>
+                    <p v-if="event.creator?.username" class="text-xs text-primary-600 dark:text-primary-400 font-medium truncate mt-0.5">{{ $t('timers.addedBy') }} {{ event.creator.username }}</p>
                     <p class="text-sm text-gray-500 dark:text-gray-400 truncate mt-1">{{ event?.region }}</p>
                     <p class="text-xs text-gray-400 dark:text-gray-500 truncate">{{ event?.country }}</p>
                   </div>
@@ -443,10 +443,10 @@
                     v-if="event.isMeta"
                     class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wider shadow-xs border bg-sky-50/80 border-sky-200 text-sky-800 dark:bg-sky-950/40 dark:border-sky-800/50 dark:text-sky-300"
                   >
-                    Meta
+                    {{ $t('timers.meta') }}
                   </span>
                   <a v-if="event && event.link" :href="event.link" target="_blank" rel="noopener" class="ml-auto inline-flex items-center text-xs font-medium text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors bg-white/50 dark:bg-gray-800/50 py-1 px-2 rounded-lg border border-gray-200 dark:border-gray-700 backdrop-blur-sm hover:shadow-xs" @click.stop>
-                    Link
+                    {{ $t('timers.link') }}
                     <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                   </a>
                 </div>
@@ -503,7 +503,7 @@
                           @click.stop="toggleStar(event)"
                           class="p-1 rounded-lg text-gray-300 hover:text-amber-400 dark:text-gray-600 dark:hover:text-amber-400 transition-colors"
                           :class="{ '!text-amber-400': isStarred(event) }"
-                          :title="isStarred(event) ? 'Remove Star' : 'Star Event'"
+                          :title="isStarred(event) ? $t('timers.removeStar') : $t('timers.starEvent')"
                         >
                           <svg class="w-5 h-5" :fill="isStarred(event) ? 'currentColor' : 'none'" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
                         </button>
@@ -523,10 +523,10 @@
                     v-if="event.isMeta"
                     class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wider shadow-xs border bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700"
                   >
-                    Meta Archive
+                    {{ $t('timers.metaArchive') }}
                   </span>
                   <a v-if="event && event.link" :href="event.link" target="_blank" rel="noopener" class="ml-auto inline-flex items-center text-xs font-medium text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors bg-white/50 dark:bg-gray-800/50 py-1 px-2 rounded-lg border border-gray-200 dark:border-gray-700 backdrop-blur-sm hover:shadow-xs" @click.stop>
-                    Link
+                    {{ $t('timers.link') }}
                     <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                   </a>
                 </div>
@@ -586,14 +586,14 @@
                 @click="toggleStar(selectedEvent)"
                 class="p-2 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-xs text-gray-400 hover:text-amber-400 dark:hover:text-amber-400 shadow-sm border border-gray-200/60 dark:border-gray-700/60 transition-colors"
                 :class="{ '!text-amber-400': isStarred(selectedEvent) }"
-                :title="isStarred(selectedEvent) ? 'Remove Star' : 'Star Event'"
+                :title="isStarred(selectedEvent) ? $t('timers.removeStar') : $t('timers.starEvent')"
               >
                 <svg class="w-5 h-5 sm:w-6 sm:h-6" :fill="isStarred(selectedEvent) ? 'currentColor' : 'none'" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
               </button>
               <button
                 @click="closeModal"
                 class="p-2 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-xs text-gray-500 hover:text-gray-900 dark:hover:text-gray-100 shadow-sm border border-gray-200/60 dark:border-gray-700/60 transition-colors"
-                title="Close modal (Esc)"
+                :title="$t('modal.close')"
               >
                 <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
               </button>
@@ -611,13 +611,13 @@
                       class="inline-flex px-2 py-0.5 rounded-md text-[11px] sm:text-xs font-bold uppercase tracking-wider border shadow-xs"
                       :class="selectedEvent.type === 'event' ? 'bg-blue-50 border-blue-200 text-blue-700 dark:bg-blue-900/30 dark:border-blue-800 dark:text-blue-300' : 'bg-rose-50 border-rose-200 text-rose-700 dark:bg-rose-900/30 dark:border-rose-800 dark:text-rose-300'"
                     >
-                      {{ selectedEvent.type }}
+                      {{ selectedEvent.type === 'deadline' ? $t('filters.deadline') : $t('filters.event') }}
                     </span>
                     <span 
                       v-if="isOngoing(selectedEvent)"
                       class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] sm:text-xs font-bold uppercase tracking-wider border bg-amber-50 border-amber-200 text-amber-700 dark:bg-amber-900/30 dark:border-amber-800 dark:text-amber-300 animate-pulse"
                     >
-                      Happening Now
+                      {{ $t('status.happeningNow') }}
                     </span>
                     <span 
                       v-if="selectedEvent.isMeta"
@@ -635,7 +635,7 @@
               <!-- Live Countdown Display Card -->
               <div class="bg-gradient-to-br from-gray-50 to-gray-100/80 dark:from-gray-800/60 dark:to-gray-800/30 rounded-2xl p-5 border border-gray-200/60 dark:border-gray-700/60">
                 <div class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3 text-center">
-                  {{ isOngoing(selectedEvent) ? '⏳ Event Ends In' : (isPast(selectedEvent) ? '🏁 Event Status' : '🚀 Countdown To Start') }}
+                  {{ isOngoing(selectedEvent) ? '⏳ ' + $t('status.eventEndsIn') : (isPast(selectedEvent) ? '🏁 ' + $t('status.eventStatus') : '🚀 ' + $t('status.countdownToStart')) }}
                 </div>
                 
                 <div v-if="!isPast(selectedEvent)" class="grid grid-cols-4 gap-2 sm:gap-4 text-center">
@@ -643,29 +643,29 @@
                     <div class="text-2xl sm:text-4xl font-extrabold text-primary-600 dark:text-primary-400 font-mono">
                       {{ String(getCountdownParts(selectedEvent).days).padStart(2, '0') }}
                     </div>
-                    <div class="text-[10px] sm:text-xs font-semibold text-gray-400 uppercase tracking-wider mt-1">Days</div>
+                    <div class="text-[10px] sm:text-xs font-semibold text-gray-400 uppercase tracking-wider mt-1">{{ $t('time.days') }}</div>
                   </div>
                   <div class="bg-white dark:bg-gray-900 rounded-xl p-3 shadow-sm border border-gray-100 dark:border-gray-800">
                     <div class="text-2xl sm:text-4xl font-extrabold text-primary-600 dark:text-primary-400 font-mono">
                       {{ String(getCountdownParts(selectedEvent).hours).padStart(2, '0') }}
                     </div>
-                    <div class="text-[10px] sm:text-xs font-semibold text-gray-400 uppercase tracking-wider mt-1">Hours</div>
+                    <div class="text-[10px] sm:text-xs font-semibold text-gray-400 uppercase tracking-wider mt-1">{{ $t('time.hours') }}</div>
                   </div>
                   <div class="bg-white dark:bg-gray-900 rounded-xl p-3 shadow-sm border border-gray-100 dark:border-gray-800">
                     <div class="text-2xl sm:text-4xl font-extrabold text-primary-600 dark:text-primary-400 font-mono">
                       {{ String(getCountdownParts(selectedEvent).minutes).padStart(2, '0') }}
                     </div>
-                    <div class="text-[10px] sm:text-xs font-semibold text-gray-400 uppercase tracking-wider mt-1">Minutes</div>
+                    <div class="text-[10px] sm:text-xs font-semibold text-gray-400 uppercase tracking-wider mt-1">{{ $t('time.minutes') }}</div>
                   </div>
                   <div class="bg-white dark:bg-gray-900 rounded-xl p-3 shadow-sm border border-gray-100 dark:border-gray-800">
                     <div class="text-2xl sm:text-4xl font-extrabold text-amber-500 font-mono">
                       {{ String(getCountdownParts(selectedEvent).seconds).padStart(2, '0') }}
                     </div>
-                    <div class="text-[10px] sm:text-xs font-semibold text-gray-400 uppercase tracking-wider mt-1">Seconds</div>
+                    <div class="text-[10px] sm:text-xs font-semibold text-gray-400 uppercase tracking-wider mt-1">{{ $t('time.seconds') }}</div>
                   </div>
                 </div>
                 <div v-else class="text-center py-4 text-gray-500 dark:text-gray-400 font-semibold text-base sm:text-lg">
-                  This event concluded on {{ formatEventDates(selectedEvent) }}
+                  {{ $t('status.concludedOn', { date: formatEventDates(selectedEvent) }) }}
                 </div>
               </div>
 
@@ -678,7 +678,7 @@
                       <div class="p-1.5 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                       </div>
-                      <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">Event Schedule</span>
+                      <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">{{ $t('modal.eventSchedule') }}</span>
                     </div>
 
                     <!-- Timezone Toggle -->
@@ -697,7 +697,7 @@
                         class="px-2.5 py-1 rounded-md transition-all"
                         :class="modalTimezone === 'local' ? 'bg-white dark:bg-gray-800 text-primary-600 dark:text-primary-400 shadow-xs' : 'text-gray-500 hover:text-gray-800 dark:hover:text-gray-200'"
                       >
-                        My Time ({{ userTimezoneAbbr }})
+                        {{ $t('modal.myTime') }} ({{ userTimezoneAbbr }})
                       </button>
                     </div>
                   </div>
@@ -713,7 +713,7 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                   </div>
                   <div class="min-w-0 flex-1">
-                    <div class="text-xs text-gray-400 font-medium">Host City / Location</div>
+                    <div class="text-xs text-gray-400 font-medium">{{ $t('modal.hostLocation') }}</div>
                     <div class="font-bold text-gray-900 dark:text-gray-100 text-sm flex items-center gap-1.5 flex-wrap mt-0.5">
                       <span>{{ selectedEvent.country || selectedEvent.region || 'Online / Virtual' }}</span>
                       <span
@@ -731,7 +731,7 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                   </div>
                   <div class="min-w-0 flex-1">
-                    <div class="text-xs text-gray-400 font-medium">Organizers</div>
+                    <div class="text-xs text-gray-400 font-medium">{{ $t('modal.organizers') }}</div>
                     <div class="font-semibold text-gray-800 dark:text-gray-200 truncate mt-0.5">{{ selectedEvent.organizers }}</div>
                   </div>
                 </div>
@@ -746,7 +746,7 @@
                   rel="noopener"
                   class="flex-1 min-w-[140px] inline-flex items-center justify-center gap-2 px-4 py-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all text-sm"
                 >
-                  <span>Open Wiki Page</span>
+                  <span>{{ $t('modal.openWikiPage') }}</span>
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                 </a>
 
@@ -758,7 +758,7 @@
                 >
                   <svg v-if="!isCopied" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
                   <svg v-else class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                  <span>{{ isCopied ? 'Copied!' : $t('modal.copyLink') }}</span>
+                  <span>{{ isCopied ? $t('modal.copied') : $t('modal.copyLink') }}</span>
                 </button>
 
                 <button
@@ -769,7 +769,7 @@
                 >
                   <svg v-if="!isWikitextCopied" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                   <svg v-else class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                  <span>{{ isWikitextCopied ? 'Wikitext Copied!' : $t('modal.copyWikitext') }}</span>
+                  <span>{{ isWikitextCopied ? $t('modal.wikitextCopied') : $t('modal.copyWikitext') }}</span>
                 </button>
 
                 <button
@@ -786,7 +786,7 @@
 
               <!-- Calendar & Embed Integrations Row -->
               <div class="flex items-center flex-wrap gap-2 pt-2 border-t border-gray-100 dark:border-gray-800">
-                <span class="text-xs text-gray-400 font-medium">Export & Embed:</span>
+                <span class="text-xs text-gray-400 font-medium">{{ $t('modal.exportAndEmbed') }}:</span>
                 <a
                   :href="getGoogleCalendarUrl(selectedEvent)"
                   target="_blank"
@@ -794,25 +794,25 @@
                   class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/40 text-blue-600 dark:text-blue-300 text-xs font-semibold rounded-lg border border-blue-200 dark:border-blue-800/50 transition-all"
                 >
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                  <span>Google Cal</span>
+                  <span>{{ $t('modal.googleCal') }}</span>
                 </a>
                 <button
                   @click="downloadICal(selectedEvent)"
                   type="button"
                   class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 text-xs font-semibold rounded-lg border border-gray-200 dark:border-gray-700 transition-all"
-                  title="Download .ics file for Apple Calendar, Outlook, etc."
+                  :title="$t('modal.downloadIcs')"
                 >
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                  <span>.ICS File</span>
+                  <span>{{ $t('modal.icsFile') }}</span>
                 </button>
                 <button
                   @click="showEmbedDrawer = !showEmbedDrawer"
                   type="button"
                   class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-xs font-semibold rounded-lg border border-purple-200 dark:border-purple-800/50 transition-all"
-                  title="Get embed code for external websites or dashboards"
+                  :title="$t('modal.embedWidget')"
                 >
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
-                  <span>Embed Widget</span>
+                  <span>{{ $t('modal.embedWidget') }}</span>
                 </button>
 
                 <button
@@ -820,21 +820,21 @@
                   @click="deleteEvent(selectedEvent.id)"
                   type="button"
                   class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 text-red-600 dark:text-red-400 text-xs font-semibold rounded-lg border border-red-200 dark:border-red-800/50 transition-all ml-auto"
-                  title="Delete this timer"
+                  :title="$t('timers.deleteTimer')"
                 >
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                  <span>Delete Timer</span>
+                  <span>{{ $t('timers.deleteTimer') }}</span>
                 </button>
               </div>
 
               <!-- Embed Widget Code Snippet Box -->
               <div v-if="showEmbedDrawer" class="p-3.5 bg-purple-50/70 dark:bg-purple-950/40 rounded-xl border border-purple-200 dark:border-purple-900/60 flex flex-col gap-2 animate-in fade-in duration-200">
                 <div class="flex items-center justify-between text-xs font-bold text-purple-900 dark:text-purple-200">
-                  <span class="flex items-center gap-1.5">🌐 <span>Live Embed HTML Snippet</span></span>
+                  <span class="flex items-center gap-1.5">🌐 <span>{{ $t('modal.embedSnippetTitle') }}</span></span>
                   <button @click="showEmbedDrawer = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-sm leading-none">✕</button>
                 </div>
                 <p class="text-[11px] text-gray-600 dark:text-gray-400">
-                  Paste this iframe into your chapter website, event landing page, or community dashboard:
+                  {{ $t('modal.embedSnippetDesc') }}
                 </p>
                 <div class="flex items-center gap-2">
                   <input
@@ -847,7 +847,7 @@
                     @click="copyEmbedCode(selectedEvent)"
                     class="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold rounded-lg transition-colors whitespace-nowrap"
                   >
-                    {{ isEmbedCopied ? '✓ Copied!' : 'Copy Code' }}
+                    {{ isEmbedCopied ? '✓ ' + $t('modal.copied') : $t('modal.copyCode') }}
                   </button>
                 </div>
               </div>

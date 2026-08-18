@@ -24,14 +24,14 @@
               <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
             </div>
           </div>
-          <span class="hidden sm:inline font-medium opacity-80 bg-white/40 dark:bg-black/30 px-3 py-1 rounded-full text-sm border border-black/5 dark:border-white/5 backdrop-blur-sm">System Time: {{ formattedTime }}</span>
-          <button @click="showTimeInfo = true" class="w-8 h-8 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center text-sm font-bold bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-700 hover:scale-110 shadow-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500" title="Click for more information">?</button>
+          <span class="hidden sm:inline font-medium opacity-80 bg-white/40 dark:bg-black/30 px-3 py-1 rounded-full text-sm border border-black/5 dark:border-white/5 backdrop-blur-sm">{{ $t('app.systemTime') }}: {{ formattedTime }}</span>
+          <button @click="showTimeInfo = true" class="w-8 h-8 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center text-sm font-bold bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-700 hover:scale-110 shadow-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500" :title="$t('app.moreInfo')">?</button>
           
           <!-- Dark Mode Toggle -->
           <button 
             @click="toggleDarkMode" 
             class="relative p-2 rounded-xl bg-white/50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 hover:scale-105 hover:bg-white dark:hover:bg-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-300 overflow-hidden group"
-            :title="darkMode ? 'Switch to light mode' : 'Switch to dark mode'"
+            :title="darkMode ? $t('app.themeLight') : $t('app.themeDark')"
           >
             <div class="absolute inset-0 bg-gradient-to-tr from-primary-400/20 to-indigo-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <!-- Sun icon for light mode -->
@@ -69,7 +69,7 @@
         <nav v-if="drawerOpen" class="fixed inset-y-0 left-0 max-w-xs w-full glass-panel shadow-2xl p-8 flex flex-col z-50 overflow-y-auto" @click.stop>
           <div class="flex items-center justify-between mb-8">
             <span class="text-2xl font-bold text-gradient">{{ $t('app.title') }}</span>
-            <button @click="drawerOpen = false" class="p-2 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-700/50 transition-colors">
+            <button @click="drawerOpen = false" class="p-2 rounded-full hover:bg-gray-200/50 dark:hover:bg-gray-700/50 transition-colors" :aria-label="$t('modal.close')">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
           </div>
@@ -102,16 +102,16 @@
     >
       <div v-if="showTimeInfo" class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50" @click="showTimeInfo = false">
         <div class="glass-panel text-gray-800 dark:text-gray-100 p-6 rounded-2xl max-w-sm relative w-full sm:w-auto" @click.stop>
-          <button @click="showTimeInfo = false" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-colors" aria-label="Close">
+          <button @click="showTimeInfo = false" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-colors" :aria-label="$t('modal.close')">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
           <div class="flex items-center gap-3 mb-2">
             <div class="p-2 bg-primary-100 dark:bg-primary-900/50 text-primary-600 dark:text-primary-400 rounded-full">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             </div>
-            <h3 class="font-bold text-lg">System Time</h3>
+            <h3 class="font-bold text-lg">{{ $t('app.systemTime') }}</h3>
           </div>
-          <p class="text-sm opacity-80 pl-11">This time is calculated locally based on your device's timezone and clock settings.</p>
+          <p class="text-sm opacity-80 pl-11">{{ $t('app.systemTimeDesc') }}</p>
         </div>
       </div>
     </transition>

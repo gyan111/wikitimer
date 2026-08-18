@@ -7,11 +7,11 @@
     <div class="absolute top-4 right-4 z-20 flex flex-col gap-2 pointer-events-auto">
       <button
         @click="showOnlineDrawer = !showOnlineDrawer"
-        class="glass-panel px-4 py-2.5 rounded-xl shadow-md border border-gray-200/60 dark:border-gray-700 bg-white/90 dark:bg-gray-800/90 text-xs sm:text-sm font-bold text-gray-800 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-700 flex items-center gap-2 transition-all"
-        :title="showOnlineDrawer ? 'Hide Online Events' : 'View Online & Global Events'"
+        class="glass-panel px-4 py-2.5 rounded-xl shadow-md border border-gray-200/60 dark:border-gray-700 bg-white/90 dark:bg-gray-800/90 text-xs sm:text-sm font-bold text-gray-800 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-700 flex items-center gap-2 transition-all cursor-pointer"
+        :title="showOnlineDrawer ? $t('map.hideOnlineEvents') : $t('map.onlineEvents')"
       >
         <span class="w-2.5 h-2.5 rounded-full bg-indigo-500 animate-pulse"></span>
-        <span>🌐 {{ $t('map.onlineEvents') || 'Online / Global Events' }} ({{ onlineEvents.length }})</span>
+        <span>🌐 {{ $t('map.onlineEvents') }} ({{ onlineEvents.length }})</span>
         <svg class="w-4 h-4 transform transition-transform" :class="{ 'rotate-180': showOnlineDrawer }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
         </svg>
@@ -33,16 +33,16 @@
       >
         <div class="flex items-center justify-between pb-2 border-b border-gray-100 dark:border-gray-800">
           <h3 class="font-bold text-sm text-gray-900 dark:text-white flex items-center gap-2">
-            <span>🌐 Online & Virtual Events</span>
+            <span>🌐 {{ $t('map.onlineVirtualEvents') }}</span>
             <span class="text-xs px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 font-semibold">{{ onlineEvents.length }}</span>
           </h3>
-          <button @click="showOnlineDrawer = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1">
+          <button @click="showOnlineDrawer = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1" :aria-label="$t('modal.close')">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
           </button>
         </div>
 
         <div v-if="onlineEvents.length === 0" class="py-6 text-center text-xs text-gray-500 dark:text-gray-400">
-          No online events match the current filter.
+          {{ $t('map.noOnlineEvents') }}
         </div>
 
         <div v-else class="space-y-2.5">
@@ -55,13 +55,13 @@
             <div class="flex items-start justify-between gap-2">
               <h4 class="font-bold text-xs sm:text-sm text-gray-900 dark:text-white line-clamp-1 hover:text-primary-600">{{ event.name }}</h4>
               <span class="text-[10px] px-1.5 py-0.5 rounded uppercase font-semibold border flex-shrink-0" :class="event.type === 'deadline' ? 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300' : 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300'">
-                {{ event.type }}
+                {{ event.type === 'deadline' ? $t('filters.deadline') : $t('filters.event') }}
               </span>
             </div>
             <div class="flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400">
               <span>{{ formatDate(event.time) }}</span>
               <span class="font-mono font-bold" :class="isConcluded(event) ? 'text-emerald-600 dark:text-emerald-400' : 'text-primary-600 dark:text-primary-400'">
-                {{ isConcluded(event) ? 'Concluded' : 'View Timer →' }}
+                {{ isConcluded(event) ? $t('status.ended') : $t('map.viewTimer') }}
               </span>
             </div>
           </div>
@@ -73,9 +73,12 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, watch, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { getEventCoordinates } from '@/utils/geo.js';
+
+const { t, locale } = useI18n();
 
 const props = defineProps({
   events: {
@@ -205,17 +208,19 @@ function renderMarkers(force = false) {
       const concluded = isConcluded(ev);
       const isDeadline = ev.type === 'deadline';
       const statusColor = concluded ? '#059669' : (isDeadline ? '#e11d48' : '#2563eb');
-      const statusText = concluded ? '✓ Concluded' : formatDate(ev.time);
+      const statusText = concluded ? `✓ ${t('status.ended')}` : formatDate(ev.time);
       const typeBadgeBg = isDeadline ? '#ffe4e6' : '#eff6ff';
       const typeBadgeColor = isDeadline ? '#9f1239' : '#1e40af';
+      const typeBadgeLabel = isDeadline ? t('filters.deadline') : t('filters.event');
       const eventKey = encodeURIComponent(getEventUniqueKey(ev));
+      const buttonLabel = t('map.viewDetailsAndTimer');
       
       return `
         <div style="padding: 10px; border-radius: 10px; background: #f9fafb; margin-bottom: 8px; border: 1px solid #e5e7eb;">
           <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; margin-bottom: 4px;">
             <span style="font-weight: 700; font-size: 12px; color: #111827; line-height: 1.35;">${escapeHtml(ev.name)}</span>
             <span style="font-size: 9px; font-weight: 700; text-transform: uppercase; background: ${typeBadgeBg}; color: ${typeBadgeColor}; padding: 2px 6px; border-radius: 4px; white-space: nowrap;">
-              ${ev.type || 'Event'}
+              ${escapeHtml(typeBadgeLabel)}
             </span>
           </div>
           <div style="font-size: 11px; font-weight: 600; color: ${statusColor}; margin-bottom: 8px;">
@@ -227,19 +232,20 @@ function renderMarkers(force = false) {
             onclick="window.__wikitimer_select_event &amp;&amp; window.__wikitimer_select_event('${eventKey}')"
             style="width: 100%; background: #2563eb; color: #ffffff; border: none; border-radius: 8px; padding: 6px 10px; font-size: 11px; font-weight: 700; cursor: pointer; text-align: center; display: block; box-shadow: 0 1px 3px rgba(0,0,0,0.12);"
           >
-            View Details &amp; Timer →
+            ${escapeHtml(buttonLabel)}
           </button>
         </div>
       `;
     }).join('');
 
+    const eventsCountLabel = t('map.eventsCount', { count });
     const popupHtml = `
       <div style="min-width: 220px; max-width: 280px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
         <div style="padding-bottom: 6px; margin-bottom: 6px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between;">
           <div style="font-weight: 800; font-size: 12px; color: #374151; display: flex; align-items: center; gap: 4px;">
             📍 <span>${escapeHtml(group.locationName)}</span>
           </div>
-          ${count > 1 ? `<span style="font-size: 10px; font-weight: 700; background: #e0e7ff; color: #3730a3; padding: 1px 6px; border-radius: 9999px;">${count} events</span>` : ''}
+          ${count > 1 ? `<span style="font-size: 10px; font-weight: 700; background: #e0e7ff; color: #3730a3; padding: 1px 6px; border-radius: 9999px;">${escapeHtml(eventsCountLabel)}</span>` : ''}
         </div>
         <div style="max-height: 240px; overflow-y: auto; padding-right: 2px;">
           ${eventsHtml}
@@ -260,6 +266,10 @@ function escapeHtml(str) {
 
 watch(() => props.events, () => {
   renderMarkers();
+});
+
+watch(locale, () => {
+  renderMarkers(true);
 });
 
 onMounted(() => {
