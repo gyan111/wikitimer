@@ -1,0 +1,108 @@
+{
+  "app": {
+    "title": "WikiTimer",
+    "login": "लॉग इन",
+    "themeLight": "लाइट थीम",
+    "themeDark": "डार्क थीम",
+    "language": "भाषा",
+    "addTimer": "टाइमर जोड़ें",
+    "backToTimers": "टाइमर पर वापस जाएं",
+    "viewDashboard": "डैशबोर्ड देखें"
+  },
+  "timers": {
+    "allTimers": "सभी टाइमर",
+    "events": "इवेंट्स",
+    "deadlines": "अंतिम तिथियां",
+    "search": "इवेंट खोजें...",
+    "noTimers": "कोई टाइमर नहीं मिला।",
+    "noTimersDesc": "अपने समुदाय के लिए पहला टाइमर बनाएं!",
+    "createNew": "नया टाइमर बनाएं"
+  },
+  "tags": {
+    "all": "सभी",
+    "wikimania": "विकिमैनिया",
+    "hackathon": "हैकाथॉन",
+    "editathon": "एडिटाथॉन",
+    "wikiloves": "विकि लव्स",
+    "conference": "सम्मेलन और बैठकें",
+    "glam": "GLAM",
+    "education": "शिक्षा"
+  },
+  "map": {
+    "gridView": "ग्रिड दृश्य",
+    "mapView": "मानचित्र दृश्य",
+    "onlineEvents": "ऑनलाइन और वैश्विक इवेंट्स",
+    "viewDetails": "विवरण देखें"
+  },
+  "filters": {
+    "allRegions": "सभी क्षेत्र",
+    "allCountries": "सभी देश",
+    "allTypes": "सभी प्रकार",
+    "event": "इवेंट",
+    "deadline": "अंतिम तिथि",
+    "upcoming": "आगामी इवेंट्स",
+    "past": "पुराने इवेंट्स",
+    "all": "सभी इवेंट्स",
+    "recentFirst": "दूर के इवेंट्स पहले",
+    "oldestFirst": "निकटतम इवेंट्स पहले",
+    "pin": "दृश्य पिन करें",
+    "pinned": "पिन किया गया",
+    "reset": "रीसेट",
+    "favoritesOnly": "पसंदीदा",
+    "showAll": "सभी",
+    "sourceBoth": "सभी स्रोत",
+    "sourceCommunity": "केवल समुदाय",
+    "sourceMeta": "केवल मेटा इवेंट्स"
+  },
+  "status": {
+    "ongoing": "जारी है",
+    "ended": "समाप्त",
+    "startsIn": "शुरू होने में",
+    "deadlineIn": "अंतिम तिथि में",
+    "endsIn": "समाप्त होने में"
+  },
+  "sections": {
+    "upcomingMatches": "आगामी और सक्रिय इवेंट्स",
+    "pastMatches": "पुराने और संग्रहीत इवेंट्स"
+  },
+  "modal": {
+    "addToGoogleCalendar": "Google कैलेंडर",
+    "downloadIcs": ".ics डाउनलोड करें",
+    "copyWikitext": "विकीटेक्स्ट कॉपी करें",
+    "copyLink": "लिंक कॉपी करें",
+    "remindMe": "याद दिलाएं",
+    "reminderSet": "अनुस्मारक सेट",
+    "timezoneLocal": "स्थानीय समय",
+    "timezoneUtc": "UTC",
+    "close": "बंद करें"
+  },
+  "time": {
+    "days": "दिन",
+    "hours": "घंटे",
+    "minutes": "मिनट",
+    "seconds": "सेकंड"
+  },
+  "form": {
+    "title": "नया टाइमर जोड़ें",
+    "subtitle": "अपने अगले विकी मील के पत्थर के लिए उलटी गिनती बनाएं।",
+    "type": "इवेंट प्रकार",
+    "typePlaceholder": "प्रकार चुनें",
+    "typeEvent": "इवेंट",
+    "typeDeadline": "अंतिम तिथि",
+    "name": "शीर्षक",
+    "namePlaceholder": "उदा. विकिमैनिया 2026",
+    "link": "मेटा-विकी लिंक",
+    "linkPlaceholder": "https://meta.wikimedia.org/wiki/...",
+    "dateTime": "दिनांक और समय",
+    "timeZone": "समय क्षेत्र",
+    "timeZonePlaceholder": "समय क्षेत्र चुनें",
+    "region": "क्षेत्र",
+    "regionPlaceholder": "क्षेत्र चुनें",
+    "country": "देश",
+    "countryPlaceholder": "टाइप करना शुरू करें...",
+    "logo": "लोगो URL (वैकल्पिक)",
+    "logoPlaceholder": "https://example.com/logo.png",
+    "logoInvalid": "अमान्य छवि URL। डिफ़ॉल्ट आइकन का उपयोग किया जाएगा।",
+    "submit": "टाइमर बनाएं"
+  }
+}

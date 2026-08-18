@@ -1,0 +1,108 @@
+{
+  "app": {
+    "title": "WikiTimer",
+    "login": "Masuk",
+    "themeLight": "Tema Terang",
+    "themeDark": "Tema Gelap",
+    "language": "Bahasa",
+    "addTimer": "Tambah Pengatur Waktu",
+    "backToTimers": "Kembali ke Pengatur Waktu",
+    "viewDashboard": "Lihat Dasbor"
+  },
+  "timers": {
+    "allTimers": "Semua Pengatur Waktu",
+    "events": "Acara",
+    "deadlines": "Batas Waktu",
+    "search": "Cari acara...",
+    "noTimers": "Tidak ada pengatur waktu yang ditemukan.",
+    "noTimersDesc": "Jadilah yang pertama membuatnya untuk komunitas Anda!",
+    "createNew": "Buat Pengatur Waktu Baru"
+  },
+  "tags": {
+    "all": "Semua",
+    "wikimania": "Wikimania",
+    "hackathon": "Hackathon",
+    "editathon": "Edit-a-thon",
+    "wikiloves": "Wiki Loves",
+    "conference": "Konferensi & KTT",
+    "glam": "GLAM",
+    "education": "Pendidikan"
+  },
+  "map": {
+    "gridView": "Tampilan Kisi",
+    "mapView": "Tampilan Peta",
+    "onlineEvents": "Acara Daring & Global",
+    "viewDetails": "Lihat Detail"
+  },
+  "filters": {
+    "allRegions": "Semua Wilayah",
+    "allCountries": "Semua Negara",
+    "allTypes": "Semua Tipe",
+    "event": "Acara",
+    "deadline": "Batas Waktu",
+    "upcoming": "Acara Mendatang",
+    "past": "Acara Lalu",
+    "all": "Semua Acara",
+    "recentFirst": "Paling Jauh",
+    "oldestFirst": "Paling Dekat",
+    "pin": "Sematkan Tampilan",
+    "pinned": "Disematkan",
+    "reset": "Atur Ulang",
+    "favoritesOnly": "Favorit",
+    "showAll": "Semua",
+    "sourceBoth": "Semua Sumber",
+    "sourceCommunity": "Hanya Komunitas",
+    "sourceMeta": "Hanya Acara Meta"
+  },
+  "status": {
+    "ongoing": "Sedang Berlangsung",
+    "ended": "Selesai",
+    "startsIn": "Dimulai dalam",
+    "deadlineIn": "Batas waktu dalam",
+    "endsIn": "Berakhir dalam"
+  },
+  "sections": {
+    "upcomingMatches": "Acara Mendatang & Aktif",
+    "pastMatches": "Acara Lalu & Diarsipkan"
+  },
+  "modal": {
+    "addToGoogleCalendar": "Google Calendar",
+    "downloadIcs": "Unduh .ics",
+    "copyWikitext": "Salin Wikiteks",
+    "copyLink": "Salin Tautan",
+    "remindMe": "Ingatkan Saya",
+    "reminderSet": "Pengingat Disetel",
+    "timezoneLocal": "Waktu Lokal",
+    "timezoneUtc": "UTC",
+    "close": "Tutup"
+  },
+  "time": {
+    "days": "Hari",
+    "hours": "Jam",
+    "minutes": "Menit",
+    "seconds": "Detik"
+  },
+  "form": {
+    "title": "Tambah Pengatur Waktu Baru",
+    "subtitle": "Buat hitung mundur untuk pencapaian wiki Anda berikutnya.",
+    "type": "Tipe Acara",
+    "typePlaceholder": "Pilih Tipe",
+    "typeEvent": "Acara",
+    "typeDeadline": "Batas Waktu",
+    "name": "Judul",
+    "namePlaceholder": "mis. Wikimania 2026",
+    "link": "Tautan Meta-Wiki",
+    "linkPlaceholder": "https://meta.wikimedia.org/wiki/...",
+    "dateTime": "Tanggal & Waktu",
+    "timeZone": "Zona Waktu",
+    "timeZonePlaceholder": "Pilih Zona Waktu",
+    "region": "Wilayah",
+    "regionPlaceholder": "Pilih Wilayah",
+    "country": "Negara",
+    "countryPlaceholder": "Ketik negara...",
+    "logo": "URL Logo (Opsional)",
+    "logoPlaceholder": "https://example.com/logo.png",
+    "logoInvalid": "URL gambar tidak valid. Ikon default akan digunakan.",
+    "submit": "Luncurkan Pelacak"
+  }
+}

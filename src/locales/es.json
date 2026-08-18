@@ -1,0 +1,108 @@
+{
+  "app": {
+    "title": "WikiTimer",
+    "login": "Iniciar sesión",
+    "themeLight": "Tema claro",
+    "themeDark": "Tema oscuro",
+    "language": "Idioma",
+    "addTimer": "Añadir temporizador",
+    "backToTimers": "Volver a los temporizadores",
+    "viewDashboard": "Ver panel"
+  },
+  "timers": {
+    "allTimers": "Todos los temporizadores",
+    "events": "Eventos",
+    "deadlines": "Fechas límite",
+    "search": "Buscar eventos...",
+    "noTimers": "No se encontraron temporizadores.",
+    "noTimersDesc": "¡Sé el primero en crear uno para tu comunidad!",
+    "createNew": "Crear nuevo temporizador"
+  },
+  "tags": {
+    "all": "Todos",
+    "wikimania": "Wikimania",
+    "hackathon": "Hackatones",
+    "editathon": "Editatones",
+    "wikiloves": "Wiki Loves",
+    "conference": "Conferencias y cumbres",
+    "glam": "GLAM",
+    "education": "Educación"
+  },
+  "map": {
+    "gridView": "Vista de cuadrícula",
+    "mapView": "Vista de mapa",
+    "onlineEvents": "Eventos virtuales y globales",
+    "viewDetails": "Ver detalles"
+  },
+  "filters": {
+    "allRegions": "Todas las regiones",
+    "allCountries": "Todos los países",
+    "allTypes": "Todos los tipos",
+    "event": "Evento",
+    "deadline": "Fecha límite",
+    "upcoming": "Próximos eventos",
+    "past": "Eventos pasados",
+    "all": "Todos los eventos",
+    "recentFirst": "Más lejanos",
+    "oldestFirst": "Más próximos",
+    "pin": "Fijar vista",
+    "pinned": "Fijado",
+    "reset": "Restablecer",
+    "favoritesOnly": "Favoritos",
+    "showAll": "Todos",
+    "sourceBoth": "Todas las fuentes",
+    "sourceCommunity": "Solo comunidad",
+    "sourceMeta": "Solo eventos de Meta"
+  },
+  "status": {
+    "ongoing": "En curso",
+    "ended": "Finalizado",
+    "startsIn": "Comienza en",
+    "deadlineIn": "Fecha límite en",
+    "endsIn": "Termina en"
+  },
+  "sections": {
+    "upcomingMatches": "Eventos próximos y activos",
+    "pastMatches": "Eventos pasados y archivados"
+  },
+  "modal": {
+    "addToGoogleCalendar": "Google Calendar",
+    "downloadIcs": "Descargar .ics",
+    "copyWikitext": "Copiar wikitexto",
+    "copyLink": "Copiar enlace",
+    "remindMe": "Recordarme",
+    "reminderSet": "Recordatorio guardado",
+    "timezoneLocal": "Hora local",
+    "timezoneUtc": "UTC",
+    "close": "Cerrar"
+  },
+  "time": {
+    "days": "Días",
+    "hours": "Horas",
+    "minutes": "Minutos",
+    "seconds": "Segundos"
+  },
+  "form": {
+    "title": "Añadir nuevo temporizador",
+    "subtitle": "Crea una cuenta regresiva para tu próximo hito wiki.",
+    "type": "Tipo de evento",
+    "typePlaceholder": "Seleccionar tipo",
+    "typeEvent": "Evento",
+    "typeDeadline": "Fecha límite",
+    "name": "Título",
+    "namePlaceholder": "p. ej. Wikimania 2026",
+    "link": "Enlace de Meta-Wiki",
+    "linkPlaceholder": "https://meta.wikimedia.org/wiki/...",
+    "dateTime": "Fecha y hora",
+    "timeZone": "Zona horaria",
+    "timeZonePlaceholder": "Seleccionar zona horaria",
+    "region": "Región",
+    "regionPlaceholder": "Seleccionar región",
+    "country": "País",
+    "countryPlaceholder": "Empieza a escribir...",
+    "logo": "URL del logotipo (opcional)",
+    "logoPlaceholder": "https://ejemplo.com/logo.png",
+    "logoInvalid": "URL de imagen no válida. Se usará el icono predeterminado.",
+    "submit": "Crear temporizador"
+  }
+}

@@ -18,12 +18,7 @@
               v-model="$i18n.locale"
               class="appearance-none bg-white/40 dark:bg-gray-800/40 border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200 text-sm rounded-full py-1.5 pl-4 pr-8 focus:outline-none focus:ring-2 focus:ring-primary-500 backdrop-blur-md shadow-sm transition-all hover:bg-white/60 dark:hover:bg-gray-700/60 cursor-pointer"
             >
-              <option value="en">English</option>
-              <option value="de">Deutsch</option>
-              <option value="fr">Français</option>
-              <option value="or">ଓଡ଼ିଆ</option>
-              <option value="ml">മലയാളം</option>
-              <option value="te">తెలుగు</option>
+              <option v-for="lang in availableLocales" :key="lang.code" :value="lang.code">{{ lang.name }}</option>
             </select>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500 dark:text-gray-400">
               <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
@@ -83,14 +78,9 @@
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{ $t('app.language') }}</label>
             <select
               v-model="$i18n.locale"
-              class="w-full appearance-none bg-white/60 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200 rounded-xl py-2 pl-4 pr-8 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all font-medium"
+              class="w-full appearance-none bg-white/60 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200 rounded-xl py-2 pl-4 pr-8 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all font-medium cursor-pointer"
             >
-              <option value="en">English</option>
-              <option value="de">Deutsch</option>
-              <option value="fr">Français</option>
-              <option value="or">ଓଡ଼ିଆ</option>
-              <option value="ml">മലയാളം</option>
-              <option value="te">తెలుగు</option>
+              <option v-for="lang in availableLocales" :key="lang.code" :value="lang.code">{{ lang.name }}</option>
             </select>
           </div>
 
@@ -161,7 +151,31 @@ export default {
       showTimeInfo: false,
       timer: null,
       darkMode: false,
-      drawerOpen: false
+      drawerOpen: false,
+      availableLocales: [
+        { code: 'en', name: 'English' },
+        { code: 'es', name: 'Español' },
+        { code: 'de', name: 'Deutsch' },
+        { code: 'fr', name: 'Français' },
+        { code: 'pt', name: 'Português (Brasil)' },
+        { code: 'it', name: 'Italiano' },
+        { code: 'id', name: 'Bahasa Indonesia' },
+        { code: 'ru', name: 'Русский' },
+        { code: 'ar', name: 'العربية' },
+        { code: 'zh', name: '中文' },
+        { code: 'ja', name: '日本語' },
+        { code: 'hi', name: 'हिन्दी' },
+        { code: 'or', name: 'ଓଡ଼ିଆ' },
+        { code: 'te', name: 'తెలుగు' },
+        { code: 'ml', name: 'മലയാളം' }
+      ]
+    }
+  },
+  watch: {
+    '$i18n.locale'(newLocale) {
+      localStorage.setItem('wiki_timer_locale', newLocale);
+      document.documentElement.lang = newLocale;
+      document.documentElement.dir = newLocale === 'ar' ? 'rtl' : 'ltr';
     }
   },
   computed: {
@@ -193,6 +207,9 @@ export default {
     // Init dark mode
     this.darkMode = localStorage.getItem('darkMode') === '1';
     document.documentElement.classList.toggle('dark', this.darkMode);
+    // Init lang and dir
+    document.documentElement.lang = this.$i18n.locale;
+    document.documentElement.dir = this.$i18n.locale === 'ar' ? 'rtl' : 'ltr';
   },
   beforeUnmount() {
     if (this.timer) {

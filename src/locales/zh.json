@@ -1,0 +1,108 @@
+{
+  "app": {
+    "title": "WikiTimer",
+    "login": "登录",
+    "themeLight": "浅色模式",
+    "themeDark": "深色模式",
+    "language": "语言",
+    "addTimer": "添加计时器",
+    "backToTimers": "返回计时器列表",
+    "viewDashboard": "查看仪表盘"
+  },
+  "timers": {
+    "allTimers": "所有计时器",
+    "events": "活动",
+    "deadlines": "截止日期",
+    "search": "搜索活动...",
+    "noTimers": "未找到计时器。",
+    "noTimersDesc": "成为第一个为您的社区创建计时器的人！",
+    "createNew": "创建新计时器"
+  },
+  "tags": {
+    "all": "全部",
+    "wikimania": "维基狂欢节 (Wikimania)",
+    "hackathon": "黑客松",
+    "editathon": "编辑松",
+    "wikiloves": "维基爱系列 (Wiki Loves)",
+    "conference": "会议与峰会",
+    "glam": "GLAM 合作",
+    "education": "教育计划"
+  },
+  "map": {
+    "gridView": "网格视图",
+    "mapView": "地图视图",
+    "onlineEvents": "线上与全球活动",
+    "viewDetails": "查看详情"
+  },
+  "filters": {
+    "allRegions": "所有地区",
+    "allCountries": "所有国家/地区",
+    "allTypes": "所有类型",
+    "event": "活动",
+    "deadline": "截止时间",
+    "upcoming": "即将举办",
+    "past": "已结束活动",
+    "all": "所有活动",
+    "recentFirst": "按时间降序",
+    "oldestFirst": "按时间升序（即将到来）",
+    "pin": "固定视图",
+    "pinned": "已固定",
+    "reset": "重置",
+    "favoritesOnly": "收藏夹",
+    "showAll": "全部",
+    "sourceBoth": "所有来源",
+    "sourceCommunity": "仅社区创建",
+    "sourceMeta": "仅 Meta 活动"
+  },
+  "status": {
+    "ongoing": "进行中",
+    "ended": "已结束",
+    "startsIn": "距离开始还有",
+    "deadlineIn": "距离截止还有",
+    "endsIn": "距离结束还有"
+  },
+  "sections": {
+    "upcomingMatches": "即将开始与进行中的活动",
+    "pastMatches": "历史与已归档活动"
+  },
+  "modal": {
+    "addToGoogleCalendar": "Google 日历",
+    "downloadIcs": "下载 .ics",
+    "copyWikitext": "复制维基文本",
+    "copyLink": "复制链接",
+    "remindMe": "提醒我",
+    "reminderSet": "已设置提醒",
+    "timezoneLocal": "本地时间",
+    "timezoneUtc": "UTC",
+    "close": "关闭"
+  },
+  "time": {
+    "days": "天",
+    "hours": "小时",
+    "minutes": "分钟",
+    "seconds": "秒"
+  },
+  "form": {
+    "title": "添加新计时器",
+    "subtitle": "为您的下一个维基里程碑创建倒计时。",
+    "type": "活动类型",
+    "typePlaceholder": "选择类型",
+    "typeEvent": "活动",
+    "typeDeadline": "截止时间",
+    "name": "标题",
+    "namePlaceholder": "例如: Wikimania 2026",
+    "link": "Meta-Wiki 链接",
+    "linkPlaceholder": "https://meta.wikimedia.org/wiki/...",
+    "dateTime": "日期和时间",
+    "timeZone": "时区",
+    "timeZonePlaceholder": "选择时区",
+    "region": "地区",
+    "regionPlaceholder": "选择地区",
+    "country": "国家/地区",
+    "countryPlaceholder": "输入国家或地区...",
+    "logo": "图标链接（可选）",
+    "logoPlaceholder": "https://example.com/logo.png",
+    "logoInvalid": "无效的图片链接，将使用默认图标。",
+    "submit": "启动计时器"
+  }
+}

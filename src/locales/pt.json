@@ -1,0 +1,108 @@
+{
+  "app": {
+    "title": "WikiTimer",
+    "login": "Entrar",
+    "themeLight": "Tema claro",
+    "themeDark": "Tema escuro",
+    "language": "Idioma",
+    "addTimer": "Adicionar cronômetro",
+    "backToTimers": "Voltar aos cronômetros",
+    "viewDashboard": "Ver painel"
+  },
+  "timers": {
+    "allTimers": "Todos os cronômetros",
+    "events": "Eventos",
+    "deadlines": "Prazos",
+    "search": "Pesquisar eventos...",
+    "noTimers": "Nenhum cronômetro encontrado.",
+    "noTimersDesc": "Seja o primeiro a criar um para a sua comunidade!",
+    "createNew": "Criar novo cronômetro"
+  },
+  "tags": {
+    "all": "Todos",
+    "wikimania": "Wikimania",
+    "hackathon": "Hackathons",
+    "editathon": "Editatonas",
+    "wikiloves": "Wiki Loves",
+    "conference": "Conferências e encontros",
+    "glam": "GLAM",
+    "education": "Educação"
+  },
+  "map": {
+    "gridView": "Visualização em grade",
+    "mapView": "Visualização em mapa",
+    "onlineEvents": "Eventos online e globais",
+    "viewDetails": "Ver detalhes"
+  },
+  "filters": {
+    "allRegions": "Todas as regiões",
+    "allCountries": "Todos os países",
+    "allTypes": "Todos os tipos",
+    "event": "Evento",
+    "deadline": "Prazo",
+    "upcoming": "Próximos eventos",
+    "past": "Eventos passados",
+    "all": "Todos os eventos",
+    "recentFirst": "Mais distantes primeiro",
+    "oldestFirst": "Mais próximos primeiro",
+    "pin": "Fixar visualização",
+    "pinned": "Fixado",
+    "reset": "Redefinir",
+    "favoritesOnly": "Favoritos",
+    "showAll": "Todos",
+    "sourceBoth": "Todas as fontes",
+    "sourceCommunity": "Apenas comunidade",
+    "sourceMeta": "Apenas eventos do Meta"
+  },
+  "status": {
+    "ongoing": "Em andamento",
+    "ended": "Concluído",
+    "startsIn": "Começa em",
+    "deadlineIn": "Prazo em",
+    "endsIn": "Termina em"
+  },
+  "sections": {
+    "upcomingMatches": "Eventos futuros e em andamento",
+    "pastMatches": "Eventos passados e arquivados"
+  },
+  "modal": {
+    "addToGoogleCalendar": "Google Agenda",
+    "downloadIcs": "Baixar .ics",
+    "copyWikitext": "Copiar wikitexto",
+    "copyLink": "Copiar link",
+    "remindMe": "Lembrar-me",
+    "reminderSet": "Lembrete definido",
+    "timezoneLocal": "Horário local",
+    "timezoneUtc": "UTC",
+    "close": "Fechar"
+  },
+  "time": {
+    "days": "Dias",
+    "hours": "Horas",
+    "minutes": "Minutos",
+    "seconds": "Segundos"
+  },
+  "form": {
+    "title": "Adicionar novo cronômetro",
+    "subtitle": "Crie uma contagem regressiva para o seu próximo marco wiki.",
+    "type": "Tipo de evento",
+    "typePlaceholder": "Selecione o tipo",
+    "typeEvent": "Evento",
+    "typeDeadline": "Prazo",
+    "name": "Título",
+    "namePlaceholder": "ex.: Wikimania 2026",
+    "link": "Link da Meta-Wiki",
+    "linkPlaceholder": "https://meta.wikimedia.org/wiki/...",
+    "dateTime": "Data e hora",
+    "timeZone": "Fuso horário",
+    "timeZonePlaceholder": "Selecione o fuso horário",
+    "region": "Região",
+    "regionPlaceholder": "Selecione a região",
+    "country": "País",
+    "countryPlaceholder": "Comece a digitar...",
+    "logo": "URL do logo (opcional)",
+    "logoPlaceholder": "https://exemplo.com/logo.png",
+    "logoInvalid": "URL de imagem inválida. O ícone padrão será usado.",
+    "submit": "Criar cronômetro"
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "app": {
+    "title": "WikiTimer",
+    "login": "ログイン",
+    "themeLight": "ライトテーマ",
+    "themeDark": "ダークテーマ",
+    "language": "言語",
+    "addTimer": "タイマーを追加",
+    "backToTimers": "タイマー一覧に戻る",
+    "viewDashboard": "ダッシュボードを表示"
+  },
+  "timers": {
+    "allTimers": "すべてのタイマー",
+    "events": "イベント",
+    "deadlines": "締切",
+    "search": "イベントを検索...",
+    "noTimers": "タイマーが見つかりません。",
+    "noTimersDesc": "コミュニティのために最初のタイマーを作成しましょう！",
+    "createNew": "新規タイマー作成"
+  },
+  "tags": {
+    "all": "すべて",
+    "wikimania": "ウィキマニア",
+    "hackathon": "ハッカソン",
+    "editathon": "エディタソン",
+    "wikiloves": "Wiki Loves",
+    "conference": "カンファレンス・サミット",
+    "glam": "GLAM",
+    "education": "教育"
+  },
+  "map": {
+    "gridView": "グリッド表示",
+    "mapView": "マップ表示",
+    "onlineEvents": "オンライン＆グローバルイベント",
+    "viewDetails": "詳細を見る"
+  },
+  "filters": {
+    "allRegions": "すべての地域",
+    "allCountries": "すべての国",
+    "allTypes": "すべての種類",
+    "event": "イベント",
+    "deadline": "締切",
+    "upcoming": "今後のイベント",
+    "past": "過去のイベント",
+    "all": "すべてのイベント",
+    "recentFirst": "開催日が遠い順",
+    "oldestFirst": "開催日が近い順",
+    "pin": "ビューをピン留め",
+    "pinned": "ピン留め済み",
+    "reset": "リセット",
+    "favoritesOnly": "お気に入り",
+    "showAll": "すべて",
+    "sourceBoth": "すべてのソース",
+    "sourceCommunity": "コミュニティのみ",
+    "sourceMeta": "Metaイベントのみ"
+  },
+  "status": {
+    "ongoing": "開催中",
+    "ended": "終了",
+    "startsIn": "開始まで",
+    "deadlineIn": "締切まで",
+    "endsIn": "終了まで"
+  },
+  "sections": {
+    "upcomingMatches": "予定中・開催中のイベント",
+    "pastMatches": "終了・アーカイブされたイベント"
+  },
+  "modal": {
+    "addToGoogleCalendar": "Google カレンダー",
+    "downloadIcs": ".ics をダウンロード",
+    "copyWikitext": "ウィキテキストをコピー",
+    "copyLink": "リンクをコピー",
+    "remindMe": "リマインダー",
+    "reminderSet": "リマインダー設定済み",
+    "timezoneLocal": "現地時間",
+    "timezoneUtc": "UTC",
+    "close": "閉じる"
+  },
+  "time": {
+    "days": "日",
+    "hours": "時間",
+    "minutes": "分",
+    "seconds": "秒"
+  },
+  "form": {
+    "title": "新規タイマー追加",
+    "subtitle": "次のウィキイベントに向けたカウントダウンを作成します。",
+    "type": "イベントの種類",
+    "typePlaceholder": "種類を選択",
+    "typeEvent": "イベント",
+    "typeDeadline": "締切",
+    "name": "タイトル",
+    "namePlaceholder": "例: Wikimania 2026",
+    "link": "Meta-Wiki リンク",
+    "linkPlaceholder": "https://meta.wikimedia.org/wiki/...",
+    "dateTime": "日時",
+    "timeZone": "タイムゾーン",
+    "timeZonePlaceholder": "タイムゾーンを選択",
+    "region": "地域",
+    "regionPlaceholder": "地域を選択",
+    "country": "国",
+    "countryPlaceholder": "国名を入力...",
+    "logo": "ロゴURL（任意）",
+    "logoPlaceholder": "https://example.com/logo.png",
+    "logoInvalid": "無効な画像URLです。デフォルトアイコンを使用します。",
+    "submit": "タイマーを開始"
+  }
+}

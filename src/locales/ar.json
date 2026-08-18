@@ -1,0 +1,108 @@
+{
+  "app": {
+    "title": "WikiTimer",
+    "login": "تسجيل الدخول",
+    "themeLight": "المظهر الفاتح",
+    "themeDark": "المظهر الداكن",
+    "language": "اللغة",
+    "addTimer": "إضافة مؤقت",
+    "backToTimers": "العودة إلى المؤقتات",
+    "viewDashboard": "عرض لوحة التحكم"
+  },
+  "timers": {
+    "allTimers": "جميع المؤقتات",
+    "events": "الفعاليات",
+    "deadlines": "المواعيد النهائية",
+    "search": "البحث في الفعاليات...",
+    "noTimers": "لم يتم العثور على مؤقتات.",
+    "noTimersDesc": "كن أول من ينشئ مؤقتًا لمجتمعك!",
+    "createNew": "إنشاء مؤقت جديد"
+  },
+  "tags": {
+    "all": "الكل",
+    "wikimania": "ويكيمانيا",
+    "hackathon": "هاكاثون",
+    "editathon": "إيديثون",
+    "wikiloves": "ويكي تهوى",
+    "conference": "المؤتمرات والقمم",
+    "glam": "جلام (GLAM)",
+    "education": "التعليم"
+  },
+  "map": {
+    "gridView": "عرض شبكي",
+    "mapView": "عرض الخريطة",
+    "onlineEvents": "فعاليات رقمية وعالمية",
+    "viewDetails": "عرض التفاصيل"
+  },
+  "filters": {
+    "allRegions": "جميع المناطق",
+    "allCountries": "جميع البلدان",
+    "allTypes": "جميع الأنواع",
+    "event": "فعالية",
+    "deadline": "موعد نهائي",
+    "upcoming": "الفعاليات القادمة",
+    "past": "الفعاليات السابقة",
+    "all": "جميع الفعاليات",
+    "recentFirst": "الأبعد أولاً",
+    "oldestFirst": "الأقرب أولاً",
+    "pin": "تثبيت العرض",
+    "pinned": "مثبت",
+    "reset": "إعادة ضبط",
+    "favoritesOnly": "المفضلة",
+    "showAll": "الكل",
+    "sourceBoth": "جميع المصادر",
+    "sourceCommunity": "المجتمع فقط",
+    "sourceMeta": "فعاليات ميتا فقط"
+  },
+  "status": {
+    "ongoing": "جارية الآن",
+    "ended": "انتهت",
+    "startsIn": "تبدأ خلال",
+    "deadlineIn": "الموعد النهائي خلال",
+    "endsIn": "تنتهي خلال"
+  },
+  "sections": {
+    "upcomingMatches": "الفعاليات القادمة والنشطة",
+    "pastMatches": "الفعاليات السابقة والمؤرشفة"
+  },
+  "modal": {
+    "addToGoogleCalendar": "تقويم Google",
+    "downloadIcs": "تنزيل .ics",
+    "copyWikitext": "نسخ نصوص الويكي",
+    "copyLink": "نسخ الرابط",
+    "remindMe": "ذكرني",
+    "reminderSet": "تم ضبط التذكير",
+    "timezoneLocal": "التوقيت المحلي",
+    "timezoneUtc": "UTC",
+    "close": "إغلاق"
+  },
+  "time": {
+    "days": "أيام",
+    "hours": "ساعات",
+    "minutes": "دقائق",
+    "seconds": "ثوانٍ"
+  },
+  "form": {
+    "title": "إضافة مؤقت جديد",
+    "subtitle": "أنشئ عدًا تنازليًا للحدث الويكيميدي القادم.",
+    "type": "نوع الفعالية",
+    "typePlaceholder": "اختر النوع",
+    "typeEvent": "فعالية",
+    "typeDeadline": "موعد نهائي",
+    "name": "العنوان",
+    "namePlaceholder": "مثال: ويكيمانيا 2026",
+    "link": "رابط ميتا-ويكي",
+    "linkPlaceholder": "https://meta.wikimedia.org/wiki/...",
+    "dateTime": "التاريخ والوقت",
+    "timeZone": "المنطقة الزمنية",
+    "timeZonePlaceholder": "اختر المنطقة الزمنية",
+    "region": "المنطقة",
+    "regionPlaceholder": "اختر المنطقة",
+    "country": "البلد",
+    "countryPlaceholder": "ابدأ بالكتابة...",
+    "logo": "رابط الشعار (اختياري)",
+    "logoPlaceholder": "https://example.com/logo.png",
+    "logoInvalid": "رابط صورة غير صالح. سيتم استخدام الرمز الافتراضي.",
+    "submit": "إنشاء المؤقت"
+  }
+}

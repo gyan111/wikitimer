@@ -1,0 +1,108 @@
+{
+  "app": {
+    "title": "WikiTimer",
+    "login": "Accedi",
+    "themeLight": "Tema chiaro",
+    "themeDark": "Tema scuro",
+    "language": "Lingua",
+    "addTimer": "Aggiungi timer",
+    "backToTimers": "Torna ai timer",
+    "viewDashboard": "Visualizza bacheca"
+  },
+  "timers": {
+    "allTimers": "Tutti i timer",
+    "events": "Eventi",
+    "deadlines": "Scadenze",
+    "search": "Cerca eventi...",
+    "noTimers": "Nessun timer trovato.",
+    "noTimersDesc": "Sii il primo a crearne uno per la tua comunità!",
+    "createNew": "Crea nuovo timer"
+  },
+  "tags": {
+    "all": "Tutti",
+    "wikimania": "Wikimania",
+    "hackathon": "Hackathon",
+    "editathon": "Editathon",
+    "wikiloves": "Wiki Loves",
+    "conference": "Conferenze e summit",
+    "glam": "GLAM",
+    "education": "Istruzione"
+  },
+  "map": {
+    "gridView": "Vista griglia",
+    "mapView": "Vista mappa",
+    "onlineEvents": "Eventi online e globali",
+    "viewDetails": "Vedi dettagli"
+  },
+  "filters": {
+    "allRegions": "Tutte le regioni",
+    "allCountries": "Tutti i paesi",
+    "allTypes": "Tutti i tipi",
+    "event": "Evento",
+    "deadline": "Scadenza",
+    "upcoming": "Eventi in arrivo",
+    "past": "Eventi passati",
+    "all": "Tutti gli eventi",
+    "recentFirst": "Più lontani prima",
+    "oldestFirst": "Più vicini prima",
+    "pin": "Fissa vista",
+    "pinned": "Fissato",
+    "reset": "Reimposta",
+    "favoritesOnly": "Preferiti",
+    "showAll": "Tutti",
+    "sourceBoth": "Tutte le fonti",
+    "sourceCommunity": "Solo comunità",
+    "sourceMeta": "Solo eventi Meta"
+  },
+  "status": {
+    "ongoing": "In corso",
+    "ended": "Concluso",
+    "startsIn": "Inizia tra",
+    "deadlineIn": "Scade tra",
+    "endsIn": "Termina tra"
+  },
+  "sections": {
+    "upcomingMatches": "Eventi futuri e in corso",
+    "pastMatches": "Eventi passati e archiviati"
+  },
+  "modal": {
+    "addToGoogleCalendar": "Google Calendar",
+    "downloadIcs": "Scarica .ics",
+    "copyWikitext": "Copia wikitesto",
+    "copyLink": "Copia link",
+    "remindMe": "Ricordamelo",
+    "reminderSet": "Promemoria impostato",
+    "timezoneLocal": "Ora locale",
+    "timezoneUtc": "UTC",
+    "close": "Chiudi"
+  },
+  "time": {
+    "days": "Giorni",
+    "hours": "Ore",
+    "minutes": "Minuti",
+    "seconds": "Secondi"
+  },
+  "form": {
+    "title": "Aggiungi nuovo timer",
+    "subtitle": "Crea un conto alla rovescia per il tuo prossimo traguardo wiki.",
+    "type": "Tipo di evento",
+    "typePlaceholder": "Seleziona tipo",
+    "typeEvent": "Evento",
+    "typeDeadline": "Scadenza",
+    "name": "Titolo",
+    "namePlaceholder": "es. Wikimania 2026",
+    "link": "Link Meta-Wiki",
+    "linkPlaceholder": "https://meta.wikimedia.org/wiki/...",
+    "dateTime": "Data e ora",
+    "timeZone": "Fuso orario",
+    "timeZonePlaceholder": "Seleziona fuso orario",
+    "region": "Regione",
+    "regionPlaceholder": "Seleziona regione",
+    "country": "Paese",
+    "countryPlaceholder": "Inizia a digitare...",
+    "logo": "URL del logo (opzionale)",
+    "logoPlaceholder": "https://example.com/logo.png",
+    "logoInvalid": "URL immagine non valido. Verrà usata l'icona predefinita.",
+    "submit": "Avvia timer"
+  }
+}

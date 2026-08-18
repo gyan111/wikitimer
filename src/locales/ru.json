@@ -1,0 +1,108 @@
+{
+  "app": {
+    "title": "WikiTimer",
+    "login": "Войти",
+    "themeLight": "Светлая тема",
+    "themeDark": "Тёмная тема",
+    "language": "Язык",
+    "addTimer": "Добавить таймер",
+    "backToTimers": "Назад к таймерам",
+    "viewDashboard": "Панель управления"
+  },
+  "timers": {
+    "allTimers": "Все таймеры",
+    "events": "События",
+    "deadlines": "Сроки",
+    "search": "Поиск событий...",
+    "noTimers": "Таймеры не найдены.",
+    "noTimersDesc": "Создайте первый таймер для своего сообщества!",
+    "createNew": "Создать новый таймер"
+  },
+  "tags": {
+    "all": "Все",
+    "wikimania": "Викимания",
+    "hackathon": "Хакатоны",
+    "editathon": "Марафоны правок",
+    "wikiloves": "Вики любит",
+    "conference": "Конференции и саммиты",
+    "glam": "GLAM",
+    "education": "Образование"
+  },
+  "map": {
+    "gridView": "Сетка",
+    "mapView": "Карта",
+    "onlineEvents": "Онлайн и глобальные события",
+    "viewDetails": "Подробнее"
+  },
+  "filters": {
+    "allRegions": "Все регионы",
+    "allCountries": "Все страны",
+    "allTypes": "Все типы",
+    "event": "Событие",
+    "deadline": "Дедлайн",
+    "upcoming": "Предстоящие",
+    "past": "Прошедшие",
+    "all": "Все события",
+    "recentFirst": "Сначала поздние",
+    "oldestFirst": "Сначала ближайшие",
+    "pin": "Закрепить вид",
+    "pinned": "Закреплено",
+    "reset": "Сбросить",
+    "favoritesOnly": "Избранное",
+    "showAll": "Все",
+    "sourceBoth": "Все источники",
+    "sourceCommunity": "Только сообщество",
+    "sourceMeta": "Только Meta-события"
+  },
+  "status": {
+    "ongoing": "Проходит сейчас",
+    "ended": "Завершено",
+    "startsIn": "Начнётся через",
+    "deadlineIn": "Дедлайн через",
+    "endsIn": "Завершится через"
+  },
+  "sections": {
+    "upcomingMatches": "Предстоящие и активные события",
+    "pastMatches": "Прошедшие и архивные события"
+  },
+  "modal": {
+    "addToGoogleCalendar": "Google Календарь",
+    "downloadIcs": "Скачать .ics",
+    "copyWikitext": "Копировать вики-текст",
+    "copyLink": "Копировать ссылку",
+    "remindMe": "Напомнить",
+    "reminderSet": "Напоминание установлено",
+    "timezoneLocal": "Местное время",
+    "timezoneUtc": "UTC",
+    "close": "Закрыть"
+  },
+  "time": {
+    "days": "Дней",
+    "hours": "Часов",
+    "minutes": "Минут",
+    "seconds": "Секунд"
+  },
+  "form": {
+    "title": "Добавить новый таймер",
+    "subtitle": "Создайте обратный отсчет до следующего вики-события.",
+    "type": "Тип события",
+    "typePlaceholder": "Выберите тип",
+    "typeEvent": "Событие",
+    "typeDeadline": "Срок (дедлайн)",
+    "name": "Название",
+    "namePlaceholder": "напр. Wikimania 2026",
+    "link": "Ссылка на Meta-Wiki",
+    "linkPlaceholder": "https://meta.wikimedia.org/wiki/...",
+    "dateTime": "Дата и время",
+    "timeZone": "Часовой пояс",
+    "timeZonePlaceholder": "Выберите часовой пояс",
+    "region": "Регион",
+    "regionPlaceholder": "Выберите регион",
+    "country": "Страна",
+    "countryPlaceholder": "Начните вводить...",
+    "logo": "URL логотипа (необязательно)",
+    "logoPlaceholder": "https://example.com/logo.png",
+    "logoInvalid": "Некорректный URL изображения. Будет использован значок по умолчанию.",
+    "submit": "Запустить таймер"
+  }
+}
