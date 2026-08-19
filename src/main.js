@@ -19,6 +19,8 @@ import hi from './locales/hi.json';
 import or from './locales/or.json';
 import ml from './locales/ml.json';
 import te from './locales/te.json';
+import ta from './locales/ta.json';
+import sat from './locales/sat.json';
 
 const savedLocale = localStorage.getItem('wiki_timer_locale') || 'en';
 
@@ -41,7 +43,9 @@ const i18n = createI18n({
         hi,
         or,
         ml,
-        te
+        te,
+        ta,
+        sat
     }
 });
 

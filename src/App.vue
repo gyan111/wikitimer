@@ -167,7 +167,9 @@ export default {
         { code: 'hi', name: 'हिन्दी' },
         { code: 'or', name: 'ଓଡ଼ିଆ' },
         { code: 'te', name: 'తెలుగు' },
-        { code: 'ml', name: 'മലയാളം' }
+        { code: 'ta', name: 'தமிழ்' },
+        { code: 'ml', name: 'മലയാളം' },
+        { code: 'sat', name: 'ᱥᱟᱱᱛᱟᱲᱤ' }
       ]
     }
   },
