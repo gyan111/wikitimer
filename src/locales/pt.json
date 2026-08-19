@@ -130,7 +130,8 @@
     "embedWidget": "Widget para incorporar",
     "embedSnippetTitle": "Código HTML de incorporação",
     "embedSnippetDesc": "Cole este iframe no site do seu grupo, landing page do evento ou painel da comunidade:",
-    "copyCode": "Copiar código"
+    "copyCode": "Copiar código",
+    "participants": "Participantes"
   },
   "time": {
     "days": "Dias",
@@ -184,7 +185,9 @@
     "wikidataPlaceholder": "Pesquisar entidades do Wikidata (ex.: Wikimania 2026)...",
     "optional": "Opcional",
     "saving": "Salvando cronômetro...",
-    "submit": "Criar cronômetro"
+    "submit": "Criar cronômetro",
+    "participants": "Participantes esperados",
+    "participantsPlaceholder": "ex: 50"
   },
   "footer": {
     "createdBy": "Criado por",

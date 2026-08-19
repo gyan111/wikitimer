@@ -130,7 +130,8 @@
     "embedWidget": "ᱮᱢᱵᱮᱰ ᱣᱤᱡᱮᱴ",
     "embedSnippetTitle": "ᱞᱟᱭᱤᱵᱷ ᱮᱢᱵᱮᱰ HTML ᱠᱳᱰ",
     "embedSnippetDesc": "ᱱᱚᱶᱟ iframe ᱠᱳᱰ ᱟᱢᱟᱜ ᱣᱮᱵᱽᱥᱟᱭᱤᱴ ᱥᱮ ᱰᱮᱥᱵᱳᱨᱰ ᱨᱮ ᱞᱟᱜᱟᱣ ᱢᱮ:",
-    "copyCode": "ᱠᱳᱰ ᱠᱚᱯᱤ ᱢᱮ"
+    "copyCode": "ᱠᱳᱰ ᱠᱚᱯᱤ ᱢᱮ",
+    "participants": "ᱥᱮᱞᱮᱫᱤᱭᱟᱹ"
   },
   "time": {
     "days": "ᱢᱟᱦᱟᱸ",
@@ -184,7 +185,9 @@
     "wikidataPlaceholder": "ᱣᱤᱠᱤᱰᱟᱴᱟ ᱥᱮᱸᱫᱽᱨᱟᱭ ᱢᱮ (ᱡᱮᱞᱮᱠᱟ: Wikimania 2026)...",
     "optional": "ᱞᱟᱹᱠᱛᱤ ᱞᱮᱠᱟᱛᱮ",
     "saving": "ᱴᱟᱭᱢᱟᱨ ᱥᱟᱧᱪᱟᱣᱜ ᱠᱟᱱᱟ...",
-    "submit": "ᱴᱟᱭᱢᱟᱨ ᱮᱦᱚᱵ ᱢᱮ"
+    "submit": "ᱴᱟᱭᱢᱟᱨ ᱮᱦᱚᱵ ᱢᱮ",
+    "participants": "ᱥᱮᱞᱮᱫᱚᱜ ᱦᱚᱲ ᱮᱞ",
+    "participantsPlaceholder": "ᱡᱮᱞᱮᱠᱟ: ᱕᱐"
   },
   "footer": {
     "createdBy": "ᱵᱮᱱᱟᱣᱤᱭᱟᱹ",

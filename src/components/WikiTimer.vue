@@ -468,6 +468,14 @@
                   >
                     {{ $t('timers.meta') }}
                   </span>
+                  <span
+                    v-if="event.participants"
+                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold tracking-wide shadow-2xs border bg-purple-50/80 border-purple-200/80 text-purple-700 dark:bg-purple-950/40 dark:border-purple-800/50 dark:text-purple-300"
+                    :title="`${event.participants} ${$t('modal.participants')}`"
+                  >
+                    <span>👥</span>
+                    <span>{{ event.participants }}</span>
+                  </span>
                   <a v-if="event && event.link" :href="event.link" target="_blank" rel="noopener" class="ml-auto inline-flex items-center text-xs font-medium text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors bg-white/50 dark:bg-gray-800/50 py-1 px-2 rounded-lg border border-gray-200 dark:border-gray-700 backdrop-blur-sm hover:shadow-xs" @click.stop>
                     {{ $t('timers.link') }}
                     <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
@@ -547,6 +555,14 @@
                     class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wider shadow-xs border bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700"
                   >
                     {{ $t('timers.metaArchive') }}
+                  </span>
+                  <span
+                    v-if="event.participants"
+                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold tracking-wide shadow-2xs border bg-emerald-50/80 border-emerald-200/80 text-emerald-700 dark:bg-emerald-950/40 dark:border-emerald-800/50 dark:text-emerald-300"
+                    :title="`${event.participants} ${$t('modal.participants')}`"
+                  >
+                    <span>👥</span>
+                    <span>{{ event.participants }}</span>
                   </span>
                   <a v-if="event && event.link" :href="event.link" target="_blank" rel="noopener" class="ml-auto inline-flex items-center text-xs font-medium text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors bg-white/50 dark:bg-gray-800/50 py-1 px-2 rounded-lg border border-gray-200 dark:border-gray-700 backdrop-blur-sm hover:shadow-xs" @click.stop>
                     {{ $t('timers.link') }}
@@ -730,15 +746,15 @@
                   </div>
                 </div>
 
-                <!-- Host City / Location Card -->
-                <div class="flex items-center gap-3 p-3.5 bg-gray-50 dark:bg-gray-800/40 rounded-xl border border-gray-100 dark:border-gray-800">
-                  <div class="p-2 rounded-lg bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 shrink-0">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                  </div>
-                  <div class="min-w-0 flex-1">
-                    <div class="text-xs text-gray-400 font-medium">{{ $t('modal.hostLocation') }}</div>
-                    <div class="font-bold text-gray-900 dark:text-gray-100 text-sm flex items-center gap-1.5 flex-wrap mt-0.5">
-                      <span>{{ selectedEvent.country || selectedEvent.region || 'Online / Virtual' }}</span>
+                <!-- Streamlined Compact Details: Location, Format, Participants, Organizers -->
+                <div class="p-3 bg-gray-50/80 dark:bg-gray-800/40 rounded-xl border border-gray-100 dark:border-gray-800 flex flex-col gap-2.5">
+                  <!-- Row 1: Location, Attendance Format, Participants -->
+                  <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+                    <div class="flex items-center gap-2 flex-wrap">
+                      <span class="font-bold text-gray-900 dark:text-gray-100 flex items-center gap-1.5">
+                        <span>📍</span>
+                        <span>{{ selectedEvent.country || selectedEvent.region || 'Online / Virtual' }}</span>
+                      </span>
                       <span
                         v-if="selectedEvent.participation"
                         class="text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase tracking-wider bg-purple-100/70 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 border border-purple-200/60 dark:border-purple-800/60"
@@ -746,30 +762,32 @@
                         {{ selectedEvent.participation }}
                       </span>
                     </div>
-                  </div>
-                </div>
 
-                <div v-if="selectedEvent.organizers" class="flex items-start gap-3 p-3.5 bg-gray-50 dark:bg-gray-800/40 rounded-xl border border-gray-100 dark:border-gray-800">
-                  <div class="p-2 rounded-lg bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    <div v-if="selectedEvent.participants" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60 font-semibold text-[11px]">
+                      <span>👥</span>
+                      <span>{{ selectedEvent.participants }} {{ $t('modal.participants') }}</span>
+                    </div>
                   </div>
-                  <div class="min-w-0 flex-1">
-                    <div class="text-xs text-gray-400 font-medium mb-1.5">{{ $t('modal.organizers') }}</div>
-                    <div class="flex flex-wrap gap-1.5">
+
+                  <!-- Row 2: Organizers Mini Pills -->
+                  <div v-if="selectedEvent.organizers" class="pt-2 border-t border-gray-200/40 dark:border-gray-700/40 flex items-start gap-2">
+                    <span class="text-[11px] text-gray-400 font-medium shrink-0 pt-0.5">{{ $t('modal.organizers') }}:</span>
+                    <div class="flex flex-wrap gap-1.5 flex-1">
                       <a
-                        v-for="(org, idx) in getOrganizerLinks(selectedEvent.organizers)"
+                        v-for="(org, idx) in getOrganizerLinks(selectedEvent.organizers, selectedEvent.link)"
                         :key="idx"
                         :href="org.url"
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-white dark:bg-gray-800 text-primary-700 dark:text-primary-300 border border-gray-200/80 dark:border-gray-700 hover:border-primary-400 dark:hover:border-primary-500 hover:bg-primary-50/50 dark:hover:bg-primary-950/40 transition-all shadow-2xs group"
-                        :title="`Open ${org.name} on Meta-Wiki`"
+                        class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-white dark:bg-gray-800 text-primary-700 dark:text-primary-300 border border-gray-200/80 dark:border-gray-700 hover:border-primary-400 dark:hover:border-primary-500 hover:bg-primary-50/50 dark:hover:bg-primary-950/40 transition-all shadow-2xs group"
+                        :title="org.title || `Open on Meta-Wiki`"
                       >
-                        <span v-if="org.isUser" class="text-amber-500 text-[11px]">👤</span>
-                        <span v-else-if="org.isExternal" class="text-emerald-500 text-[11px]">🌐</span>
-                        <span v-else class="text-indigo-500 text-[11px]">🏛️</span>
+                        <span v-if="org.isMore" class="text-primary-500">🔗</span>
+                        <span v-else-if="org.isUser" class="text-amber-500">👤</span>
+                        <span v-else-if="org.isExternal" class="text-emerald-500">🌐</span>
+                        <span v-else class="text-indigo-500">🏛️</span>
                         <span class="group-hover:underline">{{ org.name }}</span>
-                        <svg class="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                        <svg class="w-2.5 h-2.5 opacity-50 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                       </a>
                     </div>
                   </div>
@@ -988,12 +1006,31 @@ const activeFilterCount = computed(() => {
   return count;
 });
 
-function getOrganizerLinks(organizersStr) {
+function getOrganizerLinks(organizersStr, eventLink = '') {
   if (!organizersStr || typeof organizersStr !== 'string') return [];
-  const rawList = organizersStr.split(/[,;\n]+/).map(s => s.trim()).filter(Boolean);
-  
+
+  // Normalize and split on commas, semicolons, or " and "
+  const normalized = organizersStr
+    .replace(/\s+and\s+(\d+\s+more)/i, ', $1')
+    .replace(/\s+and\s+/gi, ', ');
+
+  const rawList = normalized.split(/[,;\n]+/).map(s => s.trim()).filter(Boolean);
+
   return rawList.map(raw => {
-    // If it's a direct URL
+    // 1. Check if it's "+N more" or "N more"
+    const moreMatch = raw.match(/^(?:and\s+)?(?:\+)?(\d+)\s+more$/i);
+    if (moreMatch) {
+      return {
+        name: `+${moreMatch[1]} more`,
+        url: eventLink || 'https://meta.wikimedia.org',
+        isUser: false,
+        isExternal: false,
+        isMore: true,
+        title: 'View full team on event page'
+      };
+    }
+
+    // 2. Direct external URL
     if (/^https?:\/\//i.test(raw)) {
       let displayName = raw;
       try {
@@ -1006,29 +1043,44 @@ function getOrganizerLinks(organizersStr) {
         name: displayName,
         url: raw,
         isUser: false,
-        isExternal: true
+        isExternal: true,
+        isMore: false
       };
     }
-    
-    // If it starts with User: or User_talk: (or localized prefixes)
+
+    // 3. User prefixes or Wikimedia usernames with (WMF) / dashes / underscores
     const userMatch = raw.match(/^(?:User(?:[ _]talk)?:|बᱮᱵᱷᱟᱨᱤᱭᱟᱹ:|ಬಳಕೆದಾರ:|பயனர்:|వాడుకరి:|ব্যবহারকারী:)\s*(.+)/i);
     if (userMatch) {
       const username = userMatch[1].trim();
       return {
-        name: raw,
+        name: username,
         url: `https://meta.wikimedia.org/wiki/User:${encodeURIComponent(username.replace(/\s+/g, '_'))}`,
         isUser: true,
-        isExternal: false
+        isExternal: false,
+        isMore: false
       };
     }
-    
-    // Otherwise treat as a Wikimedia affiliate / project / meta page
+
+    // Single words / usernames with WMF or typical wiki username patterns
+    const isLikelyUser = /\(WMF\)$/i.test(raw) || /^[A-Z0-9_-]+$/i.test(raw) || !raw.includes(' ');
+    if (isLikelyUser) {
+      return {
+        name: raw,
+        url: `https://meta.wikimedia.org/wiki/User:${encodeURIComponent(raw.replace(/\s+/g, '_'))}`,
+        isUser: true,
+        isExternal: false,
+        isMore: false
+      };
+    }
+
+    // 4. Otherwise treat as a Wikimedia affiliate / project / meta page
     const cleanPage = raw.replace(/^https?:\/\/meta\.wikimedia\.org\/wiki\//i, '').trim();
     return {
       name: raw,
       url: `https://meta.wikimedia.org/wiki/${encodeURIComponent(cleanPage.replace(/\s+/g, '_'))}`,
       isUser: false,
-      isExternal: false
+      isExternal: false,
+      isMore: false
     };
   });
 }

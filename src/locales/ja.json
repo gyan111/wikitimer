@@ -130,7 +130,8 @@
     "embedWidget": "埋め込みウィジェット",
     "embedSnippetTitle": "リアルタイム埋め込み HTML",
     "embedSnippetDesc": "この iframe をグループのWebサイトやダッシュボードに貼り付けてください:",
-    "copyCode": "コードをコピー"
+    "copyCode": "コードをコピー",
+    "participants": "人の参加者"
   },
   "time": {
     "days": "日",
@@ -184,7 +185,9 @@
     "wikidataPlaceholder": "Wikidata項目を検索（例: Wikimania 2026）...",
     "optional": "任意",
     "saving": "タイマーを保存中...",
-    "submit": "タイマーを開始"
+    "submit": "タイマーを開始",
+    "participants": "参加予定人数",
+    "participantsPlaceholder": "例: 50"
   },
   "footer": {
     "createdBy": "作成者",

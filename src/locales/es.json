@@ -130,7 +130,8 @@
     "embedWidget": "Widget para insertar",
     "embedSnippetTitle": "Código HTML para insertar",
     "embedSnippetDesc": "Pega este iframe en el sitio web de tu capítulo, página de evento o panel comunitario:",
-    "copyCode": "Copiar código"
+    "copyCode": "Copiar código",
+    "participants": "Participantes"
   },
   "time": {
     "days": "Días",
@@ -184,7 +185,9 @@
     "wikidataPlaceholder": "Buscar entidades de Wikidata (p. ej. Wikimania 2026)...",
     "optional": "Opcional",
     "saving": "Guardando temporizador...",
-    "submit": "Crear temporizador"
+    "submit": "Crear temporizador",
+    "participants": "Participantes esperados",
+    "participantsPlaceholder": "ej. 50"
   },
   "footer": {
     "createdBy": "Creado por",

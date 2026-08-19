@@ -130,7 +130,8 @@
     "embedWidget": "Widget d'intégration",
     "embedSnippetTitle": "Extrait HTML d'intégration",
     "embedSnippetDesc": "Collez cet iframe sur le site web de votre groupe, page d'événement ou tableau de bord :",
-    "copyCode": "Copier le code"
+    "copyCode": "Copier le code",
+    "participants": "Participants"
   },
   "time": {
     "days": "Jours",
@@ -184,7 +185,9 @@
     "wikidataPlaceholder": "Rechercher une entité Wikidata (ex. Wikimania 2026)...",
     "optional": "Optionnel",
     "saving": "Enregistrement du minuteur...",
-    "submit": "Lancer le minuteur"
+    "submit": "Lancer le minuteur",
+    "participants": "Participants attendus",
+    "participantsPlaceholder": "ex. 50"
   },
   "footer": {
     "createdBy": "Créé par",

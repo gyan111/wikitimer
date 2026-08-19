@@ -130,7 +130,8 @@
     "embedWidget": "تضمين كعنصر واجهة",
     "embedSnippetTitle": "كود HTML للتضمين المباشر",
     "embedSnippetDesc": "الصق كود iframe هذا في موقع مجموعتك أو لوحة التحكم:",
-    "copyCode": "نسخ الكود"
+    "copyCode": "نسخ الكود",
+    "participants": "مشارك"
   },
   "time": {
     "days": "أيام",
@@ -184,7 +185,9 @@
     "wikidataPlaceholder": "ابحث في عناصر ويكي بيانات (مثال: Wikimania 2026)...",
     "optional": "اختياري",
     "saving": "جاري حفظ المؤقت...",
-    "submit": "إنشاء المؤقت"
+    "submit": "إنشاء المؤقت",
+    "participants": "المشاركون المتوقعون",
+    "participantsPlaceholder": "مثال: 50"
   },
   "footer": {
     "createdBy": "تم الإنشاء بواسطة",

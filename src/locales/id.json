@@ -130,7 +130,8 @@
     "embedWidget": "Widget Sematan",
     "embedSnippetTitle": "Cuplikan HTML Sematan Langsung",
     "embedSnippetDesc": "Tempel iframe ini ke situs web cabang, halaman arahan acara, atau dasbor komunitas Anda:",
-    "copyCode": "Salin Kode"
+    "copyCode": "Salin Kode",
+    "participants": "Peserta"
   },
   "time": {
     "days": "Hari",
@@ -184,7 +185,9 @@
     "wikidataPlaceholder": "Cari entitas Wikidata (mis. Wikimania 2026)...",
     "optional": "Opsional",
     "saving": "Menyimpan pengatur waktu...",
-    "submit": "Luncurkan Pelacak"
+    "submit": "Luncurkan Pelacak",
+    "participants": "Perkiraan Peserta",
+    "participantsPlaceholder": "mis. 50"
   },
   "footer": {
     "createdBy": "Dibuat oleh",

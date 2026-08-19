@@ -130,7 +130,8 @@
     "embedWidget": "ఎంబెడ్ విడ్జెట్",
     "embedSnippetTitle": "లైవ్ ఎంబెడ్ HTML కోడ్",
     "embedSnippetDesc": "ఈ iframe కోడ్‌ను మీ వెబ్‌సైట్ లేదా డాష్‌బోర్డ్‌లో అతికించండి:",
-    "copyCode": "కోడ్ కాపీ చేయండి"
+    "copyCode": "కోడ్ కాపీ చేయండి",
+    "participants": "పాల్గొనేవారు"
   },
   "time": {
     "days": "రోజులు",
@@ -184,7 +185,9 @@
     "wikidataPlaceholder": "వికీడేటా అంశాలను శోధించండి (ఉదా. Wikimania 2026)...",
     "optional": "ఐచ్ఛికం",
     "saving": "టైమర్ భద్రపరచబడుతోంది...",
-    "submit": "టైమర్‌ను ప్రారంభించు"
+    "submit": "టైమర్‌ను ప్రారంభించు",
+    "participants": "ఆశించిన పాల్గొనేవారి సంఖ్య",
+    "participantsPlaceholder": "ఉదా. 50"
   },
   "footer": {
     "createdBy": "రూపొందించినవారు",

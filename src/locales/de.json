@@ -130,7 +130,8 @@
     "embedWidget": "Widget einbetten",
     "embedSnippetTitle": "Live-HTML-Einbettungscode",
     "embedSnippetDesc": "Füge diesen iframe-Code auf deiner Chapter-Website, Landingpage oder deinem Dashboard ein:",
-    "copyCode": "Code kopieren"
+    "copyCode": "Code kopieren",
+    "participants": "Teilnehmer"
   },
   "time": {
     "days": "Tage",
@@ -184,7 +185,9 @@
     "wikidataPlaceholder": "Wikidata-Einträge durchsuchen (z. B. Wikimania 2026)...",
     "optional": "Optional",
     "saving": "Timer wird gespeichert...",
-    "submit": "Tracker starten"
+    "submit": "Tracker starten",
+    "participants": "Erwartete Teilnehmer",
+    "participantsPlaceholder": "z.B. 50"
   },
   "footer": {
     "createdBy": "Erstellt von",

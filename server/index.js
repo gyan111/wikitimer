@@ -190,7 +190,8 @@ function validateTimerInput(body) {
     organizers: body.organizers != null ? str(body.organizers) : null,
     logo: body.logo != null ? str(body.logo) : null,
     topics: body.topics != null ? str(body.topics) : null,
-    participation: body.participation != null ? str(body.participation) : null
+    participation: body.participation != null ? str(body.participation) : null,
+    participants: body.participants != null && body.participants !== '' && !isNaN(Number(body.participants)) ? Math.max(0, parseInt(body.participants, 10)) : null
   };
 
   if (!['event', 'deadline'].includes(data.type)) errors.push('type must be "event" or "deadline"');
@@ -202,6 +203,7 @@ function validateTimerInput(body) {
   if (data.organizers && data.organizers.length > 255) errors.push('organizers too long (max 255 chars)');
   if (data.logo && data.logo.length > 255) errors.push('logo too long (max 255 chars)');
   if (data.participation && data.participation.length > 100) errors.push('participation too long (max 100 chars)');
+  if (data.participants !== null && (isNaN(data.participants) || data.participants < 0)) errors.push('participants must be a positive number');
 
   const parsedTime = new Date(data.time);
   if (isNaN(parsedTime.getTime())) errors.push('time is not a valid date');

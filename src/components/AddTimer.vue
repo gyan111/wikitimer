@@ -280,8 +280,8 @@
             </div>
           </div>
 
-          <!-- Participation Format & Tags Row -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Participation Format, Scope & Participants Row -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <!-- Event Format / Participation -->
             <div class="form-group relative">
               <label for="participation" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">
@@ -330,6 +330,27 @@
                 <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-400">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </div>
+              </div>
+            </div>
+
+            <!-- Expected Participants (Optional) -->
+            <div class="form-group relative">
+              <label for="participants" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">
+                {{ $t('form.participants') }} <span class="text-xs font-normal text-gray-400">({{ $t('form.optional') }})</span>
+              </label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                </div>
+                <input
+                  id="participants"
+                  v-model.number="newTimer.participants"
+                  type="number"
+                  min="0"
+                  :disabled="!isAuthenticated"
+                  :placeholder="$t('form.participantsPlaceholder')"
+                  class="w-full py-3.5 pl-11 pr-4 bg-white/70 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                >
               </div>
             </div>
           </div>
@@ -526,6 +547,7 @@ const newTimer = ref({
   country: '',
   timeZone: 'UTC+00:00',
   participation: 'Hybrid',
+  participants: null,
   topics: '',
   organizers: '',
   logo: ''
@@ -608,6 +630,7 @@ async function addTimer() {
       country: '',
       timeZone: 'UTC+00:00',
       participation: 'Hybrid',
+      participants: null,
       topics: '',
       organizers: '',
       logo: ''

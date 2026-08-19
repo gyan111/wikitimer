@@ -130,7 +130,8 @@
     "embedWidget": "എംബെഡ് വിജറ്റ്",
     "embedSnippetTitle": "ലൈവ് എംബെഡ് HTML കോഡ്",
     "embedSnippetDesc": "ഈ iframe നിങ്ങളുടെ വെബ്സൈറ്റിലോ കമ്മ്യൂണിറ്റി ഡാഷ്‌ബോർഡിലോ ചേർക്കുക:",
-    "copyCode": "കോഡ് കോപ്പി ചെയ്യുക"
+    "copyCode": "കോഡ് കോപ്പി ചെയ്യുക",
+    "participants": "പങ്കാളികൾ"
   },
   "time": {
     "days": "ദിവസങ്ങൾ",
@@ -184,7 +185,9 @@
     "wikidataPlaceholder": "വിക്കിഡാറ്റ ഇനങ്ങൾ തിരയുക (ഉദാ: Wikimania 2026)...",
     "optional": "ഓപ്ഷണൽ",
     "saving": "ടൈമർ സേവ് ചെയ്യുന്നു...",
-    "submit": "ടൈമർ ആരംഭിക്കുക"
+    "submit": "ടൈമർ ആരംഭിക്കുക",
+    "participants": "പ്രതീക്ഷിക്കുന്ന പങ്കാളികൾ",
+    "participantsPlaceholder": "ഉദാ: 50"
   },
   "footer": {
     "createdBy": "നിർമ്മിച്ചത്",

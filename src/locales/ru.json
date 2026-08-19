@@ -130,7 +130,8 @@
     "embedWidget": "Виджет для вставки",
     "embedSnippetTitle": "HTML-код для встраивания",
     "embedSnippetDesc": "Вставьте этот iframe на сайт вашего отделения, страницу мероприятия или панель сообщества:",
-    "copyCode": "Копировать код"
+    "copyCode": "Копировать код",
+    "participants": "Участники"
   },
   "time": {
     "days": "Дней",
@@ -184,7 +185,9 @@
     "wikidataPlaceholder": "Поиск элементов Викиданных (напр. Wikimania 2026)...",
     "optional": "Необязательно",
     "saving": "Сохранение таймера...",
-    "submit": "Запустить таймер"
+    "submit": "Запустить таймер",
+    "participants": "Ожидаемые участники",
+    "participantsPlaceholder": "напр. 50"
   },
   "footer": {
     "createdBy": "Создано",

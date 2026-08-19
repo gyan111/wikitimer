@@ -130,7 +130,8 @@
     "embedWidget": "ଏମ୍ବେଡ୍ ୱିଜେଟ୍",
     "embedSnippetTitle": "ଲାଇଭ୍ ଏମ୍ବେଡ୍ HTML କୋଡ୍",
     "embedSnippetDesc": "ଏହି iframe କୋଡ୍ ଆପଣଙ୍କ ୱେବସାଇଟ୍ ବା ଡ୍ୟାସବୋର୍ଡରେ ବ୍ୟବହାର କରନ୍ତୁ:",
-    "copyCode": "କୋଡ୍ କପି କରନ୍ତୁ"
+    "copyCode": "କୋଡ୍ କପି କରନ୍ତୁ",
+    "participants": "ଅଂଶଗ୍ରହଣକାରୀ"
   },
   "time": {
     "days": "ଦିନ",
@@ -184,7 +185,9 @@
     "wikidataPlaceholder": "ଉଇକିଡାଟା ଖୋଜନ୍ତୁ (ଯଥା: Wikimania 2026)...",
     "optional": "ଇଚ୍ଛାଧୀନ",
     "saving": "ଟାଇମର୍ ସେଭ୍ ହେଉଛି...",
-    "submit": "ଟାଇମର୍ ଆରମ୍ଭ କରନ୍ତୁ"
+    "submit": "ଟାଇମର୍ ଆରମ୍ଭ କରନ୍ତୁ",
+    "participants": "ଅଂଶଗ୍ରହଣକାରୀ ସଂଖ୍ୟା",
+    "participantsPlaceholder": "ଯଥା: ୫୦"
   },
   "footer": {
     "createdBy": "ଦ୍ୱାରା ନିର୍ମିତ",

@@ -130,7 +130,8 @@
     "embedWidget": "Widget di incorporamento",
     "embedSnippetTitle": "Snippet HTML incorporabile",
     "embedSnippetDesc": "Incolla questo iframe nel sito web del tuo capitolo, nella landing page dell'evento o nella bacheca della comunità:",
-    "copyCode": "Copia codice"
+    "copyCode": "Copia codice",
+    "participants": "Partecipanti"
   },
   "time": {
     "days": "Giorni",
@@ -184,7 +185,9 @@
     "wikidataPlaceholder": "Cerca elementi Wikidata (es. Wikimania 2026)...",
     "optional": "Opzionale",
     "saving": "Salvataggio timer...",
-    "submit": "Avvia timer"
+    "submit": "Avvia timer",
+    "participants": "Partecipanti previsti",
+    "participantsPlaceholder": "es. 50"
   },
   "footer": {
     "createdBy": "Creato da",

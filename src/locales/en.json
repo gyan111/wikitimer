@@ -130,7 +130,8 @@
     "embedWidget": "Embed Widget",
     "embedSnippetTitle": "Live Embed HTML Snippet",
     "embedSnippetDesc": "Paste this iframe into your chapter website, event landing page, or community dashboard:",
-    "copyCode": "Copy Code"
+    "copyCode": "Copy Code",
+    "participants": "Participants"
   },
   "time": {
     "days": "Days",
@@ -184,7 +185,9 @@
     "wikidataPlaceholder": "Search Wikidata entities (e.g., Wikimania 2026)...",
     "optional": "Optional",
     "saving": "Saving timer...",
-    "submit": "Launch Tracker"
+    "submit": "Launch Tracker",
+    "participants": "Expected Participants",
+    "participantsPlaceholder": "e.g. 50"
   },
   "footer": {
     "createdBy": "Created by",

@@ -130,7 +130,8 @@
     "embedWidget": "एम्बेड विजेट",
     "embedSnippetTitle": "लाइव एम्बेड HTML कोड",
     "embedSnippetDesc": "इस iframe को अपनी वेबसाइट, इवेंट लैंडिंग पेज या डैशबोर्ड में पेस्ट करें:",
-    "copyCode": "कोड कॉपी करें"
+    "copyCode": "कोड कॉपी करें",
+    "participants": "प्रतिभागी"
   },
   "time": {
     "days": "दिन",
@@ -184,7 +185,9 @@
     "wikidataPlaceholder": "विकिडेटा एंटिटी खोजें (उदा. Wikimania 2026)...",
     "optional": "वैकल्पिक",
     "saving": "टाइमर सहेजा जा रहा है...",
-    "submit": "टाइमर बनाएं"
+    "submit": "टाइमर बनाएं",
+    "participants": "अपेक्षित प्रतिभागी",
+    "participantsPlaceholder": "उदा. 50"
   },
   "footer": {
     "createdBy": "द्वारा निर्मित",

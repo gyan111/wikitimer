@@ -130,7 +130,8 @@
     "embedWidget": "嵌入组件",
     "embedSnippetTitle": "实时嵌入 HTML 代码",
     "embedSnippetDesc": "将此 iframe 代码粘贴到您的分会网站、活动页面或社区仪表板：",
-    "copyCode": "复制代码"
+    "copyCode": "复制代码",
+    "participants": "位参与者"
   },
   "time": {
     "days": "天",
@@ -184,7 +185,9 @@
     "wikidataPlaceholder": "搜索 Wikidata 条目（例如: Wikimania 2026）...",
     "optional": "可选",
     "saving": "正在保存计时器...",
-    "submit": "启动计时器"
+    "submit": "启动计时器",
+    "participants": "预计参与人数",
+    "participantsPlaceholder": "例如：50"
   },
   "footer": {
     "createdBy": "创建者",
