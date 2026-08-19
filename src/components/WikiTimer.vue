@@ -1398,20 +1398,57 @@ function checkActiveReminders() {
   });
 }
 
-// Official Wikimedia Project Logos
+// Official Wikimedia Project & Movement Campaign Logos
 function getEventLogo(event) {
   if (event?.logo) return event.logo;
-  const link = (event?.link || event?.wiki || event?.wikiProject || '').toLowerCase();
-  if (link.includes('wikidata')) return 'https://upload.wikimedia.org/wikipedia/commons/f/ff/Wikidata-logo.svg';
-  if (link.includes('commons')) return 'https://upload.wikimedia.org/wikipedia/commons/4/4a/Commons-logo.svg';
-  if (link.includes('wikiquote')) return 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Wikiquote-logo.svg';
-  if (link.includes('wikisource')) return 'https://upload.wikimedia.org/wikipedia/commons/4/4c/Wikisource-logo.svg';
-  if (link.includes('wiktionary')) return 'https://upload.wikimedia.org/wikipedia/commons/e/ec/Wiktionary-logo.svg';
-  if (link.includes('wikivoyage')) return 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Wikivoyage-Logo-v3-icon.svg';
-  if (link.includes('wikiversity')) return 'https://upload.wikimedia.org/wikipedia/commons/0/0b/Wikiversity_logo_2017.svg';
-  if (link.includes('wikinews')) return 'https://upload.wikimedia.org/wikipedia/commons/2/24/Wikinews-logo.svg';
-  if (link.includes('mediawiki')) return 'https://upload.wikimedia.org/wikipedia/commons/a/a6/MediaWiki-2020-icon.svg';
-  if (link.includes('wikipedia')) return 'https://upload.wikimedia.org/wikipedia/commons/8/80/Wikipedia-logo-v2.svg';
+  
+  const text = `${event?.name || ''} ${event?.topics || ''} ${event?.eventTypes || ''} ${event?.link || ''} ${event?.wiki || ''} ${event?.wikiProject || ''}`.toLowerCase();
+
+  // 1. Recognized Global Campaigns & Movement Events
+  if (text.includes('wikimania')) {
+    return 'https://upload.wikimedia.org/wikipedia/commons/2/20/Wikimania_logo_with_text.svg';
+  }
+  if (text.includes('hackathon') || text.includes('techcom') || text.includes('developer')) {
+    return 'https://upload.wikimedia.org/wikipedia/commons/8/85/Wikimedia_hackathon_mark_horizontal.svg';
+  }
+  if (text.includes('wiki loves monuments') || text.includes('wlm')) {
+    return 'https://upload.wikimedia.org/wikipedia/commons/b/b3/Wiki_Loves_Monuments_logo.svg';
+  }
+  if (text.includes('wiki loves earth') || text.includes('wle')) {
+    return 'https://upload.wikimedia.org/wikipedia/commons/7/7b/WLE_Austria_Logo.svg';
+  }
+  if (text.includes('wiki loves africa') || text.includes('wla')) {
+    return 'https://upload.wikimedia.org/wikipedia/commons/2/28/Wiki_Loves_Africa_logo_without_text.svg';
+  }
+  if (text.includes('wiki loves folklore') || text.includes('folklore')) {
+    return 'https://upload.wikimedia.org/wikipedia/commons/0/0a/Wiki_Loves_Folklore_Logo.svg';
+  }
+  if (text.includes('glam') || text.includes('heritage') || text.includes('museum') || text.includes('library')) {
+    return 'https://upload.wikimedia.org/wikipedia/commons/9/91/GLAM_logo.svg';
+  }
+  if (text.includes('1lib1ref')) {
+    return 'https://upload.wikimedia.org/wikipedia/commons/a/a2/1Lib1Ref_logo.svg';
+  }
+  if (text.includes('art+feminism') || text.includes('artandfeminism')) {
+    return 'https://upload.wikimedia.org/wikipedia/commons/4/4e/Art%2BFeminism_logo.svg';
+  }
+  if (text.includes('wikigap')) {
+    return 'https://upload.wikimedia.org/wikipedia/commons/4/46/WikiGap_logo.svg';
+  }
+
+  // 2. Official Wikimedia Sister Projects
+  if (text.includes('wikidata')) return 'https://upload.wikimedia.org/wikipedia/commons/f/ff/Wikidata-logo.svg';
+  if (text.includes('commons')) return 'https://upload.wikimedia.org/wikipedia/commons/4/4a/Commons-logo.svg';
+  if (text.includes('wikiquote')) return 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Wikiquote-logo.svg';
+  if (text.includes('wikisource')) return 'https://upload.wikimedia.org/wikipedia/commons/4/4c/Wikisource-logo.svg';
+  if (text.includes('wiktionary')) return 'https://upload.wikimedia.org/wikipedia/commons/e/ec/Wiktionary-logo.svg';
+  if (text.includes('wikivoyage')) return 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Wikivoyage-Logo-v3-icon.svg';
+  if (text.includes('wikiversity')) return 'https://upload.wikimedia.org/wikipedia/commons/0/0b/Wikiversity_logo_2017.svg';
+  if (text.includes('wikinews')) return 'https://upload.wikimedia.org/wikipedia/commons/2/24/Wikinews-logo.svg';
+  if (text.includes('mediawiki')) return 'https://upload.wikimedia.org/wikipedia/commons/a/a6/MediaWiki-2020-icon.svg';
+  if (text.includes('wikipedia')) return 'https://upload.wikimedia.org/wikipedia/commons/8/80/Wikipedia-logo-v2.svg';
+
+  // 3. Universal Fallback
   return 'https://upload.wikimedia.org/wikipedia/commons/7/75/Wikimedia_Community_Logo.svg';
 }
 

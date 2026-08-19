@@ -110,11 +110,19 @@ const isDark = computed(() => {
   return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 });
 
-function getWikiLogo(link = '') {
-  if (link.includes('meta.wikimedia.org')) return 'https://upload.wikimedia.org/wikipedia/commons/7/75/Wikimedia_Community_Logo.svg';
-  if (link.includes('wikimania')) return 'https://upload.wikimedia.org/wikipedia/commons/2/20/Wikimania_logo_with_text.svg';
-  if (link.includes('mediawiki')) return 'https://upload.wikimedia.org/wikipedia/commons/a/a6/MediaWiki-2020-icon.svg';
-  if (link.includes('wikipedia')) return 'https://upload.wikimedia.org/wikipedia/commons/8/80/Wikipedia-logo-v2.svg';
+function getWikiLogo(link = '', name = '', topics = '') {
+  const text = `${name || ''} ${topics || ''} ${link || ''}`.toLowerCase();
+  if (text.includes('wikimania')) return 'https://upload.wikimedia.org/wikipedia/commons/2/20/Wikimania_logo_with_text.svg';
+  if (text.includes('hackathon') || text.includes('techcom')) return 'https://upload.wikimedia.org/wikipedia/commons/8/85/Wikimedia_hackathon_mark_horizontal.svg';
+  if (text.includes('wiki loves monuments') || text.includes('wlm')) return 'https://upload.wikimedia.org/wikipedia/commons/b/b3/Wiki_Loves_Monuments_logo.svg';
+  if (text.includes('wiki loves earth') || text.includes('wle')) return 'https://upload.wikimedia.org/wikipedia/commons/7/7b/WLE_Austria_Logo.svg';
+  if (text.includes('wiki loves africa') || text.includes('wla')) return 'https://upload.wikimedia.org/wikipedia/commons/2/28/Wiki_Loves_Africa_logo_without_text.svg';
+  if (text.includes('glam') || text.includes('heritage')) return 'https://upload.wikimedia.org/wikipedia/commons/9/91/GLAM_logo.svg';
+  if (text.includes('1lib1ref')) return 'https://upload.wikimedia.org/wikipedia/commons/a/a2/1Lib1Ref_logo.svg';
+  if (text.includes('wikidata')) return 'https://upload.wikimedia.org/wikipedia/commons/f/ff/Wikidata-logo.svg';
+  if (text.includes('commons')) return 'https://upload.wikimedia.org/wikipedia/commons/4/4a/Commons-logo.svg';
+  if (text.includes('mediawiki')) return 'https://upload.wikimedia.org/wikipedia/commons/a/a6/MediaWiki-2020-icon.svg';
+  if (text.includes('wikipedia')) return 'https://upload.wikimedia.org/wikipedia/commons/8/80/Wikipedia-logo-v2.svg';
   return 'https://upload.wikimedia.org/wikipedia/commons/7/75/Wikimedia_Community_Logo.svg';
 }
 
