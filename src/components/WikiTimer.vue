@@ -746,11 +746,11 @@
                   </div>
                 </div>
 
-                <!-- Streamlined Compact Details: Location, Format, Participants, Organizers -->
-                <div class="p-3 bg-gray-50/80 dark:bg-gray-800/40 rounded-xl border border-gray-100 dark:border-gray-800 flex flex-col gap-2.5">
-                  <!-- Row 1: Location, Attendance Format, Participants -->
-                  <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
-                    <div class="flex items-center gap-2 flex-wrap">
+                <!-- Streamlined Compact Details Box (Spans full modal width) -->
+                <div class="sm:col-span-2 p-3 bg-gray-50/80 dark:bg-gray-800/40 rounded-xl border border-gray-100 dark:border-gray-800 grid grid-cols-1 sm:grid-cols-2 gap-3 items-center">
+                  <!-- Column 1: Location & Organizers -->
+                  <div class="flex flex-col gap-2">
+                    <div class="flex items-center gap-2 flex-wrap text-xs">
                       <span class="font-bold text-gray-900 dark:text-gray-100 flex items-center gap-1.5">
                         <span>📍</span>
                         <span>{{ selectedEvent.country || selectedEvent.region || 'Online / Virtual' }}</span>
@@ -763,32 +763,44 @@
                       </span>
                     </div>
 
-                    <div v-if="selectedEvent.participants" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60 font-semibold text-[11px]">
-                      <span>👥</span>
-                      <span>{{ selectedEvent.participants }} {{ $t('modal.participants') }}</span>
+                    <div v-if="selectedEvent.organizers" class="flex items-start gap-1.5 text-xs">
+                      <span class="text-[11px] text-gray-400 font-medium shrink-0 pt-0.5">{{ $t('modal.organizers') }}:</span>
+                      <div class="flex flex-wrap gap-1 flex-1">
+                        <a
+                          v-for="(org, idx) in getOrganizerLinks(selectedEvent.organizers, selectedEvent.link)"
+                          :key="idx"
+                          :href="org.url"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-white dark:bg-gray-800 text-primary-700 dark:text-primary-300 border border-gray-200/80 dark:border-gray-700 hover:border-primary-400 dark:hover:border-primary-500 hover:bg-primary-50/50 dark:hover:bg-primary-950/40 transition-all shadow-2xs group"
+                          :title="org.title || `Open on Meta-Wiki`"
+                        >
+                          <span v-if="org.isMore" class="text-primary-500">🔗</span>
+                          <span v-else-if="org.isUser" class="text-amber-500">👤</span>
+                          <span v-else-if="org.isExternal" class="text-emerald-500">🌐</span>
+                          <span v-else class="text-indigo-500">🏛️</span>
+                          <span class="group-hover:underline">{{ org.name }}</span>
+                          <svg class="w-2.5 h-2.5 opacity-50 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                        </a>
+                      </div>
                     </div>
                   </div>
 
-                  <!-- Row 2: Organizers Mini Pills -->
-                  <div v-if="selectedEvent.organizers" class="pt-2 border-t border-gray-200/40 dark:border-gray-700/40 flex items-start gap-2">
-                    <span class="text-[11px] text-gray-400 font-medium shrink-0 pt-0.5">{{ $t('modal.organizers') }}:</span>
-                    <div class="flex flex-wrap gap-1.5 flex-1">
-                      <a
-                        v-for="(org, idx) in getOrganizerLinks(selectedEvent.organizers, selectedEvent.link)"
-                        :key="idx"
-                        :href="org.url"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-white dark:bg-gray-800 text-primary-700 dark:text-primary-300 border border-gray-200/80 dark:border-gray-700 hover:border-primary-400 dark:hover:border-primary-500 hover:bg-primary-50/50 dark:hover:bg-primary-950/40 transition-all shadow-2xs group"
-                        :title="org.title || `Open on Meta-Wiki`"
-                      >
-                        <span v-if="org.isMore" class="text-primary-500">🔗</span>
-                        <span v-else-if="org.isUser" class="text-amber-500">👤</span>
-                        <span v-else-if="org.isExternal" class="text-emerald-500">🌐</span>
-                        <span v-else class="text-indigo-500">🏛️</span>
-                        <span class="group-hover:underline">{{ org.name }}</span>
-                        <svg class="w-2.5 h-2.5 opacity-50 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-                      </a>
+                  <!-- Column 2: Right-Side Utility Badge / Mini Topic Tags & Participants -->
+                  <div class="flex sm:justify-end items-center gap-2 flex-wrap pt-2 sm:pt-0 border-t sm:border-t-0 sm:border-l border-gray-200/40 dark:border-gray-700/40 sm:pl-3 text-xs">
+                    <div v-if="selectedEvent.participants" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60 font-semibold text-[11px]">
+                      <span>👥</span>
+                      <span>{{ selectedEvent.participants }} {{ $t('modal.participants') }}</span>
+                    </div>
+
+                    <div v-if="selectedEvent.wikiProject || selectedEvent.wiki" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/60 font-semibold text-[11px]" :title="selectedEvent.wikiProject || selectedEvent.wiki">
+                      <span>🌐</span>
+                      <span class="truncate max-w-[150px]">{{ selectedEvent.wikiProject || selectedEvent.wiki }}</span>
+                    </div>
+
+                    <div v-if="selectedEvent.topics" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/60 font-semibold text-[11px]" :title="selectedEvent.topics">
+                      <span>🏷️</span>
+                      <span class="truncate max-w-[150px]">{{ selectedEvent.topics.split(',')[0] }}</span>
                     </div>
                   </div>
                 </div>

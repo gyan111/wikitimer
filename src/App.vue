@@ -200,15 +200,37 @@ export default {
       this.darkMode = !this.darkMode;
       document.documentElement.classList.toggle('dark', this.darkMode);
       localStorage.setItem('darkMode', this.darkMode ? '1' : '0');
+    },
+    handleSystemThemeChange(e) {
+      if (localStorage.getItem('darkMode') === null) {
+        this.darkMode = e.matches;
+        document.documentElement.classList.toggle('dark', this.darkMode);
+      }
     }
   },
   mounted() {
     this.timer = setInterval(() => {
       this.currentTime = new Date()
     }, 1000)
-    // Init dark mode
-    this.darkMode = localStorage.getItem('darkMode') === '1';
+    
+    // Init dark mode with system theme auto-adaptation
+    const savedTheme = localStorage.getItem('darkMode');
+    if (savedTheme !== null) {
+      this.darkMode = savedTheme === '1';
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      this.darkMode = true;
+    } else {
+      this.darkMode = false;
+    }
     document.documentElement.classList.toggle('dark', this.darkMode);
+
+    if (window.matchMedia) {
+      this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      if (this.mediaQuery.addEventListener) {
+        this.mediaQuery.addEventListener('change', this.handleSystemThemeChange);
+      }
+    }
+
     // Init lang and dir
     document.documentElement.lang = this.$i18n.locale;
     document.documentElement.dir = this.$i18n.locale === 'ar' ? 'rtl' : 'ltr';
@@ -216,6 +238,9 @@ export default {
   beforeUnmount() {
     if (this.timer) {
       clearInterval(this.timer)
+    }
+    if (this.mediaQuery && this.mediaQuery.removeEventListener) {
+      this.mediaQuery.removeEventListener('change', this.handleSystemThemeChange);
     }
   }
 }
