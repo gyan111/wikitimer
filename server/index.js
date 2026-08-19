@@ -459,4 +459,12 @@ app.use((err, req, res, next) => {
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
+
+  // Warm up Meta-Wiki events cache on startup and keep synced periodically
+  getMetaEvents().catch(err => console.warn('Initial Meta-Wiki warmup sync:', err.message));
+  
+  const SYNC_INTERVAL_MS = Number(process.env.META_EVENTS_TTL_MS) || 60 * 60 * 1000; // 1 hour
+  setInterval(() => {
+    getMetaEvents().catch(err => console.warn('Periodic Meta-Wiki sync error:', err.message));
+  }, SYNC_INTERVAL_MS);
 });
