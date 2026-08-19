@@ -84,7 +84,11 @@
     "sourceMeta": "Hanya Acara Meta",
     "advancedFilters": "Filter Lanjutan",
     "showResults": "Tampilkan {count} Acara yang Cocok →",
-    "noEventsFound": "Tidak ada acara yang ditemukan untuk filter ini"
+    "noEventsFound": "Tidak ada acara yang ditemukan untuk filter ini",
+    "allFormats": "Semua Format",
+    "formatOnline": "Daring / Virtual",
+    "formatInPerson": "Tatap Muka",
+    "formatHybrid": "Hibrida"
   },
   "status": {
     "ongoing": "Sedang Berlangsung",

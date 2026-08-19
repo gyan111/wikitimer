@@ -84,7 +84,11 @@
     "sourceMeta": "Metaイベントのみ",
     "advancedFilters": "高度なフィルター",
     "showResults": "一致する {count} 件のイベントを表示 →",
-    "noEventsFound": "条件に一致するイベントは見つかりませんでした"
+    "noEventsFound": "条件に一致するイベントは見つかりませんでした",
+    "allFormats": "すべての形式",
+    "formatOnline": "オンライン / バーチャル",
+    "formatInPerson": "対面",
+    "formatHybrid": "ハイブリッド"
   },
   "status": {
     "ongoing": "開催中",

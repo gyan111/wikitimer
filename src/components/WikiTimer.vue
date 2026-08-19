@@ -140,7 +140,7 @@
     >
       <!-- Mobile Filters Content (Only shown when expanded) -->
       <div class="flex flex-col gap-3 md:hidden">
-        <div class="grid grid-cols-1 gap-2.5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           <select 
             id="region" 
             v-model="filters.region" 
@@ -160,7 +160,7 @@
             <option v-for="country in uniqueCountries" :key="country" :value="country">{{ country }}</option>
           </select>
         </div>
-        <div class="grid grid-cols-3 gap-2">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
           <select 
             id="type" 
             v-model="filters.type" 
@@ -170,6 +170,17 @@
             <option value="">{{ $t('filters.allTypes') }}</option>
             <option value="event">{{ $t('filters.event') }}</option>
             <option value="deadline">{{ $t('filters.deadline') }}</option>
+          </select>
+          <select 
+            id="format" 
+            v-model="filters.format" 
+            @change="applyFilters" 
+            class="w-full py-2 px-2.5 rounded-xl border border-gray-200/60 dark:border-gray-700/60 bg-white/70 dark:bg-gray-800/90 text-gray-900 dark:text-gray-100 text-xs shadow-xs focus:ring-2 focus:ring-primary-500 appearance-none backdrop-blur-md"
+          >
+            <option value="">{{ $t('filters.allFormats') }}</option>
+            <option value="online">💻 {{ $t('filters.formatOnline') }}</option>
+            <option value="in-person">📍 {{ $t('filters.formatInPerson') }}</option>
+            <option value="hybrid">🌐 {{ $t('filters.formatHybrid') }}</option>
           </select>
           <select 
             id="timeStatus" 
@@ -227,7 +238,7 @@
       </div>
 
       <!-- Desktop Filters -->
-      <div class="hidden md:flex items-center gap-3 lg:gap-4 relative w-full">
+      <div class="hidden md:flex items-center gap-2.5 lg:gap-3.5 relative w-full">
         <div class="relative flex-1 min-w-0">
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
@@ -262,6 +273,18 @@
           <option value="">{{ $t('filters.allTypes') }}</option>
           <option value="event">{{ $t('filters.event') }}</option>
           <option value="deadline">{{ $t('filters.deadline') }}</option>
+        </select>
+
+        <select 
+          id="format" 
+          v-model="filters.format" 
+          @change="applyFilters" 
+          class="flex-1 min-w-0 py-2.5 px-3 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/60 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm shadow-sm focus:ring-2 focus:ring-primary-400 focus:border-transparent appearance-none hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer truncate"
+        >
+          <option value="">{{ $t('filters.allFormats') }}</option>
+          <option value="online">💻 {{ $t('filters.formatOnline') }}</option>
+          <option value="in-person">📍 {{ $t('filters.formatInPerson') }}</option>
+          <option value="hybrid">🌐 {{ $t('filters.formatHybrid') }}</option>
         </select>
         
         <select 
@@ -726,13 +749,29 @@
                   </div>
                 </div>
 
-                <div v-if="selectedEvent.organizers" class="flex items-center gap-3 p-3.5 bg-gray-50 dark:bg-gray-800/40 rounded-xl border border-gray-100 dark:border-gray-800">
-                  <div class="p-2 rounded-lg bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 shrink-0">
+                <div v-if="selectedEvent.organizers" class="flex items-start gap-3 p-3.5 bg-gray-50 dark:bg-gray-800/40 rounded-xl border border-gray-100 dark:border-gray-800">
+                  <div class="p-2 rounded-lg bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                   </div>
                   <div class="min-w-0 flex-1">
-                    <div class="text-xs text-gray-400 font-medium">{{ $t('modal.organizers') }}</div>
-                    <div class="font-semibold text-gray-800 dark:text-gray-200 truncate mt-0.5">{{ selectedEvent.organizers }}</div>
+                    <div class="text-xs text-gray-400 font-medium mb-1.5">{{ $t('modal.organizers') }}</div>
+                    <div class="flex flex-wrap gap-1.5">
+                      <a
+                        v-for="(org, idx) in getOrganizerLinks(selectedEvent.organizers)"
+                        :key="idx"
+                        :href="org.url"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-white dark:bg-gray-800 text-primary-700 dark:text-primary-300 border border-gray-200/80 dark:border-gray-700 hover:border-primary-400 dark:hover:border-primary-500 hover:bg-primary-50/50 dark:hover:bg-primary-950/40 transition-all shadow-2xs group"
+                        :title="`Open ${org.name} on Meta-Wiki`"
+                      >
+                        <span v-if="org.isUser" class="text-amber-500 text-[11px]">👤</span>
+                        <span v-else-if="org.isExternal" class="text-emerald-500 text-[11px]">🌐</span>
+                        <span v-else class="text-indigo-500 text-[11px]">🏛️</span>
+                        <span class="group-hover:underline">{{ org.name }}</span>
+                        <svg class="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -930,6 +969,7 @@ const filters = ref({
   wiki: '',
   country: '',
   type: '',
+  format: '',
   timeStatus: 'upcoming',
   sort: 'asc',
   starredOnly: false
@@ -942,10 +982,56 @@ const activeFilterCount = computed(() => {
   if (filters.value.region) count++;
   if (filters.value.country) count++;
   if (filters.value.type) count++;
+  if (filters.value.format) count++;
   if (filters.value.timeStatus !== 'upcoming') count++;
   if (filters.value.starredOnly) count++;
   return count;
 });
+
+function getOrganizerLinks(organizersStr) {
+  if (!organizersStr || typeof organizersStr !== 'string') return [];
+  const rawList = organizersStr.split(/[,;\n]+/).map(s => s.trim()).filter(Boolean);
+  
+  return rawList.map(raw => {
+    // If it's a direct URL
+    if (/^https?:\/\//i.test(raw)) {
+      let displayName = raw;
+      try {
+        const u = new URL(raw);
+        displayName = u.hostname.replace(/^www\./, '') + (u.pathname !== '/' ? u.pathname : '');
+      } catch (e) {
+        displayName = raw;
+      }
+      return {
+        name: displayName,
+        url: raw,
+        isUser: false,
+        isExternal: true
+      };
+    }
+    
+    // If it starts with User: or User_talk: (or localized prefixes)
+    const userMatch = raw.match(/^(?:User(?:[ _]talk)?:|बᱮᱵᱷᱟᱨᱤᱭᱟᱹ:|ಬಳಕೆದಾರ:|பயனர்:|వాడుకరి:|ব্যবহারকারী:)\s*(.+)/i);
+    if (userMatch) {
+      const username = userMatch[1].trim();
+      return {
+        name: raw,
+        url: `https://meta.wikimedia.org/wiki/User:${encodeURIComponent(username.replace(/\s+/g, '_'))}`,
+        isUser: true,
+        isExternal: false
+      };
+    }
+    
+    // Otherwise treat as a Wikimedia affiliate / project / meta page
+    const cleanPage = raw.replace(/^https?:\/\/meta\.wikimedia\.org\/wiki\//i, '').trim();
+    return {
+      name: raw,
+      url: `https://meta.wikimedia.org/wiki/${encodeURIComponent(cleanPage.replace(/\s+/g, '_'))}`,
+      isUser: false,
+      isExternal: false
+    };
+  });
+}
 
 const hasActiveFilters = computed(() => {
   return selectedTag.value !== 'all' || 
@@ -1402,11 +1488,31 @@ const filteredEvents = computed(() => {
       queryMatch = searchCorpus.includes(query);
     }
 
+    let formatMatch = true;
+    if (filters.value.format) {
+      const selectedFormat = filters.value.format.toLowerCase();
+      const eventParticipation = (event.participation || '').toLowerCase();
+      const locationText = (event.country || event.region || '').toLowerCase();
+      
+      const isPureOnline = eventParticipation === 'online' || eventParticipation.includes('online') || eventParticipation.includes('virtual') || locationText.includes('online') || locationText.includes('virtual');
+      const isHybrid = eventParticipation === 'hybrid' || eventParticipation.includes('hybrid');
+      const isInPerson = eventParticipation === 'in-person' || eventParticipation.includes('in-person') || (!isPureOnline && Boolean(event.country || event.region));
+
+      if (selectedFormat === 'online') {
+        formatMatch = isPureOnline || isHybrid;
+      } else if (selectedFormat === 'in-person') {
+        formatMatch = isInPerson || isHybrid;
+      } else if (selectedFormat === 'hybrid') {
+        formatMatch = isHybrid;
+      }
+    }
+
     return (
       timeStatusMatch &&
       regionMatch &&
       tagMatch &&
       queryMatch &&
+      formatMatch &&
       (!filters.value.country || event.country === filters.value.country) &&
       (!filters.value.type || event.type === filters.value.type)
     );
@@ -1683,6 +1789,7 @@ function resetFilters() {
     wiki: '',
     country: '',
     type: '',
+    format: '',
     timeStatus: 'upcoming',
     sort: 'desc',
     starredOnly: false

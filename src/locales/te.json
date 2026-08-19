@@ -84,7 +84,11 @@
     "sourceMeta": "మెటా ఈవెంట్‌లు మాత్రమే",
     "advancedFilters": "అధునాతన ఫిల్టర్‌లు",
     "showResults": "{count} సరిపోలే ఈవెంట్‌లను చూపించు →",
-    "noEventsFound": "ఈ ఫిల్టర్‌కు ఈవెంట్‌లు ఏవీ కనుగొనబడలేదు"
+    "noEventsFound": "ఈ ఫిల్టర్‌కు ఈవెంట్‌లు ఏవీ కనుగొనబడలేదు",
+    "allFormats": "అన్ని ఫార్మాట్‌లు",
+    "formatOnline": "ఆన్‌లైన్ / వర్చువల్",
+    "formatInPerson": "వ్యక్తిగతంగా (ఆఫ్‌లైన్)",
+    "formatHybrid": "హైబ్రిడ్"
   },
   "status": {
     "ongoing": "కొనసాగుతోంది",

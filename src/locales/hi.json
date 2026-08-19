@@ -84,7 +84,11 @@
     "sourceMeta": "केवल मेटा इवेंट्स",
     "advancedFilters": "उन्नत फ़िल्टर",
     "showResults": "{count} मेल खाने वाले इवेंट दिखाएं →",
-    "noEventsFound": "इस फ़िल्टर के लिए कोई इवेंट नहीं मिला"
+    "noEventsFound": "इस फ़िल्टर के लिए कोई इवेंट नहीं मिला",
+    "allFormats": "सभी प्रारूप",
+    "formatOnline": "ऑनलाइन / वर्चुअल",
+    "formatInPerson": "व्यक्तिगत (ऑफ़लाइन)",
+    "formatHybrid": "हाइब्रिड"
   },
   "status": {
     "ongoing": "जारी है",

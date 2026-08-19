@@ -84,7 +84,11 @@
     "sourceMeta": "فعاليات ميتا فقط",
     "advancedFilters": "تصفية متقدمة",
     "showResults": "عرض {count} فعالية مطابقة ←",
-    "noEventsFound": "لم يتم العثور على فعاليات تطابق هذا الفلتر"
+    "noEventsFound": "لم يتم العثور على فعاليات تطابق هذا الفلتر",
+    "allFormats": "جميع التنسيقات",
+    "formatOnline": "عبر الإنترنت / افتراضي",
+    "formatInPerson": "وجهاً لوجه",
+    "formatHybrid": "مختلط"
   },
   "status": {
     "ongoing": "جارية الآن",

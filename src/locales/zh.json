@@ -84,7 +84,11 @@
     "sourceMeta": "仅 Meta 活动",
     "advancedFilters": "高级筛选",
     "showResults": "显示 {count} 个匹配活动 →",
-    "noEventsFound": "未找到符合此筛选条件的活动"
+    "noEventsFound": "未找到符合此筛选条件的活动",
+    "allFormats": "所有形式",
+    "formatOnline": "线上 / 虚拟",
+    "formatInPerson": "线下 / 现场",
+    "formatHybrid": "混合模式"
   },
   "status": {
     "ongoing": "进行中",

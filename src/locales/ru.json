@@ -84,7 +84,11 @@
     "sourceMeta": "Только Meta-события",
     "advancedFilters": "Расширенные фильтры",
     "showResults": "Показать {count} подходящих событий →",
-    "noEventsFound": "Событий по данному фильтру не найдено"
+    "noEventsFound": "Событий по данному фильтру не найдено",
+    "allFormats": "Все форматы",
+    "formatOnline": "Онлайн / Виртуальный",
+    "formatInPerson": "Очный",
+    "formatHybrid": "Гибридный"
   },
   "status": {
     "ongoing": "Проходит сейчас",

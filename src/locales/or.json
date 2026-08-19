@@ -84,7 +84,11 @@
     "sourceMeta": "କେବଳ ମେଟା ଇଭେଣ୍ଟସ୍",
     "advancedFilters": "ଉନ୍ନତ ଫିଲ୍ଟର୍",
     "showResults": "{count} ଟି ମେଳ ଖାଉଥିବା ଇଭେଣ୍ଟ ଦେଖନ୍ତୁ →",
-    "noEventsFound": "ଏହି ଫିଲ୍ଟର୍ ପାଇଁ କୌଣସି ଇଭେଣ୍ଟ ମିଳିଲା ନାହିଁ"
+    "noEventsFound": "ଏହି ଫିଲ୍ଟର୍ ପାଇଁ କୌଣସି ଇଭେଣ୍ଟ ମିଳିଲା ନାହିଁ",
+    "allFormats": "ସମସ୍ତ ଫର୍ମାଟ୍",
+    "formatOnline": "ଅନଲାଇନ୍ / ଭର୍ଚୁଆଲ୍",
+    "formatInPerson": "ବ୍ୟକ୍ତିଗତ (ଅଫଲାଇନ୍)",
+    "formatHybrid": "ହାଇବ୍ରିଡ୍"
   },
   "status": {
     "ongoing": "ଚାଲୁଅଛି",

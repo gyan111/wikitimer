@@ -84,7 +84,11 @@
     "sourceMeta": "Apenas eventos do Meta",
     "advancedFilters": "Filtros avançados",
     "showResults": "Mostrar {count} eventos correspondentes →",
-    "noEventsFound": "Nenhum evento encontrado para este filtro"
+    "noEventsFound": "Nenhum evento encontrado para este filtro",
+    "allFormats": "Todos os formatos",
+    "formatOnline": "Online / Virtual",
+    "formatInPerson": "Presencial",
+    "formatHybrid": "Híbrido"
   },
   "status": {
     "ongoing": "Em andamento",

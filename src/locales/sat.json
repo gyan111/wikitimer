@@ -84,7 +84,11 @@
     "sourceMeta": "ᱢᱮᱴᱟ ᱦᱮᱞᱢᱮᱞ ᱥᱩᱢᱩᱝ",
     "advancedFilters": "ᱵᱟᱹᱲᱛᱤ ᱯᱷᱤᱞᱴᱟᱨ",
     "showResults": "ᱢᱮᱲᱟᱣᱜ ᱠᱟᱱ {count} ᱦᱮᱞᱢᱮᱞ ᱩᱫᱩᱜ ᱢᱮ →",
-    "noEventsFound": "ᱱᱚᱶᱟ ᱯᱷᱤᱞᱴᱟᱨ ᱞᱟᱹᱜᱤᱫ ᱡᱟᱦᱟᱱ ᱦᱮᱞᱢᱮᱞ ᱵᱟᱝ ᱧᱟᱢ ᱞᱮᱱᱟ"
+    "noEventsFound": "ᱱᱚᱶᱟ ᱯᱷᱤᱞᱴᱟᱨ ᱞᱟᱹᱜᱤᱫ ᱡᱟᱦᱟᱱ ᱦᱮᱞᱢᱮᱞ ᱵᱟᱝ ᱧᱟᱢ ᱞᱮᱱᱟ",
+    "allFormats": "ᱡᱚᱛᱚ ᱨᱩᱯ",
+    "formatOnline": "ᱚᱱᱞᱟᱭᱤᱱ / ᱵᱷᱟᱨᱪᱩᱣᱟᱞ",
+    "formatInPerson": "ᱥᱟᱢᱟᱝ ᱛᱮ",
+    "formatHybrid": "ᱦᱟᱭᱵᱽᱨᱤᱰ"
   },
   "status": {
     "ongoing": "ᱪᱟᱞᱟᱜ ᱠᱟᱱᱟ",
