@@ -259,11 +259,17 @@
               </div>
             </div>
 
-            <!-- Organizers / Affiliates (Optional) -->
-            <div class="form-group relative">
-              <label for="organizers" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 ml-1">
-                {{ $t('form.organizers') }} <span class="text-xs font-normal text-gray-400">({{ $t('form.optional') }})</span>
-              </label>
+            <!-- Organizers / Affiliates (Optional) with Meta-Wiki Autocomplete -->
+            <div class="form-group relative z-20">
+              <div class="flex items-center justify-between mb-2 ml-1">
+                <label for="organizers" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                  {{ $t('form.organizers') }} <span class="text-xs font-normal text-gray-400">({{ $t('form.optional') }})</span>
+                </label>
+                <span v-if="isSearchingOrganizers" class="text-xs text-primary-500 animate-pulse flex items-center gap-1 font-medium">
+                  <svg class="w-3.5 h-3.5 animate-spin" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                  Searching Meta-Wiki...
+                </span>
+              </div>
               <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
@@ -271,11 +277,35 @@
                 <input
                   id="organizers"
                   v-model="newTimer.organizers"
+                  @input="handleOrganizersInput"
                   type="text"
                   :disabled="!isAuthenticated"
                   :placeholder="$t('form.organizersPlaceholder')"
                   class="w-full py-3.5 pl-11 pr-4 bg-white/70 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                 >
+                <transition
+                  enter-active-class="transition duration-200 ease-out"
+                  enter-from-class="opacity-0 translate-y-2"
+                  enter-to-class="opacity-100 translate-y-0"
+                  leave-active-class="transition duration-150 ease-in"
+                  leave-from-class="opacity-100 translate-y-0"
+                  leave-to-class="opacity-0 translate-y-2"
+                >
+                  <ul v-if="organizerSuggestions.length" class="absolute bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl mt-2 max-h-56 overflow-y-auto w-full z-50 py-1 divide-y divide-gray-100 dark:divide-gray-700">
+                    <li
+                      v-for="(item, idx) in organizerSuggestions"
+                      :key="idx"
+                      @click="selectOrganizer(item)"
+                      class="py-2.5 px-4 hover:bg-primary-50 dark:hover:bg-gray-700/70 cursor-pointer transition-colors text-sm flex items-center justify-between gap-2"
+                    >
+                      <div class="flex items-center gap-2 truncate">
+                        <span>{{ item.startsWith('User:') ? '👤' : '🏛️' }}</span>
+                        <span class="font-medium text-gray-900 dark:text-gray-100 truncate">{{ item }}</span>
+                      </div>
+                      <span class="text-xs text-primary-500 font-semibold shrink-0">Meta-Wiki</span>
+                    </li>
+                  </ul>
+                </transition>
               </div>
             </div>
           </div>
@@ -670,6 +700,53 @@ function filterCountries() {
 function selectCountry(country) {
   newTimer.value.country = country;
   filteredCountries.value = [];
+}
+
+const organizerSuggestions = ref([]);
+const isSearchingOrganizers = ref(false);
+let organizersTimeout = null;
+
+function handleOrganizersInput() {
+  clearTimeout(organizersTimeout);
+  
+  if (!newTimer.value.organizers) {
+    organizerSuggestions.value = [];
+    return;
+  }
+
+  // Get current active segment if multiple separated by commas
+  const parts = newTimer.value.organizers.split(',');
+  const currentFragment = parts[parts.length - 1].trim();
+
+  if (currentFragment.length < 2) {
+    organizerSuggestions.value = [];
+    return;
+  }
+
+  isSearchingOrganizers.value = true;
+  organizersTimeout = setTimeout(async () => {
+    try {
+      const url = `https://meta.wikimedia.org/w/api.php?action=opensearch&search=${encodeURIComponent(currentFragment)}&limit=6&format=json&origin=*`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Search failed');
+      const data = await res.json();
+      const list = data[1] || [];
+      // Clean and filter out subpages like /ko, /ar
+      organizerSuggestions.value = list.filter(item => !/\/[a-z]{2,3}$/i.test(item) && !item.includes('/draft'));
+    } catch (err) {
+      console.warn('Error searching organizers on Meta-Wiki:', err);
+      organizerSuggestions.value = [];
+    } finally {
+      isSearchingOrganizers.value = false;
+    }
+  }, 250);
+}
+
+function selectOrganizer(item) {
+  const parts = newTimer.value.organizers.split(',');
+  parts[parts.length - 1] = ' ' + item;
+  newTimer.value.organizers = parts.join(',').replace(/^[\s,]+/, '');
+  organizerSuggestions.value = [];
 }
 
 function goToTimers() {
