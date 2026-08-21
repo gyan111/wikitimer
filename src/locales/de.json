@@ -61,7 +61,8 @@
     "viewDetailsAndTimer": "Details & Timer ansehen →",
     "viewTimer": "Timer ansehen →",
     "eventsCount": "{count} Veranstaltungen",
-    "hideOnlineEvents": "Online-Events ausblenden"
+    "hideOnlineEvents": "Online-Events ausblenden",
+    "calendarView": "Kalenderansicht"
   },
   "filters": {
     "allRegions": "Alle Regionen",
@@ -131,7 +132,8 @@
     "embedSnippetTitle": "Live-HTML-Einbettungscode",
     "embedSnippetDesc": "Füge diesen iframe-Code auf deiner Chapter-Website, Landingpage oder deinem Dashboard ein:",
     "copyCode": "Code kopieren",
-    "participants": "Teilnehmer"
+    "participants": "Teilnehmer",
+    "viewDetails": "Details ansehen"
   },
   "time": {
     "days": "Tage",
@@ -194,5 +196,43 @@
     "hostedOn": "Gehostet auf Wikimedia Toolforge",
     "sourceCode": "Quellcode",
     "reportIssue": "Problem melden"
+  },
+  "calendar": {
+    "calendarView": "Kalenderansicht",
+    "monthView": "Monatsansicht",
+    "agendaView": "Agenda-Feed",
+    "prevMonth": "Vorheriger Monat",
+    "nextMonth": "Nächster Monat",
+    "today": "Heute",
+    "moreEvents": "weitere",
+    "eventScheduled": "Event geplant",
+    "eventsScheduled": "Events geplant",
+    "noEventsOnDate": "Keine Termine an diesem Tag.",
+    "ongoingCampaigns": "Laufende Kampagnen in diesem Monat",
+    "ongoingCampaignsCount": "{count} laufende Kampagnen",
+    "hideOngoing": "Kampagnen ausblenden",
+    "showOngoing": "Kampagnen anzeigen",
+    "startsOn": "Beginnt",
+    "endsOn": "Endet",
+    "thisWeek": "Diese Woche",
+    "nextWeek": "Nächste Woche",
+    "laterThisMonth": "Später in diesem Monat",
+    "allUpcoming": "Alle bevorstehenden Events",
+    "filterAll": "Alle",
+    "filterEvents": "Konferenzen & Treffen",
+    "filterDeadlines": "Fristen",
+    "filterCampaigns": "Kampagnen",
+    "noEventsMatching": "Keine Events entsprechen diesem Filter."
+  },
+  "timezone": {
+    "settingsTitle": "Uhrzeit- & Zeitzoneneinstellungen",
+    "settingsDesc": "Wähle, wie Daten und Zeiten in WikiTimer angezeigt werden.",
+    "systemDetected": "Lokale Systemzeit",
+    "utc": "UTC (Koordinierte Weltzeit)",
+    "custom": "Benutzerdefinierte Zeitzone",
+    "selectTimezone": "Zeitzone suchen / auswählen",
+    "activeTz": "Aktuelle Zeitzone",
+    "currentTime": "Aktuelle Uhrzeit",
+    "saved": "Zeitzoneneinstellung gespeichert!"
   }
 }

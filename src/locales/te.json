@@ -61,7 +61,8 @@
     "viewDetailsAndTimer": "వివరాలు & టైమర్ చూడండి →",
     "viewTimer": "టైమర్ చూడండి →",
     "eventsCount": "{count} ఈవెంట్‌లు",
-    "hideOnlineEvents": "ఆన్‌లైన్ ఈవెంట్‌లను దాచు"
+    "hideOnlineEvents": "ఆన్‌లైన్ ఈవెంట్‌లను దాచు",
+    "calendarView": "క్యాలెండర్ వీక్షణ"
   },
   "filters": {
     "allRegions": "అన్ని ప్రాంతాలు",
@@ -131,7 +132,8 @@
     "embedSnippetTitle": "లైవ్ ఎంబెడ్ HTML కోడ్",
     "embedSnippetDesc": "ఈ iframe కోడ్‌ను మీ వెబ్‌సైట్ లేదా డాష్‌బోర్డ్‌లో అతికించండి:",
     "copyCode": "కోడ్ కాపీ చేయండి",
-    "participants": "పాల్గొనేవారు"
+    "participants": "పాల్గొనేవారు",
+    "viewDetails": "వివరాలు చూడండి"
   },
   "time": {
     "days": "రోజులు",
@@ -194,5 +196,43 @@
     "hostedOn": "వికీమీడియా టూల్‌ఫోర్జ్‌లో హోస్ట్ చేయబడింది",
     "sourceCode": "సోర్స్ కోడ్",
     "reportIssue": "సమస్యను నివేదించండి"
+  },
+  "calendar": {
+    "calendarView": "క్యాలెండర్ వీక్షణ",
+    "monthView": "నెలవారీ వీక్షణ",
+    "agendaView": "ఎజెండా ఫీడ్",
+    "prevMonth": "గత నెల",
+    "nextMonth": "వచ్చే నెల",
+    "today": "నేడు",
+    "moreEvents": "మరిన్ని",
+    "eventScheduled": "కార్యక్రమం షెడ్యూల్ చేయబడింది",
+    "eventsScheduled": "కార్యక్రమాలు షెడ్యూల్ చేయబడ్డాయి",
+    "noEventsOnDate": "ఈ తేదీన ఎటువంటి కార్యక్రమాలు లేవు.",
+    "ongoingCampaigns": "ఈ నెలలో కొనసాగుతున్న ప్రచారాలు",
+    "ongoingCampaignsCount": "{count} కొనసాగుతున్న ప్రచారాలు",
+    "hideOngoing": "ప్రచారాలను దాచు",
+    "showOngoing": "ప్రచారాలను చూపు",
+    "startsOn": "ప్రారంభం",
+    "endsOn": "ముగింపు",
+    "thisWeek": "ఈ వారం",
+    "nextWeek": "వచ్చే వారం",
+    "laterThisMonth": "ఈ నెలాఖరులో",
+    "allUpcoming": "రాబోయే అన్ని కార్యక్రమాలు",
+    "filterAll": "అన్నీ",
+    "filterEvents": "సదస్సులు & సమావేశాలు",
+    "filterDeadlines": "గడువులు",
+    "filterCampaigns": "ప్రచారాలు",
+    "noEventsMatching": "ఈ ఫిల్టర్‌కు సరిపోలే కార్యక్రమాలు ఏవీ లేవు."
+  },
+  "timezone": {
+    "settingsTitle": "సమయం & సమయ మండలం సెట్టింగ్‌లు",
+    "settingsDesc": "WikiTimerలో తేదీలు మరియు సమయాలు ఎలా ప్రదర్శించబడాలో ఎంచుకోండి.",
+    "systemDetected": "సిస్టమ్ స్థానిక సమయం",
+    "utc": "UTC (సార్వత్రిక సమన్వయ సమయం)",
+    "custom": "కస్టమ్ సమయ మండలం",
+    "selectTimezone": "సమయ మండలాన్ని శోధించండి / ఎంచుకోండి",
+    "activeTz": "ప్రస్తుత సమయ మండలం",
+    "currentTime": "ప్రస్తుత సమయం",
+    "saved": "సమయ మండలం ప్రాధాన్యత సేవ్ చేయబడింది!"
   }
 }

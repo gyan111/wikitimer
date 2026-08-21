@@ -61,7 +61,8 @@
     "viewDetailsAndTimer": "Lihat Detail & Pengatur Waktu →",
     "viewTimer": "Lihat Pengatur Waktu →",
     "eventsCount": "{count} acara",
-    "hideOnlineEvents": "Sembunyikan Acara Daring"
+    "hideOnlineEvents": "Sembunyikan Acara Daring",
+    "calendarView": "Tampilan Kalender"
   },
   "filters": {
     "allRegions": "Semua Wilayah",
@@ -131,7 +132,8 @@
     "embedSnippetTitle": "Cuplikan HTML Sematan Langsung",
     "embedSnippetDesc": "Tempel iframe ini ke situs web cabang, halaman arahan acara, atau dasbor komunitas Anda:",
     "copyCode": "Salin Kode",
-    "participants": "Peserta"
+    "participants": "Peserta",
+    "viewDetails": "Lihat Detail"
   },
   "time": {
     "days": "Hari",
@@ -194,5 +196,43 @@
     "hostedOn": "Dihosting di Wikimedia Toolforge",
     "sourceCode": "Kode Sumber",
     "reportIssue": "Laporkan Masalah"
+  },
+  "calendar": {
+    "calendarView": "Tampilan Kalender",
+    "monthView": "Tampilan Bulan",
+    "agendaView": "Feed Agenda",
+    "prevMonth": "Bulan Sebelumnya",
+    "nextMonth": "Bulan Berikutnya",
+    "today": "Hari Ini",
+    "moreEvents": "lainnya",
+    "eventScheduled": "acara dijadwalkan",
+    "eventsScheduled": "acara dijadwalkan",
+    "noEventsOnDate": "Tidak ada acara pada tanggal ini.",
+    "ongoingCampaigns": "Kampanye Berlangsung Bulan Ini",
+    "ongoingCampaignsCount": "{count} Kampanye Berlangsung",
+    "hideOngoing": "Sembunyikan Kampanye",
+    "showOngoing": "Tampilkan Kampanye",
+    "startsOn": "Mulai",
+    "endsOn": "Berakhir",
+    "thisWeek": "Minggu Ini",
+    "nextWeek": "Minggu Depan",
+    "laterThisMonth": "Nanti di Bulan Ini",
+    "allUpcoming": "Semua Acara Mendatang",
+    "filterAll": "Semua",
+    "filterEvents": "Konferensi & Pertemuan",
+    "filterDeadlines": "Batas Waktu",
+    "filterCampaigns": "Kampanye",
+    "noEventsMatching": "Tidak ada acara yang cocok dengan filter ini."
+  },
+  "timezone": {
+    "settingsTitle": "Pengaturan Waktu & Zona Waktu",
+    "settingsDesc": "Pilih bagaimana tanggal dan waktu ditampilkan di WikiTimer.",
+    "systemDetected": "Waktu Lokal Sistem",
+    "utc": "UTC (Waktu Universal Terkoordinasi)",
+    "custom": "Zona Waktu Kustom",
+    "selectTimezone": "Cari / Pilih Zona Waktu",
+    "activeTz": "Zona Waktu Aktif",
+    "currentTime": "Waktu Saat Ini",
+    "saved": "Preferensi zona waktu disimpan!"
   }
 }

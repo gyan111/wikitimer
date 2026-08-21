@@ -61,7 +61,8 @@
     "viewDetailsAndTimer": "查看详情与计时器 →",
     "viewTimer": "查看计时器 →",
     "eventsCount": "{count} 个活动",
-    "hideOnlineEvents": "隐藏线上活动"
+    "hideOnlineEvents": "隐藏线上活动",
+    "calendarView": "日历视图"
   },
   "filters": {
     "allRegions": "所有地区",
@@ -131,7 +132,8 @@
     "embedSnippetTitle": "实时嵌入 HTML 代码",
     "embedSnippetDesc": "将此 iframe 代码粘贴到您的分会网站、活动页面或社区仪表板：",
     "copyCode": "复制代码",
-    "participants": "位参与者"
+    "participants": "位参与者",
+    "viewDetails": "查看详情"
   },
   "time": {
     "days": "天",
@@ -194,5 +196,43 @@
     "hostedOn": "托管于 Wikimedia Toolforge",
     "sourceCode": "源代码",
     "reportIssue": "报告问题"
+  },
+  "calendar": {
+    "calendarView": "日历视图",
+    "monthView": "月视图",
+    "agendaView": "日程流",
+    "prevMonth": "上个月",
+    "nextMonth": "下个月",
+    "today": "今天",
+    "moreEvents": "更多",
+    "eventScheduled": "项活动安排",
+    "eventsScheduled": "项活动安排",
+    "noEventsOnDate": "该日期暂无活动安排。",
+    "ongoingCampaigns": "本月进行中的活动与战役",
+    "ongoingCampaignsCount": "{count} 个进行中的战役",
+    "hideOngoing": "隐藏战役",
+    "showOngoing": "显示战役",
+    "startsOn": "开始",
+    "endsOn": "结束",
+    "thisWeek": "本周",
+    "nextWeek": "下周",
+    "laterThisMonth": "本月晚些时候",
+    "allUpcoming": "本月所有即将举行的活动",
+    "filterAll": "全部",
+    "filterEvents": "会议与聚会",
+    "filterDeadlines": "截止日期",
+    "filterCampaigns": "战役与竞赛",
+    "noEventsMatching": "未找到符合筛选条件的活动。"
+  },
+  "timezone": {
+    "settingsTitle": "时间与时区设置",
+    "settingsDesc": "选择在 WikiTimer 中如何显示活动日期与时间。",
+    "systemDetected": "系统本地时间",
+    "utc": "UTC (协调世界时)",
+    "custom": "自定义时区",
+    "selectTimezone": "搜索 / 选择时区",
+    "activeTz": "当前生效时区",
+    "currentTime": "当前时间",
+    "saved": "时区偏好已保存！"
   }
 }

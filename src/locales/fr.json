@@ -61,7 +61,8 @@
     "viewDetailsAndTimer": "Voir les détails & le minuteur →",
     "viewTimer": "Voir le minuteur →",
     "eventsCount": "{count} événements",
-    "hideOnlineEvents": "Masquer les événements en ligne"
+    "hideOnlineEvents": "Masquer les événements en ligne",
+    "calendarView": "Vue Calendrier"
   },
   "filters": {
     "allRegions": "Toutes les régions",
@@ -131,7 +132,8 @@
     "embedSnippetTitle": "Extrait HTML d'intégration",
     "embedSnippetDesc": "Collez cet iframe sur le site web de votre groupe, page d'événement ou tableau de bord :",
     "copyCode": "Copier le code",
-    "participants": "Participants"
+    "participants": "Participants",
+    "viewDetails": "Voir les détails"
   },
   "time": {
     "days": "Jours",
@@ -194,5 +196,43 @@
     "hostedOn": "Hébergé sur Wikimedia Toolforge",
     "sourceCode": "Code source",
     "reportIssue": "Signaler un problème"
+  },
+  "calendar": {
+    "calendarView": "Vue Calendrier",
+    "monthView": "Vue Mois",
+    "agendaView": "Flux Agenda",
+    "prevMonth": "Mois précédent",
+    "nextMonth": "Mois suivant",
+    "today": "Aujourd'hui",
+    "moreEvents": "de plus",
+    "eventScheduled": "événement prévu",
+    "eventsScheduled": "événements prévus",
+    "noEventsOnDate": "Aucun événement prévu à cette date.",
+    "ongoingCampaigns": "Campagnes en cours ce mois-ci",
+    "ongoingCampaignsCount": "{count} campagnes en cours",
+    "hideOngoing": "Masquer les campagnes",
+    "showOngoing": "Afficher les campagnes",
+    "startsOn": "Commence",
+    "endsOn": "Se termine",
+    "thisWeek": "Cette semaine",
+    "nextWeek": "Semaine prochaine",
+    "laterThisMonth": "Plus tard ce mois-ci",
+    "allUpcoming": "Tous les événements à venir",
+    "filterAll": "Tous",
+    "filterEvents": "Conférences & Rencontres",
+    "filterDeadlines": "Dates limites",
+    "filterCampaigns": "Campagnes",
+    "noEventsMatching": "Aucun événement ne correspond à ce filtre."
+  },
+  "timezone": {
+    "settingsTitle": "Paramètres d'heure et de fuseau horaire",
+    "settingsDesc": "Choisissez comment les dates et heures sont affichées dans WikiTimer.",
+    "systemDetected": "Heure locale du système",
+    "utc": "UTC (Temps universel coordonné)",
+    "custom": "Fuseau horaire personnalisé",
+    "selectTimezone": "Rechercher / Sélectionner un fuseau horaire",
+    "activeTz": "Fuseau horaire actif",
+    "currentTime": "Heure actuelle",
+    "saved": "Préférence de fuseau horaire enregistrée !"
   }
 }

@@ -61,7 +61,8 @@
     "viewDetailsAndTimer": "വിശദാംശങ്ങളും ടൈമറും കാണുക →",
     "viewTimer": "ടൈമർ കാണുക →",
     "eventsCount": "{count} ഇവന്റുകൾ",
-    "hideOnlineEvents": "ഓൺലൈൻ ഇവന്റുകൾ മറയ്ക്കുക"
+    "hideOnlineEvents": "ഓൺലൈൻ ഇവന്റുകൾ മറയ്ക്കുക",
+    "calendarView": "കലണ്ടർ കാഴ്‌ച"
   },
   "filters": {
     "allRegions": "എല്ലാ മേഖലകളും",
@@ -131,7 +132,8 @@
     "embedSnippetTitle": "ലൈവ് എംബെഡ് HTML കോഡ്",
     "embedSnippetDesc": "ഈ iframe നിങ്ങളുടെ വെബ്സൈറ്റിലോ കമ്മ്യൂണിറ്റി ഡാഷ്‌ബോർഡിലോ ചേർക്കുക:",
     "copyCode": "കോഡ് കോപ്പി ചെയ്യുക",
-    "participants": "പങ്കാളികൾ"
+    "participants": "പങ്കാളികൾ",
+    "viewDetails": "വിശദാംശങ്ങൾ കാണുക"
   },
   "time": {
     "days": "ദിവസങ്ങൾ",
@@ -194,5 +196,43 @@
     "hostedOn": "വിക്കിമീഡിയ ടൂൾഫോർജിൽ ഹോസ്റ്റ് ചെയ്‌തത്",
     "sourceCode": "സോഴ്സ് കോഡ്",
     "reportIssue": "പ്രശ്നം റിപ്പോർട്ട് ചെയ്യുക"
+  },
+  "calendar": {
+    "calendarView": "കലണ്ടർ കാഴ്‌ച",
+    "monthView": "മാസ കാഴ്‌ച",
+    "agendaView": "അജണ്ട ഫീഡ്",
+    "prevMonth": "കഴിഞ്ഞ മാസം",
+    "nextMonth": "അടുത്ത മാസം",
+    "today": "ഇന്ന്",
+    "moreEvents": "കൂടുതൽ",
+    "eventScheduled": "പരിപാടി നിശ്ചയിച്ചിരിക്കുന്നു",
+    "eventsScheduled": "പരിപാടികൾ നിശ്ചയിച്ചിരിക്കുന്നു",
+    "noEventsOnDate": "ഈ തീയതിയിൽ പരിപാടികളൊന്നുമില്ല.",
+    "ongoingCampaigns": "ഈ മാസം നടക്കുന്ന കാമ്പെയ്‌നുകൾ",
+    "ongoingCampaignsCount": "{count} സജീവ കാമ്പെയ്‌നുകൾ",
+    "hideOngoing": "കാമ്പെയ്‌നുകൾ മറയ്ക്കുക",
+    "showOngoing": "കാമ്പെയ്‌നുകൾ കാണിക്കുക",
+    "startsOn": "ആരംഭം",
+    "endsOn": "അവസാനം",
+    "thisWeek": "ഈ ആഴ്ച",
+    "nextWeek": "അടുത്ത ആഴ്ച",
+    "laterThisMonth": "ഈ മാസം പിന്നീട്",
+    "allUpcoming": "വരാനിരിക്കുന്ന എല്ലാ പരിപാടികളും",
+    "filterAll": "എല്ലാം",
+    "filterEvents": "സമ്മേളനങ്ങളും മീറ്റപ്പുകളും",
+    "filterDeadlines": "അവസാന തീയതികൾ",
+    "filterCampaigns": "കാമ്പെയ്‌നുകൾ",
+    "noEventsMatching": "ഈ ഫിൽട്ടറുമായി പൊരുത്തപ്പെടുന്ന പരിപാടികളൊന്നുമില്ല."
+  },
+  "timezone": {
+    "settingsTitle": "സമയവും സമയമേഖലാ ക്രമീകരണങ്ങളും",
+    "settingsDesc": "WikiTimer-ൽ തീയതികളും സമയവും എങ്ങനെ കാണിക്കണമെന്ന് തിരഞ്ഞെടുക്കുക.",
+    "systemDetected": "സിസ്റ്റം പ്രാദേശിക സമയം",
+    "utc": "UTC (യൂണിവേഴ്സൽ കോർഡിനേറ്റഡ് ടൈം)",
+    "custom": "ഇഷ്‌ടാനുസൃത സമയമേഖല",
+    "selectTimezone": "സമയമേഖല തിരയുക / തിരഞ്ഞെടുക്കുക",
+    "activeTz": "സജീവ സമയമേഖല",
+    "currentTime": "നിലവിലെ സമയം",
+    "saved": "സമയമേഖലാ മുൻഗണന സംരക്ഷിച്ചു!"
   }
 }

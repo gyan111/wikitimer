@@ -61,7 +61,8 @@
     "viewDetailsAndTimer": "ବିବରଣୀ ଓ ଟାଇମର୍ ଦେଖନ୍ତୁ →",
     "viewTimer": "ଟାଇମର୍ ଦେଖନ୍ତୁ →",
     "eventsCount": "{count} ଟି ଇଭେଣ୍ଟ",
-    "hideOnlineEvents": "ଅନଲାଇନ୍ ଇଭେଣ୍ଟ ଲୁଚାନ୍ତୁ"
+    "hideOnlineEvents": "ଅନଲାଇନ୍ ଇଭେଣ୍ଟ ଲୁଚାନ୍ତୁ",
+    "calendarView": "କ୍ୟାଲେଣ୍ଡର ଦୃଶ୍ୟ"
   },
   "filters": {
     "allRegions": "ସମସ୍ତ ଅଞ୍ଚଳ",
@@ -131,7 +132,8 @@
     "embedSnippetTitle": "ଲାଇଭ୍ ଏମ୍ବେଡ୍ HTML କୋଡ୍",
     "embedSnippetDesc": "ଏହି iframe କୋଡ୍ ଆପଣଙ୍କ ୱେବସାଇଟ୍ ବା ଡ୍ୟାସବୋର୍ଡରେ ବ୍ୟବହାର କରନ୍ତୁ:",
     "copyCode": "କୋଡ୍ କପି କରନ୍ତୁ",
-    "participants": "ଅଂଶଗ୍ରହଣକାରୀ"
+    "participants": "ଅଂଶଗ୍ରହଣକାରୀ",
+    "viewDetails": "ବିବରଣୀ ଦେଖନ୍ତୁ"
   },
   "time": {
     "days": "ଦିନ",
@@ -194,5 +196,43 @@
     "hostedOn": "ଉଇକିମିଡ଼ିଆ ଟୁଲଫୋର୍ଜରେ ହୋଷ୍ଟ ହୋଇଛି",
     "sourceCode": "ସୋର୍ସ କୋଡ୍",
     "reportIssue": "ସମସ୍ୟା ଜଣାନ୍ତୁ"
+  },
+  "calendar": {
+    "calendarView": "କ୍ୟାଲେଣ୍ଡର ଦୃଶ୍ୟ",
+    "monthView": "ମାସିକ ଦୃଶ୍ୟ",
+    "agendaView": "କାର୍ଯ୍ୟସୂଚୀ ଫିଡ୍",
+    "prevMonth": "ପୂର୍ବ ମାସ",
+    "nextMonth": "ପରବର୍ତ୍ତୀ ମାସ",
+    "today": "ଆଜି",
+    "moreEvents": "ଅଧିକ",
+    "eventScheduled": "କାର୍ଯ୍ୟକ୍ରମ ନିର୍ଦ୍ଧାରିତ",
+    "eventsScheduled": "କାର୍ଯ୍ୟକ୍ରମ ନିର୍ଦ୍ଧାରିତ",
+    "noEventsOnDate": "ଏହି ତାରିଖରେ କୌଣସି କାର୍ଯ୍ୟକ୍ରମ ନାହିଁ।",
+    "ongoingCampaigns": "ଏହି ମାସରେ ଚାଲୁଥିବା ଅଭିଯାନ",
+    "ongoingCampaignsCount": "{count} ଚାଲୁ ଅଭିଯାନ",
+    "hideOngoing": "ଅଭିଯାନ ଲୁଚାନ୍ତୁ",
+    "showOngoing": "ଅଭିଯାନ ଦେଖାନ୍ତୁ",
+    "startsOn": "ଆରମ୍ଭ",
+    "endsOn": "ଶେଷ",
+    "thisWeek": "ଏହି ସପ୍ତାହ",
+    "nextWeek": "ଆଗାମୀ ସପ୍ତାହ",
+    "laterThisMonth": "ମାସର ପରବର୍ତ୍ତୀ ସମୟରେ",
+    "allUpcoming": "ସମସ୍ତ ଆଗାମୀ କାର୍ଯ୍ୟକ୍ରମ",
+    "filterAll": "ସମସ୍ତ",
+    "filterEvents": "ସମ୍ମିଳନୀ ଓ ମିଳନ",
+    "filterDeadlines": "ଶେଷ ତାରିଖ",
+    "filterCampaigns": "ଅଭିଯାନ",
+    "noEventsMatching": "କୌଣସି ମେଳ ଖାଉଥିବା କାର୍ଯ୍ୟକ୍ରମ ମିଳିଲା ନାହିଁ।"
+  },
+  "timezone": {
+    "settingsTitle": "ସମୟ ଓ ସମୟ ମଣ୍ଡଳ ସେଟିଂ",
+    "settingsDesc": "WikiTimer ରେ ତାରିଖ ଏବଂ ସମୟ କିପରି ପ୍ରଦର୍ଶିତ ହେବ ଚୟନ କରନ୍ତୁ।",
+    "systemDetected": "ସିଷ୍ଟମ ସ୍ଥାନୀୟ ସମୟ",
+    "utc": "UTC (ସାର୍ବଜନୀନ ସମନ୍ୱିତ ସମୟ)",
+    "custom": "ନିଜ ପସନ୍ଦର ସମୟ ମଣ୍ଡଳ",
+    "selectTimezone": "ସମୟ ମଣ୍ଡଳ ଖୋଜନ୍ତୁ / ଚୟନ କରନ୍ତୁ",
+    "activeTz": "ସକ୍ରିୟ ସମୟ ମଣ୍ଡଳ",
+    "currentTime": "ବର୍ତ୍ତମାନ ସମୟ",
+    "saved": "ସମୟ ମଣ୍ଡଳ ପସନ୍ଦ ସଂରକ୍ଷିତ ହେଲା!"
   }
 }

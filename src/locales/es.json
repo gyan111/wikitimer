@@ -61,7 +61,8 @@
     "viewDetailsAndTimer": "Ver detalles y temporizador →",
     "viewTimer": "Ver temporizador →",
     "eventsCount": "{count} eventos",
-    "hideOnlineEvents": "Ocultar eventos online"
+    "hideOnlineEvents": "Ocultar eventos online",
+    "calendarView": "Vista de Calendario"
   },
   "filters": {
     "allRegions": "Todas las regiones",
@@ -131,7 +132,8 @@
     "embedSnippetTitle": "Código HTML para insertar",
     "embedSnippetDesc": "Pega este iframe en el sitio web de tu capítulo, página de evento o panel comunitario:",
     "copyCode": "Copiar código",
-    "participants": "Participantes"
+    "participants": "Participantes",
+    "viewDetails": "Ver detalles"
   },
   "time": {
     "days": "Días",
@@ -194,5 +196,43 @@
     "hostedOn": "Alojado en Wikimedia Toolforge",
     "sourceCode": "Código fuente",
     "reportIssue": "Informar de un error"
+  },
+  "calendar": {
+    "calendarView": "Vista de Calendario",
+    "monthView": "Vista Mensual",
+    "agendaView": "Feed de Agenda",
+    "prevMonth": "Mes anterior",
+    "nextMonth": "Mes siguiente",
+    "today": "Hoy",
+    "moreEvents": "más",
+    "eventScheduled": "evento programado",
+    "eventsScheduled": "eventos programados",
+    "noEventsOnDate": "No hay eventos programados para esta fecha.",
+    "ongoingCampaigns": "Campañas activas este mes",
+    "ongoingCampaignsCount": "{count} campañas en curso",
+    "hideOngoing": "Ocultar campañas",
+    "showOngoing": "Mostrar campañas",
+    "startsOn": "Empieza",
+    "endsOn": "Termina",
+    "thisWeek": "Esta semana",
+    "nextWeek": "Próxima semana",
+    "laterThisMonth": "Más adelante este mes",
+    "allUpcoming": "Próximos eventos",
+    "filterAll": "Todos",
+    "filterEvents": "Conferencias y Encuentros",
+    "filterDeadlines": "Fechas límite",
+    "filterCampaigns": "Campañas",
+    "noEventsMatching": "No se encontraron eventos para este filtro."
+  },
+  "timezone": {
+    "settingsTitle": "Configuración de hora y zona horaria",
+    "settingsDesc": "Elige cómo se muestran las fechas y horas en WikiTimer.",
+    "systemDetected": "Hora local del sistema",
+    "utc": "UTC (Tiempo Universal Coordinado)",
+    "custom": "Zona horaria personalizada",
+    "selectTimezone": "Buscar / Seleccionar zona horaria",
+    "activeTz": "Zona horaria activa",
+    "currentTime": "Hora actual",
+    "saved": "¡Preferencia de zona horaria guardada!"
   }
 }

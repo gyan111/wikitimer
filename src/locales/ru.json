@@ -61,7 +61,8 @@
     "viewDetailsAndTimer": "Подробнее и таймер →",
     "viewTimer": "Открыть таймер →",
     "eventsCount": "{count} событий",
-    "hideOnlineEvents": "Скрыть онлайн-события"
+    "hideOnlineEvents": "Скрыть онлайн-события",
+    "calendarView": "Вид календаря"
   },
   "filters": {
     "allRegions": "Все регионы",
@@ -131,7 +132,8 @@
     "embedSnippetTitle": "HTML-код для встраивания",
     "embedSnippetDesc": "Вставьте этот iframe на сайт вашего отделения, страницу мероприятия или панель сообщества:",
     "copyCode": "Копировать код",
-    "participants": "Участники"
+    "participants": "Участники",
+    "viewDetails": "Подробнее"
   },
   "time": {
     "days": "Дней",
@@ -194,5 +196,43 @@
     "hostedOn": "Размещено на Wikimedia Toolforge",
     "sourceCode": "Исходный код",
     "reportIssue": "Сообщить об ошибке"
+  },
+  "calendar": {
+    "calendarView": "Вид календаря",
+    "monthView": "Вид месяца",
+    "agendaView": "Лента событий",
+    "prevMonth": "Предыдущий месяц",
+    "nextMonth": "Следующий месяц",
+    "today": "Сегодня",
+    "moreEvents": "ещё",
+    "eventScheduled": "событие запланировано",
+    "eventsScheduled": "событий запланировано",
+    "noEventsOnDate": "На эту дату событий нет.",
+    "ongoingCampaigns": "Текущие кампании в этом месяце",
+    "ongoingCampaignsCount": "{count} текущих кампаний",
+    "hideOngoing": "Скрыть кампании",
+    "showOngoing": "Показать кампании",
+    "startsOn": "Начало",
+    "endsOn": "Конец",
+    "thisWeek": "На этой неделе",
+    "nextWeek": "На следующей неделе",
+    "laterThisMonth": "Позже в этом месяце",
+    "allUpcoming": "Все предстоящие события",
+    "filterAll": "Все",
+    "filterEvents": "Конференции и встречи",
+    "filterDeadlines": "Дедлайны",
+    "filterCampaigns": "Кампании",
+    "noEventsMatching": "Событий по этому фильтру не найдено."
+  },
+  "timezone": {
+    "settingsTitle": "Настройки времени и часового пояса",
+    "settingsDesc": "Выберите, как отображаются даты и время в WikiTimer.",
+    "systemDetected": "Местное системное время",
+    "utc": "UTC (Всемирное координированное время)",
+    "custom": "Пользовательский часовой пояс",
+    "selectTimezone": "Поиск / Выбор часового пояса",
+    "activeTz": "Активный часовой пояс",
+    "currentTime": "Текущее время",
+    "saved": "Настройки часового пояса сохранены!"
   }
 }

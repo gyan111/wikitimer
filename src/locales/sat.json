@@ -61,7 +61,8 @@
     "viewDetailsAndTimer": "ᱵᱤᱵᱚᱨᱚᱬ ᱟᱨ ᱴᱟᱭᱢᱟᱨ ᱧᱮᱞ →",
     "viewTimer": "ᱴᱟᱭᱢᱟᱨ ᱧᱮᱞ →",
     "eventsCount": "{count} ᱜᱚᱴᱟᱝ ᱦᱮᱞᱢᱮᱞ",
-    "hideOnlineEvents": "ᱚᱱᱞᱟᱭᱤᱱ ᱦᱮᱞᱢᱮᱞ ᱩᱠᱩᱭ ᱢᱮ"
+    "hideOnlineEvents": "ᱚᱱᱞᱟᱭᱤᱱ ᱦᱮᱞᱢᱮᱞ ᱩᱠᱩᱭ ᱢᱮ",
+    "calendarView": "ᱠᱮᱞᱮᱱᱰᱟᱨ ᱧᱮᱞ"
   },
   "filters": {
     "allRegions": "ᱡᱚᱛᱚ ᱴᱚᱴᱷᱟ",
@@ -131,7 +132,8 @@
     "embedSnippetTitle": "ᱞᱟᱭᱤᱵᱷ ᱮᱢᱵᱮᱰ HTML ᱠᱳᱰ",
     "embedSnippetDesc": "ᱱᱚᱶᱟ iframe ᱠᱳᱰ ᱟᱢᱟᱜ ᱣᱮᱵᱽᱥᱟᱭᱤᱴ ᱥᱮ ᱰᱮᱥᱵᱳᱨᱰ ᱨᱮ ᱞᱟᱜᱟᱣ ᱢᱮ:",
     "copyCode": "ᱠᱳᱰ ᱠᱚᱯᱤ ᱢᱮ",
-    "participants": "ᱥᱮᱞᱮᱫᱤᱭᱟᱹ"
+    "participants": "ᱥᱮᱞᱮᱫᱤᱭᱟᱹ",
+    "viewDetails": "ᱵᱤᱵᱚᱨᱚᱬ ᱧᱮᱞ ᱢᱮ"
   },
   "time": {
     "days": "ᱢᱟᱦᱟᱸ",
@@ -194,5 +196,43 @@
     "hostedOn": "Wikimedia Toolforge ᱨᱮ ᱦᱳᱥᱴ ᱟᱠᱟᱱᱟ",
     "sourceCode": "ᱢᱩᱲᱩᱛ ᱠᱳᱰ",
     "reportIssue": "ᱮᱴᱠᱮᱴᱚᱬᱮ ᱞᱟᱹᱭ ᱢᱮ"
+  },
+  "calendar": {
+    "calendarView": "ᱠᱮᱞᱮᱱᱰᱟᱨ ᱧᱮᱞ",
+    "monthView": "ᱪᱟᱸᱫᱚ ᱧᱮᱞ",
+    "agendaView": "ᱠᱟᱹᱢᱤᱦᱚᱨᱟ ᱯᱷᱤᱰ",
+    "prevMonth": "ᱢᱟᱬᱟᱝ ᱪᱟᱸᱫᱚ",
+    "nextMonth": "ᱛᱟᱭᱚᱢ ᱪᱟᱸᱫᱚ",
+    "today": "ᱛᱮᱦᱮᱧ",
+    "moreEvents": "ᱟᱨᱦᱚᱸ",
+    "eventScheduled": "ᱠᱟᱹᱢᱤᱦᱚᱨᱟ ᱥᱟᱯᱲᱟᱣ ᱟᱠᱟᱱᱟ",
+    "eventsScheduled": "ᱠᱟᱹᱢᱤᱦᱚᱨᱟ ᱠᱚ ᱥᱟᱯᱲᱟᱣ ᱟᱠᱟᱱᱟ",
+    "noEventsOnDate": "ᱱᱚᱶᱟ ᱢᱟᱹᱦᱤᱛ ᱨᱮ ᱡᱟᱦᱟᱱ ᱠᱟᱹᱢᱤᱦᱚᱨᱟ ᱵᱟᱹᱱᱩᱜᱼᱟ᱾",
+    "ongoingCampaigns": "ᱱᱚᱶᱟ ᱪᱟᱸᱫᱚ ᱨᱮ ᱪᱟᱞᱟᱜ ᱠᱟᱱ ᱠᱟᱹᱢᱤᱦᱚᱨᱟ ᱠᱚ",
+    "ongoingCampaignsCount": "{count} ᱪᱟᱞᱟᱜ ᱠᱟᱱ ᱠᱟᱹᱢᱤᱦᱚᱨᱟ ᱠᱚ",
+    "hideOngoing": "ᱠᱟᱹᱢᱤᱦᱚᱨᱟ ᱩᱠᱩᱭ ᱢᱮ",
+    "showOngoing": "ᱠᱟᱹᱢᱤᱦᱚᱨᱟ ᱩᱫᱩᱜ ᱢᱮ",
+    "startsOn": "ᱮᱦᱚᱵ",
+    "endsOn": "ᱢᱩᱪᱟᱹᱫ",
+    "thisWeek": "ᱱᱚᱶᱟ ᱦᱟᱯᱛᱟ",
+    "nextWeek": "ᱫᱟᱨᱟᱭ ᱦᱟᱯᱛᱟ",
+    "laterThisMonth": "ᱱᱚᱶᱟ ᱪᱟᱸᱫᱚ ᱛᱟᱭᱚᱢ ᱛᱮ",
+    "allUpcoming": "ᱡᱚᱛᱚ ᱦᱤᱡᱩᱜ ᱠᱟᱱ ᱠᱟᱹᱢᱤᱦᱚᱨᱟ ᱠᱚ",
+    "filterAll": "ᱡᱚᱛᱚ",
+    "filterEvents": "ᱥᱮᱞᱮᱫ ᱟᱨ ᱫᱩᱯᱲᱩᱵ ᱠᱚ",
+    "filterDeadlines": "ᱢᱩᱪᱟᱹᱫ ᱢᱟᱹᱦᱤᱛ ᱠᱚ",
+    "filterCampaigns": "ᱠᱟᱹᱢᱤᱦᱚᱨᱟ ᱠᱚ",
+    "noEventsMatching": "ᱱᱚᱶᱟ ᱪᱷᱟᱹᱱᱤ ᱞᱮᱠᱟᱱ ᱡᱟᱦᱟᱱ ᱠᱟᱹᱢᱤᱦᱚᱨᱟ ᱵᱟᱝ ᱧᱟᱢ ᱞᱮᱱᱟ᱾"
+  },
+  "timezone": {
+    "settingsTitle": "ᱚᱠᱛᱚ ᱟᱨ ᱴᱟᱭᱤᱢ ᱡᱳᱱ ᱥᱟᱡᱟᱣ",
+    "settingsDesc": "WikiTimer ᱨᱮ ᱢᱟᱹᱦᱤᱛ ᱟᱨ ᱚᱠᱛᱚ ᱪᱮᱫ ᱞᱮᱠᱟ ᱩᱫᱩᱜᱚᱜᱼᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ᱾",
+    "systemDetected": "ᱥᱤᱥᱴᱚᱢ ᱞᱚᱠᱟᱞ ᱚᱠᱛᱚ",
+    "utc": "UTC (ᱡᱮᱜᱮᱛ ᱥᱟᱶ ᱡᱚᱲᱟᱣ ᱚᱠᱛᱚ)",
+    "custom": "ᱠᱩᱥᱤ ᱴᱟᱭᱤᱢ ᱡᱳᱱ",
+    "selectTimezone": "ᱴᱟᱭᱤᱢ ᱡᱳᱱ ᱥᱮᱸᱫᱽᱨᱟ / ᱵᱟᱪᱷᱟᱣ ᱢᱮ",
+    "activeTz": "ᱪᱟᱹᱞᱩ ᱴᱟᱭᱤᱢ ᱡᱳᱱ",
+    "currentTime": "ᱱᱤᱛᱚᱜᱟᱜ ᱚᱠᱛᱚ",
+    "saved": "ᱴᱟᱭᱤᱢ ᱡᱳᱱ ᱵᱟᱪᱷᱟᱣ ᱥᱟᱧᱪᱟᱣ ᱮᱱᱟ!"
   }
 }

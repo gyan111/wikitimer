@@ -61,7 +61,8 @@
     "viewDetailsAndTimer": "عرض التفاصيل والمؤقت ←",
     "viewTimer": "عرض المؤقت ←",
     "eventsCount": "{count} فعاليات",
-    "hideOnlineEvents": "إخفاء الفعاليات عبر الإنترنت"
+    "hideOnlineEvents": "إخفاء الفعاليات عبر الإنترنت",
+    "calendarView": "عرض التقويم"
   },
   "filters": {
     "allRegions": "جميع المناطق",
@@ -131,7 +132,8 @@
     "embedSnippetTitle": "كود HTML للتضمين المباشر",
     "embedSnippetDesc": "الصق كود iframe هذا في موقع مجموعتك أو لوحة التحكم:",
     "copyCode": "نسخ الكود",
-    "participants": "مشارك"
+    "participants": "مشارك",
+    "viewDetails": "عرض التفاصيل"
   },
   "time": {
     "days": "أيام",
@@ -194,5 +196,43 @@
     "hostedOn": "مستضاف على ويكيميديا تولفورج",
     "sourceCode": "الكود المصدري",
     "reportIssue": "الإبلاغ عن مشكلة"
+  },
+  "calendar": {
+    "calendarView": "عرض التقويم",
+    "monthView": "عرض الشهر",
+    "agendaView": "جدول الأعمال",
+    "prevMonth": "الشهر السابق",
+    "nextMonth": "الشهر القادم",
+    "today": "اليوم",
+    "moreEvents": "المزيد",
+    "eventScheduled": "حدث مجدول",
+    "eventsScheduled": "أحداث مجدولة",
+    "noEventsOnDate": "لا توجد أحداث مجدولة في هذا التاريخ.",
+    "ongoingCampaigns": "الحملات الجارية هذا الشهر",
+    "ongoingCampaignsCount": "{count} حملة جارية",
+    "hideOngoing": "إخفاء الحملات",
+    "showOngoing": "عرض الحملات",
+    "startsOn": "يبدأ",
+    "endsOn": "ينتهي",
+    "thisWeek": "هذا الأسبوع",
+    "nextWeek": "الأسبوع القادم",
+    "laterThisMonth": "لاحقاً هذا الشهر",
+    "allUpcoming": "جميع الأحداث القادمة",
+    "filterAll": "الكل",
+    "filterEvents": "المؤتمرات واللقاءات",
+    "filterDeadlines": "المواعيد النهائية",
+    "filterCampaigns": "الحملات",
+    "noEventsMatching": "لم يتم العثور على أحداث مطابقة لهذا الفلتر."
+  },
+  "timezone": {
+    "settingsTitle": "إعدادات الوقت والمنطقة الزمنية",
+    "settingsDesc": "اختر كيفية عرض التواريخ والأوقات في WikiTimer.",
+    "systemDetected": "التوقيت المحلي للنظام",
+    "utc": "UTC (التوقيت العالمي المنسق)",
+    "custom": "منطقة زمنية مخصصة",
+    "selectTimezone": "بحث / اختيار المنطقة الزمنية",
+    "activeTz": "المنطقة الزمنية النشطة",
+    "currentTime": "الوقت الحالي",
+    "saved": "تم حفظ تفضيلات المنطقة الزمنية!"
   }
 }

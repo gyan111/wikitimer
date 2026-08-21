@@ -61,7 +61,8 @@
     "viewDetailsAndTimer": "விவரங்கள் & நேரங்காட்டியைப் பார் →",
     "viewTimer": "நேரங்காட்டியைப் பார் →",
     "eventsCount": "{count} நிகழ்வுகள்",
-    "hideOnlineEvents": "ஆன்லைன் நிகழ்வுகளை மறை"
+    "hideOnlineEvents": "ஆன்லைன் நிகழ்வுகளை மறை",
+    "calendarView": "நாட்காட்டி காட்சி"
   },
   "filters": {
     "allRegions": "அனைத்து பிராந்தியங்களும்",
@@ -131,7 +132,8 @@
     "embedSnippetTitle": "நேரடி உட்பொதிவு HTML குறியீடு",
     "embedSnippetDesc": "இந்த iframe குறியீட்டை உங்கள் இணையதளம் அல்லது சமூக டாஷ்போர்டில் ஒட்டவும்:",
     "copyCode": "குறியீட்டை நகலெடு",
-    "participants": "பங்கேற்பாளர்கள்"
+    "participants": "பங்கேற்பாளர்கள்",
+    "viewDetails": "விவரங்களைக் காண்க"
   },
   "time": {
     "days": "நாட்கள்",
@@ -194,5 +196,43 @@
     "hostedOn": "Wikimedia Toolforge-இல் வழங்கப்படுகிறது",
     "sourceCode": "மூலக் குறியீடு",
     "reportIssue": "சிக்கலைப் புகாரளிக்கவும்"
+  },
+  "calendar": {
+    "calendarView": "நாட்காட்டி காட்சி",
+    "monthView": "மாதாந்திர காட்சி",
+    "agendaView": "நிகழ்வுப் பட்டியல்",
+    "prevMonth": "முந்தைய மாதம்",
+    "nextMonth": "அடுத்த மாதம்",
+    "today": "இன்று",
+    "moreEvents": "மேலும்",
+    "eventScheduled": "நிகழ்வு திட்டமிடப்பட்டுள்ளது",
+    "eventsScheduled": "நிகழ்வுகள் திட்டமிடப்பட்டுள்ளன",
+    "noEventsOnDate": "இந்த தேதியில் நிகழ்வுகள் எதுவும் இல்லை.",
+    "ongoingCampaigns": "இந்த மாதத்தில் நடைபெறும் பிரச்சாரங்கள்",
+    "ongoingCampaignsCount": "{count} தொடரும் பிரச்சாரங்கள்",
+    "hideOngoing": "பிரச்சாரங்களை மறை",
+    "showOngoing": "பிரச்சாரங்களைக் காட்டு",
+    "startsOn": "தொடக்கம்",
+    "endsOn": "முடிவு",
+    "thisWeek": "இந்த வாரம்",
+    "nextWeek": "அடுத்த வாரம்",
+    "laterThisMonth": "இந்த மாதத்தின் பிற்பகுதியில்",
+    "allUpcoming": "வரவிருக்கும் அனைத்து நிகழ்வுகள்",
+    "filterAll": "அனைத்தும்",
+    "filterEvents": "மாநாடுகள் & சந்திப்புகள்",
+    "filterDeadlines": "கடைசி தேதிகள்",
+    "filterCampaigns": "பிரச்சாரங்கள்",
+    "noEventsMatching": "இந்த வடிகட்டலுக்கு ஏற்ற நிகழ்வுகள் எதுவும் இல்லை."
+  },
+  "timezone": {
+    "settingsTitle": "நேரம் மற்றும் நேர மண்டல அமைப்புகள்",
+    "settingsDesc": "WikiTimer-இல் தேதிகள் மற்றும் நேரங்கள் எவ்வாறு காட்டப்பட வேண்டும் என்பதைத் தேர்ந்தெடுக்கவும்.",
+    "systemDetected": "கணினி உள்ளூர் நேரம்",
+    "utc": "UTC (ஒருங்கிணைந்த உலகளாவிய நேரம்)",
+    "custom": "விருப்ப நேர மண்டலம்",
+    "selectTimezone": "நேர மண்டலத்தைத் தேடு / தேர்ந்தெடு",
+    "activeTz": "செயலில் உள்ள நேர மண்டலம்",
+    "currentTime": "தற்போதைய நேரம்",
+    "saved": "நேர மண்டல விருப்பம் சேமிக்கப்பட்டது!"
   }
 }

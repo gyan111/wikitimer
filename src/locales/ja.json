@@ -61,7 +61,8 @@
     "viewDetailsAndTimer": "詳細とタイマーを見る →",
     "viewTimer": "タイマーを見る →",
     "eventsCount": "{count} 件のイベント",
-    "hideOnlineEvents": "オンラインイベントを隠す"
+    "hideOnlineEvents": "オンラインイベントを隠す",
+    "calendarView": "カレンダー表示"
   },
   "filters": {
     "allRegions": "すべての地域",
@@ -131,7 +132,8 @@
     "embedSnippetTitle": "リアルタイム埋め込み HTML",
     "embedSnippetDesc": "この iframe をグループのWebサイトやダッシュボードに貼り付けてください:",
     "copyCode": "コードをコピー",
-    "participants": "人の参加者"
+    "participants": "人の参加者",
+    "viewDetails": "詳細を見る"
   },
   "time": {
     "days": "日",
@@ -194,5 +196,43 @@
     "hostedOn": "Wikimedia Toolforge でホスト中",
     "sourceCode": "ソースコード",
     "reportIssue": "問題を報告"
+  },
+  "calendar": {
+    "calendarView": "カレンダー表示",
+    "monthView": "月表示",
+    "agendaView": "アジェンダ",
+    "prevMonth": "前月",
+    "nextMonth": "翌月",
+    "today": "今日",
+    "moreEvents": "件以上",
+    "eventScheduled": "件の予定",
+    "eventsScheduled": "件の予定",
+    "noEventsOnDate": "この日の予定はありません。",
+    "ongoingCampaigns": "今月開催中のキャンペーン",
+    "ongoingCampaignsCount": "{count} 件のキャンペーン",
+    "hideOngoing": "キャンペーンを非表示",
+    "showOngoing": "キャンペーンを表示",
+    "startsOn": "開始",
+    "endsOn": "終了",
+    "thisWeek": "今週",
+    "nextWeek": "来週",
+    "laterThisMonth": "今月後半",
+    "allUpcoming": "今後の全イベント",
+    "filterAll": "すべて",
+    "filterEvents": "カンファレンス＆ミートアップ",
+    "filterDeadlines": "締切",
+    "filterCampaigns": "キャンペーン",
+    "noEventsMatching": "該当するイベントは見つかりませんでした。"
+  },
+  "timezone": {
+    "settingsTitle": "時刻とタイムゾーン設定",
+    "settingsDesc": "WikiTimer での日付と時刻の表示形式を選択します。",
+    "systemDetected": "システム現地時刻",
+    "utc": "UTC (協定世界時)",
+    "custom": "カスタムタイムゾーン",
+    "selectTimezone": "タイムゾーンを検索 / 選択",
+    "activeTz": "現在のタイムゾーン",
+    "currentTime": "現在時刻",
+    "saved": "タイムゾーン設定を保存しました！"
   }
 }

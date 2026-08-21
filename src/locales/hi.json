@@ -61,7 +61,8 @@
     "viewDetailsAndTimer": "विवरण और टाइमर देखें →",
     "viewTimer": "टाइमर देखें →",
     "eventsCount": "{count} इवेंट्स",
-    "hideOnlineEvents": "ऑनलाइन इवेंट छिपाएं"
+    "hideOnlineEvents": "ऑनलाइन इवेंट छिपाएं",
+    "calendarView": "कैलेंडर दृश्य"
   },
   "filters": {
     "allRegions": "सभी क्षेत्र",
@@ -131,7 +132,8 @@
     "embedSnippetTitle": "लाइव एम्बेड HTML कोड",
     "embedSnippetDesc": "इस iframe को अपनी वेबसाइट, इवेंट लैंडिंग पेज या डैशबोर्ड में पेस्ट करें:",
     "copyCode": "कोड कॉपी करें",
-    "participants": "प्रतिभागी"
+    "participants": "प्रतिभागी",
+    "viewDetails": "विवरण देखें"
   },
   "time": {
     "days": "दिन",
@@ -194,5 +196,43 @@
     "hostedOn": "विकिमीडिया टूलफोर्ज पर होस्ट किया गया",
     "sourceCode": "स्रोत कोड",
     "reportIssue": "समस्या की रिपोर्ट करें"
+  },
+  "calendar": {
+    "calendarView": "कैलेंडर दृश्य",
+    "monthView": "मासिक दृश्य",
+    "agendaView": "एजेंडा फ़ीड",
+    "prevMonth": "पिछला महीना",
+    "nextMonth": "अगला महीना",
+    "today": "आज",
+    "moreEvents": "और",
+    "eventScheduled": "कार्यक्रम निर्धारित",
+    "eventsScheduled": "कार्यक्रम निर्धारित",
+    "noEventsOnDate": "इस तिथि पर कोई कार्यक्रम नहीं है।",
+    "ongoingCampaigns": "इस महीने के चालू अभियान",
+    "ongoingCampaignsCount": "{count} चालू अभियान",
+    "hideOngoing": "अभियान छुपाएं",
+    "showOngoing": "अभियान दिखाएं",
+    "startsOn": "शुरू",
+    "endsOn": "समाप्त",
+    "thisWeek": "इस सप्ताह",
+    "nextWeek": "अगले सप्ताह",
+    "laterThisMonth": "इस महीने बाद में",
+    "allUpcoming": "सभी आगामी कार्यक्रम",
+    "filterAll": "सभी",
+    "filterEvents": "सम्मेलन और बैठकें",
+    "filterDeadlines": "अंतिम तिथियां",
+    "filterCampaigns": "अभियान",
+    "noEventsMatching": "इस फ़िल्टर से मेल खाता कोई कार्यक्रम नहीं मिला।"
+  },
+  "timezone": {
+    "settingsTitle": "समय और समय क्षेत्र सेटिंग्स",
+    "settingsDesc": "चुनें कि WikiTimer में दिनांक और समय कैसे प्रदर्शित हों।",
+    "systemDetected": "सिस्टम स्थानीय समय",
+    "utc": "UTC (समन्वित सार्वभौमिक समय)",
+    "custom": "कस्टम समय क्षेत्र",
+    "selectTimezone": "समय क्षेत्र खोजें / चुनें",
+    "activeTz": "सक्रिय समय क्षेत्र",
+    "currentTime": "वर्तमान समय",
+    "saved": "समय क्षेत्र प्राथमिकता सहेजी गई!"
   }
 }
