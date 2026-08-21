@@ -53,6 +53,7 @@
   },
   "map": {
     "gridView": "Grid View",
+    "calendarView": "Calendar View",
     "mapView": "Map View",
     "onlineEvents": "Online & Global Events",
     "onlineVirtualEvents": "Online & Virtual Events",
@@ -62,6 +63,44 @@
     "viewTimer": "View Timer →",
     "eventsCount": "{count} events",
     "hideOnlineEvents": "Hide Online Events"
+  },
+  "calendar": {
+    "calendarView": "Calendar View",
+    "monthView": "Month View",
+    "agendaView": "Agenda Feed",
+    "prevMonth": "Previous Month",
+    "nextMonth": "Next Month",
+    "today": "Today",
+    "moreEvents": "more",
+    "eventScheduled": "event scheduled",
+    "eventsScheduled": "events scheduled",
+    "noEventsOnDate": "No specific single-day events on this date.",
+    "ongoingCampaigns": "Ongoing Campaigns Active This Month",
+    "ongoingCampaignsCount": "{count} Ongoing Campaigns",
+    "hideOngoing": "Hide Campaigns",
+    "showOngoing": "Show Campaigns",
+    "startsOn": "Starts",
+    "endsOn": "Ends",
+    "thisWeek": "This Week",
+    "nextWeek": "Next Week",
+    "laterThisMonth": "Later this Month",
+    "allUpcoming": "All Upcoming in Month",
+    "filterAll": "All",
+    "filterEvents": "Conferences & Meetups",
+    "filterDeadlines": "Deadlines",
+    "filterCampaigns": "Campaigns",
+    "noEventsMatching": "No events found matching this calendar filter."
+  },
+  "timezone": {
+    "settingsTitle": "Time & Timezone Settings",
+    "settingsDesc": "Choose how dates, event schedules, and times are displayed throughout WikiTimer.",
+    "systemDetected": "System Local Time",
+    "utc": "UTC (Universal Coordinated Time)",
+    "custom": "Custom Timezone",
+    "selectTimezone": "Search / Select Timezone",
+    "activeTz": "Current Active Timezone",
+    "currentTime": "Current Time",
+    "saved": "Timezone preference saved!"
   },
   "filters": {
     "allRegions": "All Regions",
@@ -108,6 +147,7 @@
     "pastMatches": "Past & Archived Events"
   },
   "modal": {
+    "viewDetails": "View Details",
     "addToGoogleCalendar": "Google Calendar",
     "downloadIcs": "Download .ics",
     "copyWikitext": "Copy Wikitext",
