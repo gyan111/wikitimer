@@ -319,6 +319,7 @@
 
 <script setup>
 import { ref, watch } from 'vue';
+import { resolveCommonsImageUrl } from '../utils/wiki';
 
 const props = defineProps({
   event: {
@@ -491,6 +492,11 @@ async function saveTimer() {
   isSubmitting.value = true;
 
   try {
+    if (form.value.logo) {
+      const resolvedLogo = await resolveCommonsImageUrl(form.value.logo);
+      if (resolvedLogo) form.value.logo = resolvedLogo;
+    }
+
     const payload = {
       ...form.value,
       topics: selectedTags.value.join(', ')

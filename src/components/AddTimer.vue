@@ -259,10 +259,10 @@
               </div>
             </div>
 
-            <!-- Organizers / Affiliates (Optional) with Meta-Wiki Autocomplete -->
+            <!-- Organizers / Affiliates / User Groups -->
             <div class="form-group relative z-20">
               <div class="flex items-center justify-between mb-2 ml-1">
-                <label for="organizers" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
                   {{ $t('form.organizers') }} <span class="text-xs font-normal text-gray-400">({{ $t('form.optional') }})</span>
                 </label>
                 <span v-if="isSearchingOrganizers" class="text-xs text-primary-500 animate-pulse flex items-center gap-1 font-medium">
@@ -270,42 +270,105 @@
                   Searching Meta-Wiki...
                 </span>
               </div>
-              <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+
+              <!-- Type Selector (User / Affiliate / Custom) -->
+              <div class="flex items-center gap-1.5 mb-2.5 p-1 bg-gray-100/80 dark:bg-gray-800/80 rounded-xl w-fit">
+                <button
+                  type="button"
+                  @click="activeOrganizerType = 'user'"
+                  class="px-2.5 py-1 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5"
+                  :class="activeOrganizerType === 'user' ? 'bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-300 shadow-xs' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'"
+                >
+                  <span>👤</span>
+                  <span>{{ $t('form.organizerTypeUser') }}</span>
+                </button>
+                <button
+                  type="button"
+                  @click="activeOrganizerType = 'affiliate'"
+                  class="px-2.5 py-1 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5"
+                  :class="activeOrganizerType === 'affiliate' ? 'bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-300 shadow-xs' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'"
+                >
+                  <span>🏛️</span>
+                  <span>{{ $t('form.organizerTypeAffiliate') }}</span>
+                </button>
+                <button
+                  type="button"
+                  @click="activeOrganizerType = 'custom'"
+                  class="px-2.5 py-1 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5"
+                  :class="activeOrganizerType === 'custom' ? 'bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-300 shadow-xs' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'"
+                >
+                  <span>🌐</span>
+                  <span>{{ $t('form.organizerTypeCustom') }}</span>
+                </button>
+              </div>
+
+              <!-- Chips List of Added Organizers -->
+              <div v-if="organizerList.length > 0" class="flex flex-wrap gap-2 mb-3">
+                <span
+                  v-for="(org, idx) in organizerList"
+                  :key="idx"
+                  class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold shadow-xs border bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200"
+                >
+                  <span>{{ org.type === 'user' ? '👤' : (org.type === 'affiliate' ? '🏛️' : '🌐') }}</span>
+                  <span>{{ org.name }}</span>
+                  <button
+                    type="button"
+                    @click="removeOrganizer(idx)"
+                    class="ml-1 text-gray-400 hover:text-red-500 rounded-full focus:outline-none"
+                  >
+                    ✕
+                  </button>
+                </span>
+              </div>
+
+              <!-- Input field with Add button and dropdown suggestions -->
+              <div class="relative flex gap-2">
+                <div class="relative flex-1">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                    <span class="text-sm">{{ activeOrganizerType === 'user' ? '👤' : (activeOrganizerType === 'affiliate' ? '🏛️' : '🌐') }}</span>
+                  </div>
+                  <input
+                    id="organizer-input"
+                    v-model="organizerInput"
+                    @input="handleOrganizersInput"
+                    @keydown.enter.prevent="addOrganizerFromInput"
+                    type="text"
+                    :disabled="!isAuthenticated"
+                    :placeholder="activeOrganizerType === 'user' ? $t('form.organizerPlaceholderUser') : (activeOrganizerType === 'affiliate' ? $t('form.organizerPlaceholderAffiliate') : $t('form.organizerPlaceholderCustom'))"
+                    class="w-full py-3 pl-11 pr-4 bg-white/70 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all text-sm"
+                  >
+                  <transition
+                    enter-active-class="transition duration-200 ease-out"
+                    enter-from-class="opacity-0 translate-y-2"
+                    enter-to-class="opacity-100 translate-y-0"
+                    leave-active-class="transition duration-150 ease-in"
+                    leave-from-class="opacity-100 translate-y-0"
+                    leave-to-class="opacity-0 translate-y-2"
+                  >
+                    <ul v-if="organizerSuggestions.length" class="absolute bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl mt-2 max-h-56 overflow-y-auto w-full z-50 py-1 divide-y divide-gray-100 dark:divide-gray-700">
+                      <li
+                        v-for="(item, idx) in organizerSuggestions"
+                        :key="idx"
+                        @click="selectOrganizer(item)"
+                        class="py-2.5 px-4 hover:bg-primary-50 dark:hover:bg-gray-700/70 cursor-pointer transition-colors text-sm flex items-center justify-between gap-2"
+                      >
+                        <div class="flex items-center gap-2 truncate">
+                          <span>{{ item.startsWith('User:') ? '👤' : '🏛️' }}</span>
+                          <span class="font-medium text-gray-900 dark:text-gray-100 truncate">{{ item }}</span>
+                        </div>
+                        <span class="text-xs text-primary-500 font-semibold shrink-0">Meta-Wiki</span>
+                      </li>
+                    </ul>
+                  </transition>
                 </div>
-                <input
-                  id="organizers"
-                  v-model="newTimer.organizers"
-                  @input="handleOrganizersInput"
-                  type="text"
-                  :disabled="!isAuthenticated"
-                  :placeholder="$t('form.organizersPlaceholder')"
-                  class="w-full py-3.5 pl-11 pr-4 bg-white/70 dark:bg-gray-900/70 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                <button
+                  type="button"
+                  @click="addOrganizerFromInput"
+                  class="px-4 py-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl text-sm transition-all shrink-0 shadow-xs flex items-center gap-1.5"
                 >
-                <transition
-                  enter-active-class="transition duration-200 ease-out"
-                  enter-from-class="opacity-0 translate-y-2"
-                  enter-to-class="opacity-100 translate-y-0"
-                  leave-active-class="transition duration-150 ease-in"
-                  leave-from-class="opacity-100 translate-y-0"
-                  leave-to-class="opacity-0 translate-y-2"
-                >
-                  <ul v-if="organizerSuggestions.length" class="absolute bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl mt-2 max-h-56 overflow-y-auto w-full z-50 py-1 divide-y divide-gray-100 dark:divide-gray-700">
-                    <li
-                      v-for="(item, idx) in organizerSuggestions"
-                      :key="idx"
-                      @click="selectOrganizer(item)"
-                      class="py-2.5 px-4 hover:bg-primary-50 dark:hover:bg-gray-700/70 cursor-pointer transition-colors text-sm flex items-center justify-between gap-2"
-                    >
-                      <div class="flex items-center gap-2 truncate">
-                        <span>{{ item.startsWith('User:') ? '👤' : '🏛️' }}</span>
-                        <span class="font-medium text-gray-900 dark:text-gray-100 truncate">{{ item }}</span>
-                      </div>
-                      <span class="text-xs text-primary-500 font-semibold shrink-0">Meta-Wiki</span>
-                    </li>
-                  </ul>
-                </transition>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                  <span>{{ $t('form.addOrganizer') }}</span>
+                </button>
               </div>
             </div>
           </div>
@@ -534,6 +597,60 @@
         </form>
       </div>
     </div>
+
+    <!-- Celebratory Success Modal -->
+    <transition
+      enter-active-class="transition duration-300 ease-out"
+      enter-from-class="opacity-0 scale-95"
+      enter-to-class="opacity-100 scale-100"
+      leave-active-class="transition duration-200 ease-in"
+      leave-from-class="opacity-100 scale-100"
+      leave-to-class="opacity-0 scale-95"
+    >
+      <div v-if="showSuccessModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
+        <div class="relative w-full max-w-lg bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-2xl border border-gray-100 dark:border-gray-800 text-center flex flex-col items-center">
+          <div class="w-20 h-20 rounded-3xl bg-gradient-to-tr from-emerald-400 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/30 mb-5 animate-bounce">
+            <span class="text-3xl">🎉</span>
+          </div>
+
+          <h2 class="text-2xl font-black text-gray-900 dark:text-white mb-2">
+            {{ $t('form.successTitle') }}
+          </h2>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-6 max-w-sm">
+            {{ $t('form.successSubtitle') }}
+          </p>
+
+          <div v-if="createdEventData" class="w-full p-4 rounded-2xl bg-gray-50 dark:bg-gray-800/60 border border-gray-200/80 dark:border-gray-700/60 mb-6 text-left flex items-center gap-3">
+            <div class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-primary-950/50 flex items-center justify-center text-xl shrink-0">
+              📅
+            </div>
+            <div class="min-w-0 flex-1">
+              <h4 class="font-bold text-sm text-gray-900 dark:text-white truncate">{{ createdEventData.name }}</h4>
+              <p class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ createdEventData.country || createdEventData.region }} • {{ createdEventData.time ? new Date(createdEventData.time).toLocaleDateString() : '' }}</p>
+            </div>
+          </div>
+
+          <div class="w-full flex flex-col sm:flex-row gap-3">
+            <button
+              type="button"
+              @click="goToDashboard"
+              class="flex-1 py-3.5 px-6 rounded-xl font-bold text-white bg-primary-600 hover:bg-primary-700 shadow-md hover:shadow-lg transition-all text-sm flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <span>🚀</span>
+              <span>{{ $t('form.viewYourTimer') }}</span>
+            </button>
+            <button
+              type="button"
+              @click="addAnotherEvent"
+              class="flex-1 py-3.5 px-6 rounded-xl font-bold text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all text-sm border border-gray-200 dark:border-gray-700 cursor-pointer flex items-center justify-center gap-2"
+            >
+              <span>➕</span>
+              <span>{{ $t('form.addAnother') }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -541,6 +658,7 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuth } from '../store/auth';
+import { resolveCommonsImageUrl } from '../utils/wiki';
 
 const router = useRouter();
 const { user, isAuthenticated, login, checkAuth } = useAuth();
@@ -596,6 +714,86 @@ const submitError = ref('');
 const isSubmitting = ref(false);
 const logoError = ref(false);
 
+// Celebratory Success Modal State
+const showSuccessModal = ref(false);
+const createdEventData = ref(null);
+
+function goToDashboard() {
+  showSuccessModal.value = false;
+  router.push('/');
+}
+
+function addAnotherEvent() {
+  showSuccessModal.value = false;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Structured Organizers State
+const organizerList = ref([]);
+const activeOrganizerType = ref('user');
+const organizerInput = ref('');
+const organizerSuggestions = ref([]);
+const isSearchingOrganizers = ref(false);
+let organizersTimeout = null;
+
+function handleOrganizersInput() {
+  clearTimeout(organizersTimeout);
+  const query = organizerInput.value.trim();
+
+  if (query.length < 2) {
+    organizerSuggestions.value = [];
+    return;
+  }
+
+  isSearchingOrganizers.value = true;
+  organizersTimeout = setTimeout(async () => {
+    try {
+      let searchQuery = query;
+      if (activeOrganizerType.value === 'user' && !query.startsWith('User:')) {
+        searchQuery = `User:${query}`;
+      }
+      const url = `https://meta.wikimedia.org/w/api.php?action=opensearch&search=${encodeURIComponent(searchQuery)}&limit=6&format=json&origin=*`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Search failed');
+      const data = await res.json();
+      const list = data[1] || [];
+      organizerSuggestions.value = list.filter(item => !/\/[a-z]{2,3}$/i.test(item) && !item.includes('/draft'));
+    } catch (err) {
+      console.warn('Error searching organizers on Meta-Wiki:', err);
+      organizerSuggestions.value = [];
+    } finally {
+      isSearchingOrganizers.value = false;
+    }
+  }, 250);
+}
+
+function selectOrganizer(item) {
+  const type = item.startsWith('User:') ? 'user' : 'affiliate';
+  if (!organizerList.value.some(o => o.name === item)) {
+    organizerList.value.push({ type, name: item });
+  }
+  organizerInput.value = '';
+  organizerSuggestions.value = [];
+}
+
+function addOrganizerFromInput() {
+  const val = organizerInput.value.trim();
+  if (!val) return;
+  let formattedName = val;
+  if (activeOrganizerType.value === 'user' && !val.startsWith('User:')) {
+    formattedName = `User:${val}`;
+  }
+  if (!organizerList.value.some(o => o.name.toLowerCase() === formattedName.toLowerCase())) {
+    organizerList.value.push({ type: activeOrganizerType.value, name: formattedName });
+  }
+  organizerInput.value = '';
+  organizerSuggestions.value = [];
+}
+
+function removeOrganizer(idx) {
+  organizerList.value.splice(idx, 1);
+}
+
 // Dynamic Global Location Autocomplete State
 const locationSuggestions = ref([]);
 const isSearchingLocations = ref(false);
@@ -613,7 +811,6 @@ function handleLocationInput() {
   isSearchingLocations.value = true;
   locationSearchTimeout = setTimeout(async () => {
     try {
-      // Privacy-compliant dynamic location search using official Wikimedia/Wikidata API
       const endpoint = `https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${encodeURIComponent(query)}&language=en&format=json&origin=*&limit=7&type=item`;
       const res = await fetch(endpoint);
       if (!res.ok) throw new Error('Wikidata search failed');
@@ -669,6 +866,19 @@ async function addTimer() {
   try {
     newTimer.value.topics = selectedTags.value.join(', ');
 
+    // Combine organizer chips + raw input if any
+    const orgNames = organizerList.value.map(o => o.name);
+    if (organizerInput.value.trim()) {
+      orgNames.push(organizerInput.value.trim());
+    }
+    newTimer.value.organizers = orgNames.join(', ');
+
+    // Pre-resolve logo if needed
+    if (newTimer.value.logo) {
+      const resolvedLogo = await resolveCommonsImageUrl(newTimer.value.logo);
+      if (resolvedLogo) newTimer.value.logo = resolvedLogo;
+    }
+
     const response = await fetch('/add-timer', {
       method: 'POST',
       headers: {
@@ -683,9 +893,20 @@ async function addTimer() {
     }
 
     const data = await response.json();
-    successMessage.value = data.message || 'Timer created successfully!';
+    createdEventData.value = {
+      name: newTimer.value.name,
+      country: newTimer.value.country,
+      region: newTimer.value.region,
+      time: newTimer.value.time,
+      id: data.timer?.id
+    };
+    showSuccessModal.value = true;
+
+    // Reset form fields
     selectedTags.value = [];
     customTagInput.value = '';
+    organizerList.value = [];
+    organizerInput.value = '';
     newTimer.value = {
       type: 'event',
       name: '',
@@ -709,10 +930,14 @@ async function addTimer() {
   }
 }
 
-function validateLogo() {
+async function validateLogo() {
   if (!newTimer.value.logo) {
     logoError.value = false;
     return;
+  }
+  const resolved = await resolveCommonsImageUrl(newTimer.value.logo);
+  if (resolved && resolved !== newTimer.value.logo) {
+    newTimer.value.logo = resolved;
   }
   const img = new Image();
   img.onload = () => {
@@ -722,58 +947,6 @@ function validateLogo() {
     logoError.value = true;
   };
   img.src = newTimer.value.logo;
-}
-
-function selectCountry(country) {
-  newTimer.value.country = country;
-  filteredCountries.value = [];
-}
-
-const organizerSuggestions = ref([]);
-const isSearchingOrganizers = ref(false);
-let organizersTimeout = null;
-
-function handleOrganizersInput() {
-  clearTimeout(organizersTimeout);
-  
-  if (!newTimer.value.organizers) {
-    organizerSuggestions.value = [];
-    return;
-  }
-
-  // Get current active segment if multiple separated by commas
-  const parts = newTimer.value.organizers.split(',');
-  const currentFragment = parts[parts.length - 1].trim();
-
-  if (currentFragment.length < 2) {
-    organizerSuggestions.value = [];
-    return;
-  }
-
-  isSearchingOrganizers.value = true;
-  organizersTimeout = setTimeout(async () => {
-    try {
-      const url = `https://meta.wikimedia.org/w/api.php?action=opensearch&search=${encodeURIComponent(currentFragment)}&limit=6&format=json&origin=*`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('Search failed');
-      const data = await res.json();
-      const list = data[1] || [];
-      // Clean and filter out subpages like /ko, /ar
-      organizerSuggestions.value = list.filter(item => !/\/[a-z]{2,3}$/i.test(item) && !item.includes('/draft'));
-    } catch (err) {
-      console.warn('Error searching organizers on Meta-Wiki:', err);
-      organizerSuggestions.value = [];
-    } finally {
-      isSearchingOrganizers.value = false;
-    }
-  }, 250);
-}
-
-function selectOrganizer(item) {
-  const parts = newTimer.value.organizers.split(',');
-  parts[parts.length - 1] = ' ' + item;
-  newTimer.value.organizers = parts.join(',').replace(/^[\s,]+/, '');
-  organizerSuggestions.value = [];
 }
 
 function goToTimers() {
