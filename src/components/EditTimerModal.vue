@@ -365,34 +365,18 @@ function handleLocationInput() {
   isSearchingLocations.value = true;
   locationSearchTimeout = setTimeout(async () => {
     try {
-      const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=6&lang=en`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('Geocoding search failed');
+      // Privacy-compliant dynamic location search using official Wikimedia/Wikidata API
+      const endpoint = `https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${encodeURIComponent(query)}&language=en&format=json&origin=*&limit=7&type=item`;
+      const res = await fetch(endpoint);
+      if (!res.ok) throw new Error('Wikidata search failed');
       const data = await res.json();
 
       const results = [];
-      const seen = new Set();
-
-      for (const feature of (data.features || [])) {
-        const p = feature.properties || {};
-        const namePart = p.name || p.city || '';
-        const countryPart = p.country || '';
-        const statePart = (p.state && p.state !== namePart) ? p.state : '';
-
-        let label = '';
-        if (namePart && countryPart && namePart.toLowerCase() !== countryPart.toLowerCase()) {
-          label = statePart ? `${namePart}, ${statePart}, ${countryPart}` : `${namePart}, ${countryPart}`;
-        } else {
-          label = namePart || countryPart;
-        }
-
-        if (label && !seen.has(label)) {
-          seen.add(label);
-          results.push({
-            label,
-            subtitle: countryPart && label !== countryPart ? countryPart : (p.type || '')
-          });
-        }
+      for (const item of (data.search || [])) {
+        results.push({
+          label: item.label,
+          subtitle: item.description || ''
+        });
       }
 
       if ('online / virtual'.includes(query.toLowerCase())) {
@@ -401,7 +385,7 @@ function handleLocationInput() {
 
       locationSuggestions.value = results;
     } catch (err) {
-      console.warn('Error fetching dynamic locations:', err);
+      console.warn('Error searching locations on Wikidata:', err);
       locationSuggestions.value = [];
     } finally {
       isSearchingLocations.value = false;

@@ -125,9 +125,10 @@ function initMap() {
     worldCopyJump: true
   });
 
-  // OpenStreetMap standard tile layer with clean styling
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  // Wikimedia Maps tile layer (official privacy-preserving WMF tile service)
+  L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://foundation.wikimedia.org/wiki/Maps_Terms_of_Use">Wikimedia Maps</a>',
+    maxZoom: 18
   }).addTo(map);
 
   markersLayer = L.layerGroup().addTo(map);
