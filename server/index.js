@@ -149,10 +149,11 @@ let devTimerCounter = devTimers.length + 1;
 // Timers created by users and seeded archive.
 app.get('/timers', async (req, res) => {
   if (!process.env.DATABASE_URL) {
-    return res.json(devTimers);
+    return res.json(devTimers.filter(t => !t.deletedAt));
   }
   try {
     const timers = await prisma.timer.findMany({
+      where: { deletedAt: null },
       include: { creator: { select: { id: true, username: true } } },
       orderBy: { time: 'asc' }
     });
@@ -174,19 +175,63 @@ app.get('/meta-events', async (req, res) => {
   }
 });
 
-// Validates and normalizes the body of an add-timer request.
+/**
+ * Combines a datetime string (e.g. YYYY-MM-DDTHH:mm) with a timezone offset string
+ * (e.g. "UTC+02:00", "+02:00", "UTC", etc.) to produce a correct UTC Date object.
+ */
+function parseDateTimeWithTz(dateTimeVal, timeZoneStr) {
+  if (!dateTimeVal) return null;
+  if (dateTimeVal instanceof Date) {
+    return isNaN(dateTimeVal.getTime()) ? null : dateTimeVal;
+  }
+  if (typeof dateTimeVal !== 'string') return null;
+
+  const trimmed = dateTimeVal.trim();
+  if (!trimmed) return null;
+
+  // If already full ISO with Z or offset (e.g. 2026-10-24T10:00:00.000Z or +02:00)
+  if (/Z$|[+-]\d{2}:?\d{2}$/i.test(trimmed)) {
+    const d = new Date(trimmed);
+    return isNaN(d.getTime()) ? null : d;
+  }
+
+  // Extract offset from timeZoneStr (e.g. "UTC+02:00" -> "+02:00", "UTC-05:00" -> "-05:00")
+  let offset = '+00:00';
+  if (timeZoneStr && typeof timeZoneStr === 'string') {
+    const match = timeZoneStr.match(/([+-]\d{2}):?(\d{2})?/);
+    if (match) {
+      const signAndHours = match[1];
+      const minutes = match[2] || '00';
+      offset = `${signAndHours}:${minutes}`;
+    }
+  }
+
+  // Format base datetime with seconds if not present: YYYY-MM-DDTHH:mm:00
+  const normalized = trimmed.replace(' ', 'T');
+  const dateWithSeconds = normalized.length === 16 ? `${normalized}:00` : normalized;
+  const isoWithOffset = `${dateWithSeconds}${offset}`;
+  const d = new Date(isoWithOffset);
+  return isNaN(d.getTime()) ? null : d;
+}
+
+// Validates and normalizes the body of an add/edit-timer request.
 function validateTimerInput(body) {
   const errors = [];
   const str = (v) => (typeof v === 'string' ? v.trim() : '');
+  const tz = str(body.timeZone) || 'UTC';
+  
+  const parsedTime = parseDateTimeWithTz(body.time, tz);
+  const parsedEndTime = body.endTime ? parseDateTimeWithTz(body.endTime, tz) : null;
+
   const data = {
     type: str(body.type),
     name: str(body.name),
     link: str(body.link),
-    time: body.time,
-    endTime: body.endTime ? new Date(body.endTime) : null,
+    time: parsedTime,
+    endTime: parsedEndTime,
     region: str(body.region),
     country: str(body.country),
-    timeZone: str(body.timeZone),
+    timeZone: tz,
     organizers: body.organizers != null ? str(body.organizers) : null,
     logo: body.logo != null ? str(body.logo) : null,
     topics: body.topics != null ? str(body.topics) : null,
@@ -205,12 +250,8 @@ function validateTimerInput(body) {
   if (data.participation && data.participation.length > 100) errors.push('participation too long (max 100 chars)');
   if (data.participants !== null && (isNaN(data.participants) || data.participants < 0)) errors.push('participants must be a positive number');
 
-  const parsedTime = new Date(data.time);
-  if (isNaN(parsedTime.getTime())) errors.push('time is not a valid date');
-  else data.time = parsedTime;
-
-  if (data.endTime && isNaN(data.endTime.getTime())) {
-    data.endTime = null;
+  if (!data.time) {
+    errors.push('time is not a valid date');
   }
 
   return { data, errors };
@@ -232,24 +273,75 @@ app.post('/add-timer', async (req, res) => {
       id: devTimerCounter++,
       ...data,
       creatorId: req.user.id,
-      creator: { id: req.user.id, username: req.user.username }
+      creator: { id: req.user.id, username: req.user.username },
+      deletedAt: null
     };
     devTimers.push(newTimer);
-    return res.status(201).json({ message: 'Timer added successfully', timerId: newTimer.id.toString() });
+    return res.status(201).json({ message: 'Timer added successfully', timerId: newTimer.id.toString(), timer: newTimer });
   }
 
   try {
     const timer = await prisma.timer.create({
       data: { ...data, creatorId: req.user.id }
     });
-    res.status(201).json({ message: 'Timer added successfully', timerId: timer.id.toString() });
+    res.status(201).json({ message: 'Timer added successfully', timerId: timer.id.toString(), timer });
   } catch (err) {
     console.error('Error adding timer:', err);
     res.status(500).json({ message: 'Error adding timer' });
   }
 });
 
-// Delete timer endpoint (protected).
+// Edit/update timer endpoint (protected).
+app.put('/timers/:id', async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  const timerId = parseInt(req.params.id, 10);
+  if (isNaN(timerId)) {
+    return res.status(400).json({ message: 'Invalid timer id' });
+  }
+
+  const { data, errors } = validateTimerInput(req.body);
+  if (errors.length) {
+    return res.status(400).json({ message: 'Invalid timer data', errors });
+  }
+
+  if (!process.env.DATABASE_URL) {
+    const index = devTimers.findIndex(t => t.id === timerId && !t.deletedAt);
+    if (index === -1) return res.status(404).json({ message: 'Timer not found' });
+    if (devTimers[index].creatorId !== req.user.id && !req.user.isAdmin) {
+      return res.status(403).json({ message: 'Forbidden: You do not have permission to edit this timer' });
+    }
+    devTimers[index] = {
+      ...devTimers[index],
+      ...data,
+      updatedAt: new Date()
+    };
+    return res.json({ message: 'Timer updated successfully', timer: devTimers[index] });
+  }
+
+  try {
+    const existing = await prisma.timer.findUnique({ where: { id: timerId } });
+    if (!existing || existing.deletedAt) {
+      return res.status(404).json({ message: 'Timer not found' });
+    }
+    if (existing.creatorId !== req.user.id && !req.user.isAdmin) {
+      return res.status(403).json({ message: 'Forbidden: You do not have permission to edit this timer' });
+    }
+    const updatedTimer = await prisma.timer.update({
+      where: { id: timerId },
+      data,
+      include: { creator: { select: { id: true, username: true } } }
+    });
+    res.json({ message: 'Timer updated successfully', timer: updatedTimer });
+  } catch (err) {
+    console.error('Error updating timer:', err);
+    res.status(500).json({ message: 'Error updating timer' });
+  }
+});
+
+// Delete timer endpoint (protected, soft delete).
 app.delete('/timers/:id', async (req, res) => {
   if (!req.isAuthenticated()) {
     return res.status(401).json({ message: 'Unauthorized' });
@@ -261,24 +353,27 @@ app.delete('/timers/:id', async (req, res) => {
   }
 
   if (!process.env.DATABASE_URL) {
-    const index = devTimers.findIndex(t => t.id === timerId);
+    const index = devTimers.findIndex(t => t.id === timerId && !t.deletedAt);
     if (index === -1) return res.status(404).json({ message: 'Timer not found' });
     if (devTimers[index].creatorId !== req.user.id && !req.user.isAdmin) {
       return res.status(403).json({ message: 'Forbidden: You do not have permission to delete this timer' });
     }
-    devTimers.splice(index, 1);
+    devTimers[index].deletedAt = new Date();
     return res.json({ message: 'Timer deleted successfully' });
   }
 
   try {
     const timer = await prisma.timer.findUnique({ where: { id: timerId } });
-    if (!timer) {
+    if (!timer || timer.deletedAt) {
       return res.status(404).json({ message: 'Timer not found' });
     }
     if (timer.creatorId !== req.user.id && !req.user.isAdmin) {
       return res.status(403).json({ message: 'Forbidden: You do not have permission to delete this timer' });
     }
-    await prisma.timer.delete({ where: { id: timerId } });
+    await prisma.timer.update({
+      where: { id: timerId },
+      data: { deletedAt: new Date() }
+    });
     res.json({ message: 'Timer deleted successfully' });
   } catch (err) {
     console.error('Error deleting timer:', err);

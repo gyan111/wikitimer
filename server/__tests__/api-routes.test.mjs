@@ -102,6 +102,13 @@ beforeAll(async () => {
     res.status(201).json({ message: 'Timer added' });
   });
 
+  app.put('/timers/:id', (req, res) => {
+    if (!req.isAuthenticated || !req.isAuthenticated()) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    res.status(200).json({ message: 'Timer updated' });
+  });
+
   app.delete('/timers/:id', (req, res) => {
     if (!req.isAuthenticated || !req.isAuthenticated()) {
       return res.status(401).json({ message: 'Unauthorized' });
@@ -235,6 +242,19 @@ describe('Auth-protected routes (unauthenticated)', () => {
     const res = await request('POST', '/add-timer', {
       type: 'event',
       name: 'Test',
+      link: 'https://example.com',
+      time: '2026-12-01T00:00:00Z',
+      region: 'Global',
+      country: 'Online',
+      timeZone: 'UTC',
+    });
+    expect(res.status).toBe(401);
+  });
+
+  it('PUT /timers/1 returns 401', async () => {
+    const res = await request('PUT', '/timers/1', {
+      type: 'event',
+      name: 'Updated Test',
       link: 'https://example.com',
       time: '2026-12-01T00:00:00Z',
       region: 'Global',
