@@ -391,7 +391,11 @@
               <label for="country" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
                 {{ $t('form.hostLocation') }} <span class="text-red-500">*</span>
               </label>
-              <span class="text-xs text-primary-600 dark:text-primary-400 font-medium">{{ $t('form.autoMapped') }}</span>
+              <span v-if="isSearchingLocations" class="text-xs text-primary-500 animate-pulse flex items-center gap-1 font-medium">
+                <svg class="w-3.5 h-3.5 animate-spin" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                Searching location...
+              </span>
+              <span v-else class="text-xs text-primary-600 dark:text-primary-400 font-medium">{{ $t('form.autoMapped') }}</span>
             </div>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
@@ -400,7 +404,7 @@
               <input
                 id="country"
                 v-model="newTimer.country"
-                @input="filterCountries"
+                @input="handleLocationInput"
                 type="text"
                 required
                 :disabled="!isAuthenticated"
@@ -415,14 +419,18 @@
                 leave-from-class="opacity-100 translate-y-0"
                 leave-to-class="opacity-0 translate-y-2"
               >
-                <ul v-if="filteredCountries.length" class="absolute bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl mt-2 max-h-60 overflow-y-auto w-full z-50 py-1 divide-y divide-gray-100 dark:divide-gray-700">
+                <ul v-if="locationSuggestions.length" class="absolute bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl mt-2 max-h-60 overflow-y-auto w-full z-50 py-1 divide-y divide-gray-100 dark:divide-gray-700">
                   <li
-                    v-for="c in filteredCountries"
-                    :key="c"
-                    @click="selectCountry(c)"
-                    class="py-3 px-4 hover:bg-primary-50 dark:hover:bg-gray-700 cursor-pointer transition-colors text-sm"
+                    v-for="(loc, idx) in locationSuggestions"
+                    :key="idx"
+                    @click="selectLocation(loc)"
+                    class="py-3 px-4 hover:bg-primary-50 dark:hover:bg-gray-700 cursor-pointer transition-colors text-sm flex items-center justify-between gap-2"
                   >
-                    {{ c }}
+                    <div class="flex items-center gap-2 truncate">
+                      <span>📍</span>
+                      <span class="font-medium text-gray-900 dark:text-gray-100 truncate">{{ loc.label }}</span>
+                    </div>
+                    <span v-if="loc.subtitle" class="text-xs text-gray-400 shrink-0">{{ loc.subtitle }}</span>
                   </li>
                 </ul>
               </transition>
@@ -588,27 +596,72 @@ const submitError = ref('');
 const isSubmitting = ref(false);
 const logoError = ref(false);
 
-const countries = [
-  "Online", "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", 
-  "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", 
-  "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia", 
-  "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", 
-  "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominican Republic", 
-  "Ecuador", "Egypt", "El Salvador", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", 
-  "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Guatemala", "Guinea", "Guyana", "Haiti", 
-  "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", 
-  "Jordan", "Kazakhstan", "Kenya", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", 
-  "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Mauritania", "Mauritius", "Mexico", 
-  "Moldova", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nepal", "Netherlands", "New Zealand", 
-  "Nicaragua", "Niger", "Nigeria", "North Macedonia", "Norway", "Oman", "Pakistan", "Panama", "Papua New Guinea", 
-  "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", 
-  "Saudi Arabia", "Senegal", "Serbia", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Somalia", "South Africa", 
-  "South Sudan", "Spain", "Sri Lanka", "Sudan", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", 
-  "Tanzania", "Thailand", "Timor-Leste", "Togo", "Trinidad and Tobago", "Tunisia", "Turkey", "Uganda", "Ukraine", 
-  "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
-];
+// Dynamic Global Location Autocomplete State
+const locationSuggestions = ref([]);
+const isSearchingLocations = ref(false);
+let locationSearchTimeout = null;
 
-const filteredCountries = ref([]);
+function handleLocationInput() {
+  clearTimeout(locationSearchTimeout);
+  const query = (newTimer.value.country || '').trim();
+
+  if (query.length < 2) {
+    locationSuggestions.value = [];
+    return;
+  }
+
+  isSearchingLocations.value = true;
+  locationSearchTimeout = setTimeout(async () => {
+    try {
+      // Dynamic location search via Photon (OpenStreetMap global geocoder)
+      const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=6&lang=en`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Geocoding search failed');
+      const data = await res.json();
+
+      const results = [];
+      const seen = new Set();
+
+      for (const feature of (data.features || [])) {
+        const p = feature.properties || {};
+        const namePart = p.name || p.city || '';
+        const countryPart = p.country || '';
+        const statePart = (p.state && p.state !== namePart) ? p.state : '';
+
+        let label = '';
+        if (namePart && countryPart && namePart.toLowerCase() !== countryPart.toLowerCase()) {
+          label = statePart ? `${namePart}, ${statePart}, ${countryPart}` : `${namePart}, ${countryPart}`;
+        } else {
+          label = namePart || countryPart;
+        }
+
+        if (label && !seen.has(label)) {
+          seen.add(label);
+          results.push({
+            label,
+            subtitle: countryPart && label !== countryPart ? countryPart : (p.type || '')
+          });
+        }
+      }
+
+      if ('online / virtual'.includes(query.toLowerCase())) {
+        results.unshift({ label: 'Online / Virtual', subtitle: 'Global' });
+      }
+
+      locationSuggestions.value = results;
+    } catch (err) {
+      console.warn('Error fetching dynamic locations:', err);
+      locationSuggestions.value = [];
+    } finally {
+      isSearchingLocations.value = false;
+    }
+  }, 250);
+}
+
+function selectLocation(loc) {
+  newTimer.value.country = typeof loc === 'string' ? loc : loc.label;
+  locationSuggestions.value = [];
+}
 
 // Wikidata Search State
 const wikidataSearchQuery = ref('');
@@ -686,15 +739,6 @@ function validateLogo() {
     logoError.value = true;
   };
   img.src = newTimer.value.logo;
-}
-
-function filterCountries() {
-  const searchTerm = newTimer.value.country.toLowerCase();
-  if (searchTerm) {
-    filteredCountries.value = countries.filter(c => c.toLowerCase().includes(searchTerm));
-  } else {
-    filteredCountries.value = [];
-  }
 }
 
 function selectCountry(country) {

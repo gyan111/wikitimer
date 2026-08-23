@@ -220,18 +220,38 @@
             </div>
 
             <!-- Location -->
-            <div>
+            <div class="relative z-20">
               <label for="edit-country" class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5 ml-1">
                 {{ $t('form.hostLocation') }} <span class="text-red-500">*</span>
               </label>
               <input
                 id="edit-country"
                 v-model="form.country"
+                @input="filterLocations"
                 type="text"
                 required
                 :placeholder="$t('form.locationPlaceholder')"
                 class="w-full py-2.5 px-3.5 bg-gray-50 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
               >
+              <transition
+                enter-active-class="transition duration-200 ease-out"
+                enter-from-class="opacity-0 translate-y-2"
+                enter-to-class="opacity-100 translate-y-0"
+                leave-active-class="transition duration-150 ease-in"
+                leave-from-class="opacity-100 translate-y-0"
+                leave-to-class="opacity-0 translate-y-2"
+              >
+                <ul v-if="filteredLocations.length" class="absolute bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl mt-1.5 max-h-48 overflow-y-auto w-full z-50 py-1 divide-y divide-gray-100 dark:divide-gray-700">
+                  <li
+                    v-for="c in filteredLocations"
+                    :key="c"
+                    @click="selectLocation(c)"
+                    class="py-2.5 px-3.5 hover:bg-primary-50 dark:hover:bg-gray-700 cursor-pointer transition-colors text-xs font-medium text-gray-900 dark:text-gray-100"
+                  >
+                    {{ c }}
+                  </li>
+                </ul>
+              </transition>
             </div>
 
             <!-- Category Tags -->
@@ -327,6 +347,72 @@ const selectedTags = ref([]);
 const isSubmitting = ref(false);
 const errorMessage = ref('');
 const successMessage = ref('');
+
+// Dynamic Global Location Autocomplete State
+const locationSuggestions = ref([]);
+const isSearchingLocations = ref(false);
+let locationSearchTimeout = null;
+
+function handleLocationInput() {
+  clearTimeout(locationSearchTimeout);
+  const query = (form.value.country || '').trim();
+
+  if (query.length < 2) {
+    locationSuggestions.value = [];
+    return;
+  }
+
+  isSearchingLocations.value = true;
+  locationSearchTimeout = setTimeout(async () => {
+    try {
+      const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=6&lang=en`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Geocoding search failed');
+      const data = await res.json();
+
+      const results = [];
+      const seen = new Set();
+
+      for (const feature of (data.features || [])) {
+        const p = feature.properties || {};
+        const namePart = p.name || p.city || '';
+        const countryPart = p.country || '';
+        const statePart = (p.state && p.state !== namePart) ? p.state : '';
+
+        let label = '';
+        if (namePart && countryPart && namePart.toLowerCase() !== countryPart.toLowerCase()) {
+          label = statePart ? `${namePart}, ${statePart}, ${countryPart}` : `${namePart}, ${countryPart}`;
+        } else {
+          label = namePart || countryPart;
+        }
+
+        if (label && !seen.has(label)) {
+          seen.add(label);
+          results.push({
+            label,
+            subtitle: countryPart && label !== countryPart ? countryPart : (p.type || '')
+          });
+        }
+      }
+
+      if ('online / virtual'.includes(query.toLowerCase())) {
+        results.unshift({ label: 'Online / Virtual', subtitle: 'Global' });
+      }
+
+      locationSuggestions.value = results;
+    } catch (err) {
+      console.warn('Error fetching dynamic locations:', err);
+      locationSuggestions.value = [];
+    } finally {
+      isSearchingLocations.value = false;
+    }
+  }, 250);
+}
+
+function selectLocation(loc) {
+  form.value.country = typeof loc === 'string' ? loc : loc.label;
+  locationSuggestions.value = [];
+}
 
 const form = ref({
   type: 'event',
