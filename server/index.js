@@ -3,6 +3,7 @@ import express from 'express';
 import session from 'express-session';
 import MySQLStoreFactory from 'express-mysql-session';
 import passport from 'passport';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import auth from './auth.js';
@@ -534,6 +535,122 @@ app.use(express.static(distPath, {
     }
   }
 }));
+
+// --- Open Graph & Social Preview Injection for Event Links (/timer/:idOrSlug) ---
+const DEFAULT_OG_IMAGE = 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Wikimedia-logo_community.svg/1200px-Wikimedia-logo_community.svg.png';
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function getEventOgImage(event) {
+  if (event.logo && event.logo.startsWith('http')) {
+    return event.logo;
+  }
+  const text = `${event.name || ''} ${event.wikiProject || ''} ${event.topics || ''}`.toLowerCase();
+  if (text.includes('wikimania')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Wikimania_logo_with_text.svg/1200px-Wikimania_logo_with_text.svg.png';
+  if (text.includes('hackathon')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Wikimedia_Hackathon_Logo.svg/1200px-Wikimedia_Hackathon_Logo.svg.png';
+  if (text.includes('wiki loves monuments') || text.includes('wlm')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Wiki_Loves_Monuments_logo.svg/1200px-Wiki_Loves_Monuments_logo.svg.png';
+  if (text.includes('wiki loves earth') || text.includes('wle')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/WLE_Austria_Logo.svg/1200px-WLE_Austria_Logo.svg.png';
+  if (text.includes('glam')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/GLAM_logo.svg/1200px-GLAM_logo.svg.png';
+  if (text.includes('wikidata')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Wikidata-logo.svg/1200px-Wikidata-logo.svg.png';
+  if (text.includes('wikipedia')) return 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Wikipedia-logo-v2.svg/1200px-Wikipedia-logo-v2.svg.png';
+  return DEFAULT_OG_IMAGE;
+}
+
+function injectEventMetaTags(html, event, req) {
+  const title = `${escapeHtml(event.name)} – WikiTimer`;
+  const dateStr = event.time ? new Date(event.time).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }) : '';
+  const locStr = event.country || event.region || 'Online / Virtual';
+  const participation = event.participation ? ` (${event.participation})` : '';
+  const desc = `⏱️ Live countdown and schedule for ${escapeHtml(event.name)} on ${dateStr} in ${escapeHtml(locStr)}${participation}. Track Wikimedia community events on WikiTimer.`;
+  const image = getEventOgImage(event);
+  const host = req.get('host') || 'wikitimer.toolforge.org';
+  const protocol = req.protocol || 'https';
+  const canonicalUrl = `${protocol}://${host}/timer/${encodeURIComponent(event.slug || event.id)}`;
+
+  return html
+    .replace(/<title>.*?<\/title>/i, `<title>${title}</title>`)
+    .replace(/<meta name="title" content=".*?" \/>/i, `<meta name="title" content="${title}" />`)
+    .replace(/<meta name="description" content=".*?" \/>/i, `<meta name="description" content="${desc}" />`)
+    .replace(/<meta property="og:title" content=".*?" \/>/i, `<meta property="og:title" content="${title}" />`)
+    .replace(/<meta property="og:description" content=".*?" \/>/i, `<meta property="og:description" content="${desc}" />`)
+    .replace(/<meta property="og:image" content=".*?" \/>/i, `<meta property="og:image" content="${image}" />\n    <meta property="og:url" content="${canonicalUrl}" />`)
+    .replace(/<meta name="twitter:title" content=".*?" \/>/i, `<meta name="twitter:title" content="${title}" />`)
+    .replace(/<meta name="twitter:description" content=".*?" \/>/i, `<meta name="twitter:description" content="${desc}" />`)
+    .replace(/<meta name="twitter:image" content=".*?" \/>/i, `<meta name="twitter:image" content="${image}" />`);
+}
+
+async function findEventByIdOrSlug(idOrSlug) {
+  if (!idOrSlug) return null;
+  const numId = Number(idOrSlug);
+
+  // 1. Search in local Prisma DB
+  try {
+    if (process.env.DATABASE_URL) {
+      if (!isNaN(numId) && numId > 0) {
+        const byId = await prisma.timer.findFirst({
+          where: { id: numId, deletedAt: null }
+        });
+        if (byId) return byId;
+      }
+      const bySlug = await prisma.timer.findFirst({
+        where: { slug: idOrSlug, deletedAt: null }
+      });
+      if (bySlug) return bySlug;
+    }
+  } catch (err) {
+    console.warn('DB lookup error for OG tags:', err.message);
+  }
+
+  // 2. Search in Meta-Wiki events cache
+  try {
+    const metaEvents = await getMetaEvents();
+    if (Array.isArray(metaEvents)) {
+      const match = metaEvents.find(e => 
+        String(e.id) === String(idOrSlug) ||
+        String(e.metaId) === String(idOrSlug) ||
+        (e.slug && e.slug.toLowerCase() === String(idOrSlug).toLowerCase())
+      );
+      if (match) return match;
+    }
+  } catch (err) {
+    console.warn('Meta events lookup error for OG tags:', err.message);
+  }
+
+  return null;
+}
+
+// Deep link route for events with rich social media preview tags
+app.get(['/timer/:idOrSlug', '/embed/:idOrSlug'], async (req, res, next) => {
+  const indexPath = path.join(distPath, 'index.html');
+  if (!fs.existsSync(indexPath)) {
+    return next();
+  }
+
+  try {
+    const event = await findEventByIdOrSlug(req.params.idOrSlug);
+    let html = fs.readFileSync(indexPath, 'utf8');
+
+    if (event) {
+      html = injectEventMetaTags(html, event, req);
+    }
+
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    return res.send(html);
+  } catch (err) {
+    console.error('Error injecting OG tags:', err.message);
+    return res.sendFile(indexPath);
+  }
+});
 
 app.get('*', (req, res) => {
   // If requesting a missing asset or static file (e.g. /assets/old-chunk.js, /favicon.ico), return 404
