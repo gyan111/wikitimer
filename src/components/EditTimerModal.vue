@@ -7,44 +7,42 @@
     leave-from-class="opacity-100"
     leave-to-class="opacity-0"
   >
-    <div v-if="isOpen" class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 sm:p-6">
-      <!-- Backdrop -->
-      <div class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" @click="closeModal"></div>
+    <div v-if="isOpen" class="fixed inset-0 z-[100] overflow-y-auto bg-black/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6">
+      <!-- Backdrop click -->
+      <div class="fixed inset-0" @click="closeModal"></div>
 
       <!-- Modal Dialog -->
-      <div class="relative max-w-2xl w-full bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden z-10 my-8">
-        <!-- Header -->
-        <div class="relative bg-gradient-to-r from-primary-600 to-indigo-600 p-6 sm:p-8 text-white">
+      <div class="relative max-w-2xl w-full max-h-[90vh] flex flex-col bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-800 overflow-hidden z-10 my-auto">
+        <!-- Header (Sticky top) -->
+        <div class="shrink-0 relative bg-gradient-to-r from-primary-600 to-indigo-600 p-5 sm:p-6 text-white">
           <button
             @click="closeModal"
-            class="absolute top-6 right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+            class="absolute top-5 right-5 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
             :title="$t('modal.close')"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
           
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-md">
+          <div class="flex items-center gap-3 pr-10">
+            <div class="w-10 h-10 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-md shrink-0">
               <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
             </div>
             <div>
-              <h3 class="text-2xl font-bold tracking-tight">{{ $t('form.editTitle') }}</h3>
+              <h3 class="text-xl sm:text-2xl font-bold tracking-tight">{{ $t('form.editTitle') }}</h3>
               <p class="text-white/80 text-xs sm:text-sm">{{ $t('form.editSubtitle') }}</p>
             </div>
           </div>
         </div>
 
-        <!-- Form Body -->
-        <div class="p-6 sm:p-8 max-h-[75vh] overflow-y-auto space-y-5">
-          
+        <!-- Form Body (Scrollable flex-1) -->
+        <div class="flex-1 overflow-y-auto p-5 sm:p-7 space-y-5">
           <!-- Success Message -->
           <div v-if="successMessage" class="p-4 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300 rounded-2xl flex items-center gap-3">
             <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
             <p class="text-sm font-medium">{{ successMessage }}</p>
           </div>
 
-          <form @submit.prevent="saveTimer" class="space-y-5">
-            
+          <form id="edit-timer-form" @submit.prevent="saveTimer" class="space-y-5">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <!-- Type -->
               <div>
@@ -151,17 +149,113 @@
                 </select>
               </div>
 
+              <!-- Organizers / Affiliates / User Groups -->
               <div>
-                <label for="edit-organizers" class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5 ml-1">
-                  {{ $t('form.organizers') }} <span class="text-xs font-normal text-gray-400">({{ $t('form.optional') }})</span>
-                </label>
-                <input
-                  id="edit-organizers"
-                  v-model="form.organizers"
-                  type="text"
-                  :placeholder="$t('form.organizersPlaceholder')"
-                  class="w-full py-2.5 px-3.5 bg-gray-50 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                >
+                <div class="flex items-center justify-between mb-1 ml-1">
+                  <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300">
+                    {{ $t('form.organizers') }} <span class="text-xs font-normal text-gray-400">({{ $t('form.optional') }})</span>
+                  </label>
+                  <span v-if="isSearchingOrganizers" class="text-[10px] text-primary-500 animate-pulse flex items-center gap-1 font-medium">
+                    <svg class="w-3 h-3 animate-spin" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                    Searching...
+                  </span>
+                </div>
+
+                <!-- Type Selector (User / Affiliate / Custom) -->
+                <div class="flex items-center gap-1 mb-2 p-0.5 bg-gray-100 dark:bg-gray-800 rounded-lg w-fit">
+                  <button
+                    type="button"
+                    @click="activeOrganizerType = 'user'"
+                    class="px-2 py-0.5 text-[10px] font-semibold rounded-md transition-all flex items-center gap-1 cursor-pointer"
+                    :class="activeOrganizerType === 'user' ? 'bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-300 shadow-2xs' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900'"
+                  >
+                    <span>👤</span>
+                    <span>{{ $t('form.organizerTypeUser') }}</span>
+                  </button>
+                  <button
+                    type="button"
+                    @click="activeOrganizerType = 'affiliate'"
+                    class="px-2 py-0.5 text-[10px] font-semibold rounded-md transition-all flex items-center gap-1 cursor-pointer"
+                    :class="activeOrganizerType === 'affiliate' ? 'bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-300 shadow-2xs' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900'"
+                  >
+                    <span>🏛️</span>
+                    <span>{{ $t('form.organizerTypeAffiliate') }}</span>
+                  </button>
+                  <button
+                    type="button"
+                    @click="activeOrganizerType = 'custom'"
+                    class="px-2 py-0.5 text-[10px] font-semibold rounded-md transition-all flex items-center gap-1 cursor-pointer"
+                    :class="activeOrganizerType === 'custom' ? 'bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-300 shadow-2xs' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900'"
+                  >
+                    <span>🌐</span>
+                    <span>{{ $t('form.organizerTypeCustom') }}</span>
+                  </button>
+                </div>
+
+                <!-- Chips List -->
+                <div v-if="organizerList.length > 0" class="flex flex-wrap gap-1.5 mb-2">
+                  <span
+                    v-for="(org, idx) in organizerList"
+                    :key="idx"
+                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold border bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200"
+                  >
+                    <span>{{ org.type === 'user' ? '👤' : (org.type === 'affiliate' ? '🏛️' : '🌐') }}</span>
+                    <span>{{ org.name }}</span>
+                    <button
+                      type="button"
+                      @click="removeOrganizer(idx)"
+                      class="ml-0.5 text-gray-400 hover:text-red-500 rounded-full focus:outline-none cursor-pointer"
+                    >
+                      ✕
+                    </button>
+                  </span>
+                </div>
+
+                <!-- Input & Add button with suggestions -->
+                <div class="relative flex gap-2">
+                  <div class="relative flex-1">
+                    <input
+                      id="edit-organizer-input"
+                      v-model="organizerInput"
+                      @input="handleOrganizersInput"
+                      @keydown.enter.prevent="addOrganizerFromInput"
+                      type="text"
+                      :placeholder="activeOrganizerType === 'user' ? $t('form.organizerPlaceholderUser') : (activeOrganizerType === 'affiliate' ? $t('form.organizerPlaceholderAffiliate') : $t('form.organizerPlaceholderCustom'))"
+                      class="w-full py-2 px-3 bg-gray-50 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-xl text-xs focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                    >
+                    <transition
+                      enter-active-class="transition duration-200 ease-out"
+                      enter-from-class="opacity-0 translate-y-2"
+                      enter-to-class="opacity-100 translate-y-0"
+                      leave-active-class="transition duration-150 ease-in"
+                      leave-from-class="opacity-100 translate-y-0"
+                      leave-to-class="opacity-0 translate-y-2"
+                    >
+                      <ul v-if="organizerSuggestions.length" class="absolute bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl mt-1.5 max-h-48 overflow-y-auto w-full z-50 py-1 divide-y divide-gray-100 dark:divide-gray-700">
+                        <li
+                          v-for="(item, idx) in organizerSuggestions"
+                          :key="idx"
+                          @click="selectOrganizer(item)"
+                          class="py-2 px-3 hover:bg-primary-50 dark:hover:bg-gray-700/70 cursor-pointer transition-colors text-xs flex items-center justify-between gap-2"
+                        >
+                          <div class="flex items-center gap-1.5 truncate">
+                            <span>{{ item.startsWith('User:') ? '👤' : '🏛️' }}</span>
+                            <span class="font-medium text-gray-900 dark:text-gray-100 truncate">{{ item }}</span>
+                          </div>
+                          <span class="text-[10px] text-primary-500 font-semibold shrink-0">Meta-Wiki</span>
+                        </li>
+                      </ul>
+                    </transition>
+                  </div>
+                  <button
+                    type="button"
+                    @click="addOrganizerFromInput"
+                    class="px-3 py-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl text-xs transition-all shrink-0 shadow-xs flex items-center gap-1 cursor-pointer"
+                  >
+                    <span>+</span>
+                    <span>{{ $t('form.addOrganizer') }}</span>
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -227,7 +321,7 @@
               <input
                 id="edit-country"
                 v-model="form.country"
-                @input="filterLocations"
+                @input="handleLocationInput"
                 type="text"
                 required
                 :placeholder="$t('form.locationPlaceholder')"
@@ -241,14 +335,18 @@
                 leave-from-class="opacity-100 translate-y-0"
                 leave-to-class="opacity-0 translate-y-2"
               >
-                <ul v-if="filteredLocations.length" class="absolute bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl mt-1.5 max-h-48 overflow-y-auto w-full z-50 py-1 divide-y divide-gray-100 dark:divide-gray-700">
+                <ul v-if="locationSuggestions.length" class="absolute bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl mt-1.5 max-h-48 overflow-y-auto w-full z-50 py-1 divide-y divide-gray-100 dark:divide-gray-700">
                   <li
-                    v-for="c in filteredLocations"
-                    :key="c"
-                    @click="selectLocation(c)"
-                    class="py-2.5 px-3.5 hover:bg-primary-50 dark:hover:bg-gray-700 cursor-pointer transition-colors text-xs font-medium text-gray-900 dark:text-gray-100"
+                    v-for="(loc, idx) in locationSuggestions"
+                    :key="idx"
+                    @click="selectLocation(loc)"
+                    class="py-2.5 px-3.5 hover:bg-primary-50 dark:hover:bg-gray-700 cursor-pointer transition-colors text-xs font-medium text-gray-900 dark:text-gray-100 flex items-center justify-between gap-2"
                   >
-                    {{ c }}
+                    <div class="flex items-center gap-2 truncate">
+                      <span>📍</span>
+                      <span class="truncate">{{ loc.label }}</span>
+                    </div>
+                    <span v-if="loc.subtitle" class="text-[10px] text-gray-400 shrink-0">{{ loc.subtitle }}</span>
                   </li>
                 </ul>
               </transition>
@@ -292,25 +390,27 @@
             <p v-if="errorMessage" class="text-xs text-red-500 font-medium p-3 bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-200 dark:border-red-800">
               {{ errorMessage }}
             </p>
-
-            <div class="pt-4 flex items-center justify-end gap-3 border-t border-gray-100 dark:border-gray-800">
-              <button
-                type="button"
-                @click="closeModal"
-                class="px-5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 text-sm font-semibold hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
-              >
-                {{ $t('modal.close') }}
-              </button>
-              <button
-                type="submit"
-                :disabled="isSubmitting"
-                class="px-6 py-2.5 bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2 disabled:opacity-50"
-              >
-                <svg v-if="isSubmitting" class="animate-spin w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
-                <span>{{ isSubmitting ? $t('form.updating') : $t('form.saveChanges') }}</span>
-              </button>
-            </div>
           </form>
+        </div>
+
+        <!-- Footer (Sticky bottom) -->
+        <div class="shrink-0 p-4 sm:px-7 border-t border-gray-100 dark:border-gray-800 bg-white/95 dark:bg-gray-900/95 flex items-center justify-end gap-3 z-10">
+          <button
+            type="button"
+            @click="closeModal"
+            class="px-5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 text-sm font-semibold hover:bg-gray-100 dark:hover:bg-gray-800 transition-all cursor-pointer"
+          >
+            {{ $t('modal.close') }}
+          </button>
+          <button
+            type="submit"
+            form="edit-timer-form"
+            :disabled="isSubmitting"
+            class="px-6 py-2.5 bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2 disabled:opacity-50 cursor-pointer"
+          >
+            <svg v-if="isSubmitting" class="animate-spin w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+            <span>{{ isSubmitting ? $t('form.updating') : $t('form.saveChanges') }}</span>
+          </button>
         </div>
       </div>
     </div>
@@ -349,6 +449,72 @@ const isSubmitting = ref(false);
 const errorMessage = ref('');
 const successMessage = ref('');
 
+// Structured Organizers State
+const organizerList = ref([]);
+const activeOrganizerType = ref('user');
+const organizerInput = ref('');
+const organizerSuggestions = ref([]);
+const isSearchingOrganizers = ref(false);
+let organizersTimeout = null;
+
+function handleOrganizersInput() {
+  clearTimeout(organizersTimeout);
+  const query = organizerInput.value.trim();
+
+  if (query.length < 2) {
+    organizerSuggestions.value = [];
+    return;
+  }
+
+  isSearchingOrganizers.value = true;
+  organizersTimeout = setTimeout(async () => {
+    try {
+      let searchQuery = query;
+      if (activeOrganizerType.value === 'user' && !query.startsWith('User:')) {
+        searchQuery = `User:${query}`;
+      }
+      const url = `https://meta.wikimedia.org/w/api.php?action=opensearch&search=${encodeURIComponent(searchQuery)}&limit=6&format=json&origin=*`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Search failed');
+      const data = await res.json();
+      const list = data[1] || [];
+      organizerSuggestions.value = list.filter(item => !/\/[a-z]{2,3}$/i.test(item) && !item.includes('/draft'));
+    } catch (err) {
+      console.warn('Error searching organizers on Meta-Wiki:', err);
+      organizerSuggestions.value = [];
+    } finally {
+      isSearchingOrganizers.value = false;
+    }
+  }, 250);
+}
+
+function selectOrganizer(item) {
+  const type = item.startsWith('User:') ? 'user' : 'affiliate';
+  if (!organizerList.value.some(o => o.name === item)) {
+    organizerList.value.push({ type, name: item });
+  }
+  organizerInput.value = '';
+  organizerSuggestions.value = [];
+}
+
+function addOrganizerFromInput() {
+  const val = organizerInput.value.trim();
+  if (!val) return;
+  let formattedName = val;
+  if (activeOrganizerType.value === 'user' && !val.startsWith('User:')) {
+    formattedName = `User:${val}`;
+  }
+  if (!organizerList.value.some(o => o.name.toLowerCase() === formattedName.toLowerCase())) {
+    organizerList.value.push({ type: activeOrganizerType.value, name: formattedName });
+  }
+  organizerInput.value = '';
+  organizerSuggestions.value = [];
+}
+
+function removeOrganizer(idx) {
+  organizerList.value.splice(idx, 1);
+}
+
 // Dynamic Global Location Autocomplete State
 const locationSuggestions = ref([]);
 const isSearchingLocations = ref(false);
@@ -366,7 +532,6 @@ function handleLocationInput() {
   isSearchingLocations.value = true;
   locationSearchTimeout = setTimeout(async () => {
     try {
-      // Privacy-compliant dynamic location search using official Wikimedia/Wikidata API
       const endpoint = `https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${encodeURIComponent(query)}&language=en&format=json&origin=*&limit=7&type=item`;
       const res = await fetch(endpoint);
       if (!res.ok) throw new Error('Wikidata search failed');
@@ -463,6 +628,22 @@ watch(
       logo: ev.logo || ''
     };
 
+    // Parse organizers string into chips
+    organizerList.value = [];
+    organizerInput.value = '';
+    if (ev.organizers) {
+      const parts = ev.organizers.split(',').map(s => s.trim()).filter(Boolean);
+      organizerList.value = parts.map(name => {
+        let type = 'custom';
+        if (name.startsWith('User:')) {
+          type = 'user';
+        } else if (/wikimedia|chapter|user group|affiliate|foundation|ug/i.test(name)) {
+          type = 'affiliate';
+        }
+        return { type, name };
+      });
+    }
+
     if (ev.topics) {
       selectedTags.value = ev.topics.split(',').map((t) => t.trim()).filter(Boolean);
     } else {
@@ -496,6 +677,13 @@ async function saveTimer() {
       const resolvedLogo = await resolveCommonsImageUrl(form.value.logo);
       if (resolvedLogo) form.value.logo = resolvedLogo;
     }
+
+    // Combine organizer chips + raw input if any
+    const orgNames = organizerList.value.map(o => o.name);
+    if (organizerInput.value.trim()) {
+      orgNames.push(organizerInput.value.trim());
+    }
+    form.value.organizers = orgNames.join(', ');
 
     const payload = {
       ...form.value,
