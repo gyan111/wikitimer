@@ -173,6 +173,8 @@
     "embedSnippetTitle": "Live Embed HTML Snippet",
     "embedSnippetDesc": "Paste this iframe into your chapter website, event landing page, or community dashboard:",
     "copyCode": "Copy Code",
+    "viewPoster": "Poster",
+    "viewFullImage": "Tap to view full poster / image",
     "participants": "Participants"
   },
   "time": {

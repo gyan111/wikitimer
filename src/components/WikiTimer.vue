@@ -667,9 +667,22 @@
             <div class="p-5 sm:p-8 flex flex-col gap-5 sm:gap-6">
               <!-- Header with Logo and Title -->
               <div class="flex items-start gap-3.5">
-                <div class="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-2 shadow-sm flex items-center justify-center">
+                <!-- Interactive Clickable Logo Avatar to Open Fullscreen Lightbox -->
+                <button
+                  type="button"
+                  @click="selectedEvent.logo && (showImageLightbox = true)"
+                  :class="selectedEvent.logo ? 'cursor-pointer hover:scale-105 hover:border-primary-400 dark:hover:border-primary-500 hover:shadow-md group' : 'cursor-default'"
+                  class="relative flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-2 shadow-sm flex items-center justify-center transition-all overflow-hidden focus:outline-none"
+                  :title="selectedEvent.logo ? $t('modal.viewFullImage') : ''"
+                >
                   <img :src="getEventLogo(selectedEvent)" alt="logo" class="w-full h-full object-contain" @error="$event.target.src=fallbackLogo" />
-                </div>
+                  <span
+                    v-if="selectedEvent.logo"
+                    class="absolute bottom-0.5 right-0.5 p-1 bg-black/60 text-white rounded-md opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none"
+                  >
+                    <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path></svg>
+                  </span>
+                </button>
                 <div class="flex-1 min-w-0 pr-20">
                   <div class="flex flex-wrap gap-1.5 sm:gap-2 items-center mb-1.5">
                     <span 
@@ -949,6 +962,55 @@
           </div>
         </div>
       </transition>
+
+      <!-- Fullscreen Image Lightbox Overlay -->
+      <Teleport to="body">
+        <transition
+          enter-active-class="transition duration-200 ease-out"
+          enter-from-class="opacity-0 scale-95"
+          enter-to-class="opacity-100 scale-100"
+          leave-active-class="transition duration-150 ease-in"
+          leave-from-class="opacity-100 scale-100"
+          leave-to-class="opacity-0 scale-95"
+        >
+          <div
+            v-if="showImageLightbox && selectedEvent && selectedEvent.logo"
+            class="fixed inset-0 z-[100000] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-8"
+            @click="showImageLightbox = false"
+          >
+            <!-- Close Button -->
+            <button
+              type="button"
+              @click="showImageLightbox = false"
+              class="absolute top-4 right-4 sm:top-6 sm:right-6 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer z-20"
+              :title="$t('modal.close')"
+            >
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+
+            <!-- Image Container -->
+            <div class="relative max-w-4xl max-h-[85vh] flex flex-col items-center gap-3" @click.stop>
+              <img
+                :src="getEventLogo(selectedEvent)"
+                :alt="selectedEvent.name"
+                class="max-w-full max-h-[80vh] object-contain rounded-2xl shadow-2xl border border-white/10"
+              />
+              <div class="flex items-center justify-between w-full px-2 text-white/80 text-xs sm:text-sm">
+                <span class="font-bold truncate max-w-md">{{ selectedEvent.name }}</span>
+                <a
+                  :href="selectedEvent.logo"
+                  target="_blank"
+                  rel="noopener"
+                  class="inline-flex items-center gap-1 text-primary-400 hover:text-primary-300 font-semibold hover:underline"
+                >
+                  <span>Wikimedia Commons</span>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </transition>
+      </Teleport>
     </teleport>
 
     <!-- Edit Timer Modal -->
@@ -1015,6 +1077,7 @@ const currentTime = ref(new Date());
 let timerInterval = null;
 const selectedEvent = ref(null);
 const isCopied = ref(false);
+const showImageLightbox = ref(false);
 const isLoadingEvents = ref(true);
 
 const filters = ref({
@@ -1870,6 +1933,7 @@ function handleTimerUpdated(updatedTimer) {
 function closeModal() {
   selectedEvent.value = null;
   showEmbedDrawer.value = false;
+  showImageLightbox.value = false;
   if (route.name === 'TimerDetail') {
     router.push({ name: 'WikiTimer' });
   }
