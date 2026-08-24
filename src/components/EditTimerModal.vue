@@ -430,6 +430,7 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { resolveCommonsImageUrl } from '../utils/wiki';
+import { countryCentroids, cityCentroids } from '../utils/geo';
 
 const props = defineProps({
   event: {
@@ -584,7 +585,23 @@ function handleLocationInput() {
 }
 
 function selectLocation(loc) {
-  form.value.country = typeof loc === 'string' ? loc : loc.label;
+  if (typeof loc === 'string') {
+    form.value.country = loc;
+  } else {
+    let text = loc.label;
+    if (loc.subtitle) {
+      const countryMatch = Object.keys(countryCentroids).find(c => loc.subtitle.toLowerCase().includes(c.toLowerCase()));
+      if (countryMatch && !text.toLowerCase().includes(countryMatch.toLowerCase())) {
+        text = `${text}, ${countryMatch}`;
+      } else {
+        const cityMatch = Object.keys(cityCentroids).find(c => loc.subtitle.toLowerCase().includes(c.toLowerCase()));
+        if (cityMatch && !text.toLowerCase().includes(cityMatch.toLowerCase())) {
+          text = `${text}, ${cityMatch}`;
+        }
+      }
+    }
+    form.value.country = text;
+  }
   locationSuggestions.value = [];
 }
 

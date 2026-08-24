@@ -665,6 +665,7 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuth } from '../store/auth';
 import { resolveCommonsImageUrl } from '../utils/wiki';
+import { countryCentroids, cityCentroids } from '../utils/geo';
 
 const router = useRouter();
 const { user, isAuthenticated, login, checkAuth } = useAuth();
@@ -859,7 +860,23 @@ function handleLocationInput() {
 }
 
 function selectLocation(loc) {
-  newTimer.value.country = typeof loc === 'string' ? loc : loc.label;
+  if (typeof loc === 'string') {
+    newTimer.value.country = loc;
+  } else {
+    let text = loc.label;
+    if (loc.subtitle) {
+      const countryMatch = Object.keys(countryCentroids).find(c => loc.subtitle.toLowerCase().includes(c.toLowerCase()));
+      if (countryMatch && !text.toLowerCase().includes(countryMatch.toLowerCase())) {
+        text = `${text}, ${countryMatch}`;
+      } else {
+        const cityMatch = Object.keys(cityCentroids).find(c => loc.subtitle.toLowerCase().includes(c.toLowerCase()));
+        if (cityMatch && !text.toLowerCase().includes(cityMatch.toLowerCase())) {
+          text = `${text}, ${cityMatch}`;
+        }
+      }
+    }
+    newTimer.value.country = text;
+  }
   locationSuggestions.value = [];
 }
 

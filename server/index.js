@@ -243,10 +243,10 @@ function validateTimerInput(body) {
   if (!data.name || data.name.length > 255) errors.push('name is required (max 255 chars)');
   if (!data.link || data.link.length > 255) errors.push('link is required (max 255 chars)');
   if (data.region.length > 100) errors.push('region too long (max 100 chars)');
-  if (data.country.length > 100) errors.push('country too long (max 100 chars)');
+  if (data.country.length > 255) errors.push('country too long (max 255 chars)');
   if (data.timeZone.length > 50) errors.push('timeZone too long (max 50 chars)');
-  if (data.organizers && data.organizers.length > 255) errors.push('organizers too long (max 255 chars)');
-  if (data.logo && data.logo.length > 255) errors.push('logo too long (max 255 chars)');
+  if (data.organizers && data.organizers.length > 2000) errors.push('organizers too long (max 2000 chars)');
+  if (data.logo && data.logo.length > 500) errors.push('logo too long (max 500 chars)');
   if (data.participation && data.participation.length > 100) errors.push('participation too long (max 100 chars)');
   if (data.participants !== null && (isNaN(data.participants) || data.participants < 0)) errors.push('participants must be a positive number');
 
