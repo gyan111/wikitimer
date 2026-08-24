@@ -17,7 +17,7 @@ const META_API = 'https://meta.wikimedia.org/w/api.php';
 // Set META_USER_AGENT in production to something like:
 //   "WikiTimer/1.0 (https://<toolname>.toolforge.org; <your-contact-info>)"
 const USER_AGENT = process.env.META_USER_AGENT ||
-  'WikiTimer/1.0 (https://wiki-timer.toolforge.org; contact: set META_USER_AGENT)';
+  'WikiTimer/1.0 (https://wikitimer.toolforge.org; contact: set META_USER_AGENT)';
 const CACHE_TTL_MS = Number(process.env.META_EVENTS_TTL_MS) || 60 * 60 * 1000; // 1 hour
 // Avoid hammering Meta if it's failing/lagged: don't retry more often than this.
 const MIN_RETRY_INTERVAL_MS = 5 * 60 * 1000;

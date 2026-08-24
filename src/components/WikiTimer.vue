@@ -901,10 +901,22 @@
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                   <span>{{ $t('modal.icsFile') }}</span>
                 </button>
+                <!-- Wiki Template Tag Button -->
                 <button
-                  @click="showEmbedDrawer = !showEmbedDrawer"
+                  @click="showTemplateDrawer = !showTemplateDrawer; if (showTemplateDrawer) showEmbedDrawer = false;"
                   type="button"
-                  class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-xs font-semibold rounded-lg border border-purple-200 dark:border-purple-800/50 transition-all"
+                  class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-xs font-semibold rounded-lg border border-emerald-200 dark:border-emerald-800/50 transition-all cursor-pointer"
+                  :title="$t('modal.wikiTemplate')"
+                >
+                  <span class="font-mono text-emerald-600 dark:text-emerald-400 font-bold">&#123;&#123;&nbsp;&#125;&#125;</span>
+                  <span>{{ $t('modal.wikiTemplate') }}</span>
+                </button>
+
+                <!-- HTML Embed Widget Button -->
+                <button
+                  @click="showEmbedDrawer = !showEmbedDrawer; if (showEmbedDrawer) showTemplateDrawer = false;"
+                  type="button"
+                  class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-xs font-semibold rounded-lg border border-purple-200 dark:border-purple-800/50 transition-all cursor-pointer"
                   :title="$t('modal.embedWidget')"
                 >
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
@@ -923,28 +935,77 @@
                 </button>
               </div>
 
+              <!-- Wiki Template Drawer -->
+              <div v-if="showTemplateDrawer" class="p-3.5 sm:p-4 bg-emerald-50/80 dark:bg-emerald-950/40 rounded-xl border border-emerald-200 dark:border-emerald-900/60 flex flex-col gap-2.5 animate-in fade-in duration-200">
+                <div class="flex items-center justify-between gap-2 flex-wrap">
+                  <div class="flex items-center gap-1.5 font-mono text-xs font-bold text-emerald-900 dark:text-emerald-200">
+                    <span>&#123;&#123;&nbsp;&#125;&#125;</span>
+                    <span>{{ $t('modal.templateSnippetTitle') }}</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <button
+                      @click="copyTemplateCode(selectedEvent)"
+                      class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg transition-all whitespace-nowrap cursor-pointer shadow-xs flex items-center gap-1"
+                    >
+                      <span v-if="!isTemplateCopied">📋</span>
+                      <span v-else>✓</span>
+                      <span>{{ isTemplateCopied ? $t('modal.templateCopied') : $t('modal.copyTemplate') }}</span>
+                    </button>
+                    <button @click="showTemplateDrawer = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-sm leading-none p-1 cursor-pointer">✕</button>
+                  </div>
+                </div>
+                <p class="text-[11px] text-gray-600 dark:text-gray-400 leading-relaxed">
+                  Paste this on Meta-Wiki or any wiki with 
+                  <a
+                    href="https://meta.wikimedia.org/wiki/Template:WikiTimer"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-md font-mono font-bold bg-emerald-100/80 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-700/80 hover:underline"
+                  >
+                    <span>Template:WikiTimer</span>
+                    <svg class="w-2.5 h-2.5 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                  </a>
+                  installed:
+                </p>
+                <div class="w-full">
+                  <textarea
+                    readonly
+                    rows="6"
+                    :value="getWikiTemplateCode(selectedEvent)"
+                    class="w-full text-xs font-mono bg-white dark:bg-gray-900 px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200 select-all resize-none leading-relaxed shadow-2xs focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                  ></textarea>
+                </div>
+              </div>
+
               <!-- Embed Widget Code Snippet Box -->
-              <div v-if="showEmbedDrawer" class="p-3.5 bg-purple-50/70 dark:bg-purple-950/40 rounded-xl border border-purple-200 dark:border-purple-900/60 flex flex-col gap-2 animate-in fade-in duration-200">
-                <div class="flex items-center justify-between text-xs font-bold text-purple-900 dark:text-purple-200">
-                  <span class="flex items-center gap-1.5">🌐 <span>{{ $t('modal.embedSnippetTitle') }}</span></span>
-                  <button @click="showEmbedDrawer = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-sm leading-none">✕</button>
+              <div v-if="showEmbedDrawer" class="p-3.5 sm:p-4 bg-purple-50/80 dark:bg-purple-950/40 rounded-xl border border-purple-200 dark:border-purple-900/60 flex flex-col gap-2.5 animate-in fade-in duration-200">
+                <div class="flex items-center justify-between gap-2 flex-wrap">
+                  <div class="flex items-center gap-1.5 text-xs font-bold text-purple-900 dark:text-purple-200">
+                    <span>🌐</span>
+                    <span>{{ $t('modal.embedSnippetTitle') }}</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <button
+                      @click="copyEmbedCode(selectedEvent)"
+                      class="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold rounded-lg transition-all whitespace-nowrap cursor-pointer shadow-xs flex items-center gap-1"
+                    >
+                      <span v-if="!isEmbedCopied">📋</span>
+                      <span v-else>✓</span>
+                      <span>{{ isEmbedCopied ? $t('modal.copied') : $t('modal.copyCode') }}</span>
+                    </button>
+                    <button @click="showEmbedDrawer = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-sm leading-none p-1 cursor-pointer">✕</button>
+                  </div>
                 </div>
                 <p class="text-[11px] text-gray-600 dark:text-gray-400">
                   {{ $t('modal.embedSnippetDesc') }}
                 </p>
-                <div class="flex items-center gap-2">
+                <div class="w-full">
                   <input
                     type="text"
                     readonly
                     :value="getEmbedIframeCode(selectedEvent)"
-                    class="flex-1 text-xs font-mono bg-white dark:bg-gray-900 px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 select-all"
+                    class="w-full text-xs font-mono bg-white dark:bg-gray-900 px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200 select-all shadow-2xs focus:outline-none focus:ring-1 focus:ring-purple-500"
                   />
-                  <button
-                    @click="copyEmbedCode(selectedEvent)"
-                    class="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold rounded-lg transition-colors whitespace-nowrap"
-                  >
-                    {{ isEmbedCopied ? '✓ ' + $t('modal.copied') : $t('modal.copyCode') }}
-                  </button>
                 </div>
               </div>
 
@@ -1405,6 +1466,44 @@ function downloadICal(event) {
 // 5. Standalone Embed Code Generator (<iframe ...>)
 const showEmbedDrawer = ref(false);
 const isEmbedCopied = ref(false);
+
+const showTemplateDrawer = ref(false);
+const isTemplateCopied = ref(false);
+
+function getWikiTemplateCode(event) {
+  if (!event || !event.time) return '';
+  const d = new Date(event.time);
+  const dateStr = d.toISOString().slice(0, 10);
+  const hours = String(d.getUTCHours()).padStart(2, '0');
+  const mins = String(d.getUTCMinutes()).padStart(2, '0');
+  const timeStr = `${hours}:${mins}`;
+  const targetId = event.slug || event.id;
+
+  return `{{WikiTimer\n | id   = ${targetId}\n | name = ${event.name || ''}\n | link = ${event.link || ''}\n | date = ${dateStr}\n | time = ${timeStr}\n}}`;
+}
+
+async function copyTemplateCode(event) {
+  if (!event) return;
+  const code = getWikiTemplateCode(event);
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(code);
+    } else {
+      const textarea = document.createElement('textarea');
+      textarea.value = code;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+    }
+    isTemplateCopied.value = true;
+    setTimeout(() => {
+      isTemplateCopied.value = false;
+    }, 2500);
+  } catch (err) {
+    console.error('Failed to copy template code:', err);
+  }
+}
 
 function getEmbedUrl(event) {
   if (!event) return '';
@@ -1933,6 +2032,7 @@ function handleTimerUpdated(updatedTimer) {
 function closeModal() {
   selectedEvent.value = null;
   showEmbedDrawer.value = false;
+  showTemplateDrawer.value = false;
   showImageLightbox.value = false;
   if (route.name === 'TimerDetail') {
     router.push({ name: 'WikiTimer' });

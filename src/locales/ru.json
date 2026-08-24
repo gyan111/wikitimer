@@ -39,7 +39,9 @@
     "removeStar": "Удалить из избранного",
     "starEvent": "Добавить в избранное",
     "meta": "Meta",
-    "link": "Ссылка"
+    "link": "Ссылка",
+    "editTimer": "Редактировать таймер",
+    "createdByYou": "Создано вами"
   },
   "tags": {
     "all": "Все",
@@ -133,7 +135,14 @@
     "embedSnippetDesc": "Вставьте этот iframe на сайт вашего отделения, страницу мероприятия или панель сообщества:",
     "copyCode": "Копировать код",
     "participants": "Участники",
-    "viewDetails": "Подробнее"
+    "viewDetails": "Подробнее",
+    "wikiTemplate": "Вики-шаблон",
+    "copyTemplate": "Копировать шаблон",
+    "templateCopied": "Шаблон скопирован!",
+    "templateSnippetTitle": "Синтаксис шаблона MediaWiki",
+    "templateSnippetDesc": "Вставьте это на Мета-вики или в любой вики с установленным Template:WikiTimer:",
+    "viewPoster": "Постер",
+    "viewFullImage": "Нажмите для просмотра полного постера / изображения"
   },
   "time": {
     "days": "Дней",
@@ -189,7 +198,23 @@
     "saving": "Сохранение таймера...",
     "submit": "Запустить таймер",
     "participants": "Ожидаемые участники",
-    "participantsPlaceholder": "напр. 50"
+    "participantsPlaceholder": "напр. 50",
+    "updating": "Обновление...",
+    "saveChanges": "Сохранить изменения",
+    "editTitle": "Редактировать таймер",
+    "editSubtitle": "Обновить данные таймера и расписание.",
+    "timerUpdated": "Таймер успешно обновлен!",
+    "successTitle": "Таймер успешно добавлен! 🎉",
+    "successSubtitle": "Ваш таймер теперь доступен для всех.",
+    "addAnother": "Добавить еще один таймер",
+    "viewYourTimer": "Просмотреть ваш таймер",
+    "organizerTypeUser": "Участник Вики",
+    "organizerTypeAffiliate": "Организация / Группа",
+    "organizerTypeCustom": "Пользовательский / Внешний",
+    "addOrganizer": "Добавить организатора",
+    "organizerPlaceholderUser": "Поиск имени участника Викимедиа...",
+    "organizerPlaceholderAffiliate": "Поиск организации / юзер-группы...",
+    "organizerPlaceholderCustom": "Введите имя или ссылку организатора..."
   },
   "footer": {
     "createdBy": "Создано",

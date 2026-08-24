@@ -39,7 +39,9 @@
     "removeStar": "إزالة من المفضلة",
     "starEvent": "إضافة للمفضلة",
     "meta": "ميتا",
-    "link": "رابط"
+    "link": "رابط",
+    "editTimer": "تعديل المؤقت",
+    "createdByYou": "تم إنشاؤه بواسطتك"
   },
   "tags": {
     "all": "الكل",
@@ -133,7 +135,14 @@
     "embedSnippetDesc": "الصق كود iframe هذا في موقع مجموعتك أو لوحة التحكم:",
     "copyCode": "نسخ الكود",
     "participants": "مشارك",
-    "viewDetails": "عرض التفاصيل"
+    "viewDetails": "عرض التفاصيل",
+    "wikiTemplate": "قالب ويكي",
+    "copyTemplate": "نسخ القالب",
+    "templateCopied": "تم نسخ القالب!",
+    "templateSnippetTitle": "صيغة قالب ميدياويكي",
+    "templateSnippetDesc": "الصق هذا على ميتا ويكي أو أي ويكي يحتوي على Template:WikiTimer:",
+    "viewPoster": "الملصق",
+    "viewFullImage": "انقر لعرض الملصق / الصورة بالكامل"
   },
   "time": {
     "days": "أيام",
@@ -189,7 +198,23 @@
     "saving": "جاري حفظ المؤقت...",
     "submit": "إنشاء المؤقت",
     "participants": "المشاركون المتوقعون",
-    "participantsPlaceholder": "مثال: 50"
+    "participantsPlaceholder": "مثال: 50",
+    "updating": "جارٍ التحديث...",
+    "saveChanges": "حفظ التغييرات",
+    "editTitle": "تعديل المؤقت",
+    "editSubtitle": "تحديث تفاصيل المؤقت والجدول الزمني.",
+    "timerUpdated": "تم تحديث المؤقت بنجاح!",
+    "successTitle": "تمت إضافة المؤقت بنجاح! 🎉",
+    "successSubtitle": "أصبح المؤقت المخصص متاحًا الآن ويمكن للجميع اكتشافه.",
+    "addAnother": "إضافة مؤقت آخر",
+    "viewYourTimer": "عرض المؤقت الخاص بك",
+    "organizerTypeUser": "مستخدم ويكي",
+    "organizerTypeAffiliate": "جهة شريكة / مجموعة",
+    "organizerTypeCustom": "مخصص / خارجي",
+    "addOrganizer": "إضافة منظم",
+    "organizerPlaceholderUser": "ابحث عن اسم مستخدم ويكيميديا...",
+    "organizerPlaceholderAffiliate": "ابحث عن جهة شريكة / مجموعة مستخدمين...",
+    "organizerPlaceholderCustom": "أدخل اسم المنظم أو الرابط..."
   },
   "footer": {
     "createdBy": "تم الإنشاء بواسطة",

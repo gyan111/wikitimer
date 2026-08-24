@@ -39,7 +39,9 @@
     "removeStar": "お気に入り解除",
     "starEvent": "お気に入りに追加",
     "meta": "Meta",
-    "link": "リンク"
+    "link": "リンク",
+    "editTimer": "タイマーを編集",
+    "createdByYou": "あなたが作成"
   },
   "tags": {
     "all": "すべて",
@@ -133,7 +135,14 @@
     "embedSnippetDesc": "この iframe をグループのWebサイトやダッシュボードに貼り付けてください:",
     "copyCode": "コードをコピー",
     "participants": "人の参加者",
-    "viewDetails": "詳細を見る"
+    "viewDetails": "詳細を見る",
+    "wikiTemplate": "ウィキテンプレート",
+    "copyTemplate": "テンプレートをコピー",
+    "templateCopied": "テンプレートをコピーしました！",
+    "templateSnippetTitle": "MediaWiki テンプレート構文",
+    "templateSnippetDesc": "Meta-Wiki または Template:WikiTimer が設置されたウィキに貼り付けてください：",
+    "viewPoster": "ポスター",
+    "viewFullImage": "タップしてポスター/全画像を表示"
   },
   "time": {
     "days": "日",
@@ -189,7 +198,23 @@
     "saving": "タイマーを保存中...",
     "submit": "タイマーを開始",
     "participants": "参加予定人数",
-    "participantsPlaceholder": "例: 50"
+    "participantsPlaceholder": "例: 50",
+    "updating": "更新中...",
+    "saveChanges": "変更を保存",
+    "editTitle": "タイマーを編集",
+    "editSubtitle": "タイマーの詳細とスケジュールを更新します。",
+    "timerUpdated": "タイマーが正常に更新されました！",
+    "successTitle": "タイマーが正常に追加されました！ 🎉",
+    "successSubtitle": "作成したカスタムタイマーが公開されました。",
+    "addAnother": "別のタイマーを追加",
+    "viewYourTimer": "タイマーを表示",
+    "organizerTypeUser": "ウィキ利用者",
+    "organizerTypeAffiliate": "提携団体 / グループ",
+    "organizerTypeCustom": "カスタム / 外部",
+    "addOrganizer": "主催者を追加",
+    "organizerPlaceholderUser": "ウィキメディア利用者名を検索...",
+    "organizerPlaceholderAffiliate": "提携団体 / 利用者グループを検索...",
+    "organizerPlaceholderCustom": "主催者名またはURLを入力..."
   },
   "footer": {
     "createdBy": "作成者",

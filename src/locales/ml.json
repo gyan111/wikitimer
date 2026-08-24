@@ -39,7 +39,9 @@
     "removeStar": "പ്രിയപ്പെട്ടവയിൽ നിന്ന് നീക്കുക",
     "starEvent": "പ്രിയപ്പെട്ടതാക്കുക",
     "meta": "മെറ്റാ",
-    "link": "ലിങ്ക്"
+    "link": "ലിങ്ക്",
+    "editTimer": "ടൈമർ തിരുത്തുക",
+    "createdByYou": "നിങ്ങൾ സൃഷ്ടിച്ചത്"
   },
   "tags": {
     "all": "എല്ലാം",
@@ -133,7 +135,14 @@
     "embedSnippetDesc": "ഈ iframe നിങ്ങളുടെ വെബ്സൈറ്റിലോ കമ്മ്യൂണിറ്റി ഡാഷ്‌ബോർഡിലോ ചേർക്കുക:",
     "copyCode": "കോഡ് കോപ്പി ചെയ്യുക",
     "participants": "പങ്കാളികൾ",
-    "viewDetails": "വിശദാംശങ്ങൾ കാണുക"
+    "viewDetails": "വിശദാംശങ്ങൾ കാണുക",
+    "wikiTemplate": "വിക്കി ഫലകം",
+    "copyTemplate": "ഫലകം പകർത്തുക",
+    "templateCopied": "ഫലകം പകർത്തി!",
+    "templateSnippetTitle": "മീഡിയവിക്കി ഫലക രൂപഘടന",
+    "templateSnippetDesc": "മെറ്റാ-വിക്കിയിലോ Template:WikiTimer ഉള്ള മറ്റേതെങ്കിലും വിക്കിയിലോ ഇത് ഒട്ടിക്കുക:",
+    "viewPoster": "പോസ്റ്റർ",
+    "viewFullImage": "മുഴുവൻ പോസ്റ്റർ / ചിത്രം കാണാൻ തൊടുക"
   },
   "time": {
     "days": "ദിവസങ്ങൾ",
@@ -189,7 +198,23 @@
     "saving": "ടൈമർ സേവ് ചെയ്യുന്നു...",
     "submit": "ടൈമർ ആരംഭിക്കുക",
     "participants": "പ്രതീക്ഷിക്കുന്ന പങ്കാളികൾ",
-    "participantsPlaceholder": "ഉദാ: 50"
+    "participantsPlaceholder": "ഉദാ: 50",
+    "updating": "പുതുക്കുന്നു...",
+    "saveChanges": "മാറ്റങ്ങൾ സേവ് ചെയ്യുക",
+    "editTitle": "ടൈമർ തിരുത്തുക",
+    "editSubtitle": "ടൈമർ വിവരങ്ങളും സമയക്രമവും പുതുക്കുക.",
+    "timerUpdated": "ടൈമർ വിജയകരമായി പുതുക്കി!",
+    "successTitle": "ടൈമർ വിജയകരമായി ചേർത്തു! 🎉",
+    "successSubtitle": "നിങ്ങൾ ചേർത്ത ടൈമർ ഇപ്പോൾ ലഭ്യമാണ്.",
+    "addAnother": "മറ്റൊരു ടൈമർ ചേർക്കുക",
+    "viewYourTimer": "നിങ്ങളുടെ ടൈമർ കാണുക",
+    "organizerTypeUser": "വിക്കി ഉപയോക്താവ്",
+    "organizerTypeAffiliate": "അഫിലിയേറ്റ് / സംഘം",
+    "organizerTypeCustom": "മറ്റ് / ബാഹ്യ സംഘാടകർ",
+    "addOrganizer": "സംഘാടകരെ ചേർക്കുക",
+    "organizerPlaceholderUser": "വിക്കിമീഡിയ ഉപയോക്തൃനാമം തിരയുക...",
+    "organizerPlaceholderAffiliate": "അഫിലിയേറ്റ് / യൂസർ ഗ്രൂപ്പ് തിരയുക...",
+    "organizerPlaceholderCustom": "സംഘാടകന്റെ പേരോ ലിങ്കോ നൽകുക..."
   },
   "footer": {
     "createdBy": "നിർമ്മിച്ചത്",

@@ -39,7 +39,9 @@
     "removeStar": "पसंदीदा से हटाएं",
     "starEvent": "पसंदीदा में जोड़ें",
     "meta": "मेटा",
-    "link": "लिंक"
+    "link": "लिंक",
+    "editTimer": "टाइमर संपादित करें",
+    "createdByYou": "आपके द्वारा बनाया गया"
   },
   "tags": {
     "all": "सभी",
@@ -133,7 +135,14 @@
     "embedSnippetDesc": "इस iframe को अपनी वेबसाइट, इवेंट लैंडिंग पेज या डैशबोर्ड में पेस्ट करें:",
     "copyCode": "कोड कॉपी करें",
     "participants": "प्रतिभागी",
-    "viewDetails": "विवरण देखें"
+    "viewDetails": "विवरण देखें",
+    "wikiTemplate": "विकी साँचा",
+    "copyTemplate": "साँचा कॉपी करें",
+    "templateCopied": "साँचा कॉपी हो गया!",
+    "templateSnippetTitle": "मीडियाविकी साँचा सिंटैक्स",
+    "templateSnippetDesc": "इसे मेटा-विकी या किसी भी विकी पर पेस्ट करें जहाँ Template:WikiTimer उपलब्ध है:",
+    "viewPoster": "पोस्टर",
+    "viewFullImage": "पूरा पोस्टर / चित्र देखने के लिए टैप करें"
   },
   "time": {
     "days": "दिन",
@@ -189,7 +198,23 @@
     "saving": "टाइमर सहेजा जा रहा है...",
     "submit": "टाइमर बनाएं",
     "participants": "अपेक्षित प्रतिभागी",
-    "participantsPlaceholder": "उदा. 50"
+    "participantsPlaceholder": "उदा. 50",
+    "updating": "अपडेट हो रहा है...",
+    "saveChanges": "बदलाव सहेजें",
+    "editTitle": "टाइमर संपादित करें",
+    "editSubtitle": "टाइमर विवरण और समय-सारणी अपडेट करें।",
+    "timerUpdated": "टाइमर सफलतापूर्वक अपडेट हो गया!",
+    "successTitle": "टाइमर सफलतापूर्वक जोड़ा गया! 🎉",
+    "successSubtitle": "आपका कस्टम टाइमर अब लाइव और सभी के लिए उपलब्ध है।",
+    "addAnother": "एक और टाइमर जोड़ें",
+    "viewYourTimer": "अपना टाइमर देखें",
+    "organizerTypeUser": "विकी सदस्य",
+    "organizerTypeAffiliate": "संबद्ध संस्था / समूह",
+    "organizerTypeCustom": "कस्टम / बाहरी",
+    "addOrganizer": "आयोजक जोड़ें",
+    "organizerPlaceholderUser": "विकिमीडिया सदस्य नाम खोजें...",
+    "organizerPlaceholderAffiliate": "संबद्ध संस्था / सदस्य समूह खोजें...",
+    "organizerPlaceholderCustom": "आयोजक का नाम या लिंक दर्ज करें..."
   },
   "footer": {
     "createdBy": "द्वारा निर्मित",

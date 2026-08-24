@@ -39,7 +39,9 @@
     "removeStar": "ఇష్టమైన వాటి నుండి తీసివేయి",
     "starEvent": "ఇష్టమైనదిగా గుర్తించు",
     "meta": "మెటా",
-    "link": "లింక్"
+    "link": "లింక్",
+    "editTimer": "టైమర్‌ను సవరించండి",
+    "createdByYou": "మీరు సృష్టించినది"
   },
   "tags": {
     "all": "అన్నీ",
@@ -133,7 +135,14 @@
     "embedSnippetDesc": "ఈ iframe కోడ్‌ను మీ వెబ్‌సైట్ లేదా డాష్‌బోర్డ్‌లో అతికించండి:",
     "copyCode": "కోడ్ కాపీ చేయండి",
     "participants": "పాల్గొనేవారు",
-    "viewDetails": "వివరాలు చూడండి"
+    "viewDetails": "వివరాలు చూడండి",
+    "wikiTemplate": "వికీ మూస",
+    "copyTemplate": "మూసను కాపీ చేయండి",
+    "templateCopied": "మూస కాపీ అయింది!",
+    "templateSnippetTitle": "మీడియావికీ మూస సింటాక్స్",
+    "templateSnippetDesc": "దీనిని మెటా-వికీ లేదా Template:WikiTimer ఉన్న ఏ వికీలోనైనా అతికించండి:",
+    "viewPoster": "పోస్టర్",
+    "viewFullImage": "పూర్తి పోస్టర్ / చిత్రాన్ని చూడటానికి నొక్కండి"
   },
   "time": {
     "days": "రోజులు",
@@ -189,7 +198,23 @@
     "saving": "టైమర్ భద్రపరచబడుతోంది...",
     "submit": "టైమర్‌ను ప్రారంభించు",
     "participants": "ఆశించిన పాల్గొనేవారి సంఖ్య",
-    "participantsPlaceholder": "ఉదా. 50"
+    "participantsPlaceholder": "ఉదా. 50",
+    "updating": "నవీకరిస్తోంది...",
+    "saveChanges": "మార్పులను భద్రపరచండి",
+    "editTitle": "టైమర్‌ను సవరించండి",
+    "editSubtitle": "టైమర్ వివరాలు మరియు సమయపట్టికను నవీకరించండి.",
+    "timerUpdated": "టైమర్ విజయవంతంగా నవీకరించబడింది!",
+    "successTitle": "టైమర్ విజయవంతంగా జోడించబడింది! 🎉",
+    "successSubtitle": "మీ అనుకూల టైమర్ ఇప్పుడు ప్రత్యక్ష ప్రసారంలో అందుబాటులో ఉంది.",
+    "addAnother": "మరొక టైమర్‌ను జోడించండి",
+    "viewYourTimer": "మీ టైమర్‌ను చూడండి",
+    "organizerTypeUser": "వికీ వాడుకరి",
+    "organizerTypeAffiliate": "అనుబంధ సంస్థ / బృందం",
+    "organizerTypeCustom": "అనుకూల / బాహ్య నిర్వాహకుడు",
+    "addOrganizer": "నిర్వాహకుడిని జోడించండి",
+    "organizerPlaceholderUser": "వికీమీడియా వాడుకరి పేరును శోధించండి...",
+    "organizerPlaceholderAffiliate": "అనుబంధ సంస్థ / వాడుకరి బృందాన్ని శోధించండి...",
+    "organizerPlaceholderCustom": "నిర్వాహకుడి పేరు లేదా లింక్ నమోదు చేయండి..."
   },
   "footer": {
     "createdBy": "రూపొందించినవారు",

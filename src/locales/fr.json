@@ -39,7 +39,9 @@
     "removeStar": "Retirer des favoris",
     "starEvent": "Ajouter aux favoris",
     "meta": "Meta",
-    "link": "Lien"
+    "link": "Lien",
+    "editTimer": "Modifier le compte à rebours",
+    "createdByYou": "Créé par vous"
   },
   "tags": {
     "all": "Tous",
@@ -133,7 +135,14 @@
     "embedSnippetDesc": "Collez cet iframe sur le site web de votre groupe, page d'événement ou tableau de bord :",
     "copyCode": "Copier le code",
     "participants": "Participants",
-    "viewDetails": "Voir les détails"
+    "viewDetails": "Voir les détails",
+    "wikiTemplate": "Modèle Wiki",
+    "copyTemplate": "Copier le modèle",
+    "templateCopied": "Modèle copié !",
+    "templateSnippetTitle": "Syntaxe de modèle MediaWiki",
+    "templateSnippetDesc": "Collez ceci sur Meta-Wiki ou tout wiki avec Modèle:WikiTimer installé :",
+    "viewPoster": "Affiche",
+    "viewFullImage": "Appuyez pour voir l'affiche / image complète"
   },
   "time": {
     "days": "Jours",
@@ -189,7 +198,23 @@
     "saving": "Enregistrement du minuteur...",
     "submit": "Lancer le minuteur",
     "participants": "Participants attendus",
-    "participantsPlaceholder": "ex. 50"
+    "participantsPlaceholder": "ex. 50",
+    "updating": "Mise à jour...",
+    "saveChanges": "Enregistrer les modifications",
+    "editTitle": "Modifier le compte à rebours",
+    "editSubtitle": "Mettre à jour les détails et le calendrier.",
+    "timerUpdated": "Compte à rebours mis à jour avec succès !",
+    "successTitle": "Compte à rebours ajouté avec succès ! 🎉",
+    "successSubtitle": "Votre compte à rebours personnalisé est désormais en ligne.",
+    "addAnother": "Ajouter un autre compte à rebours",
+    "viewYourTimer": "Voir votre compte à rebours",
+    "organizerTypeUser": "Utilisateur Wiki",
+    "organizerTypeAffiliate": "Affilié / Groupe",
+    "organizerTypeCustom": "Personnalisé / Externe",
+    "addOrganizer": "Ajouter un organisateur",
+    "organizerPlaceholderUser": "Rechercher un nom d'utilisateur Wikimedia...",
+    "organizerPlaceholderAffiliate": "Rechercher un affilié / groupe d'utilisateurs...",
+    "organizerPlaceholderCustom": "Entrer le nom ou l'URL de l'organisateur..."
   },
   "footer": {
     "createdBy": "Créé par",

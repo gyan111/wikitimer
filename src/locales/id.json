@@ -39,7 +39,9 @@
     "removeStar": "Hapus Bintang",
     "starEvent": "Bintangi Acara",
     "meta": "Meta",
-    "link": "Tautan"
+    "link": "Tautan",
+    "editTimer": "Edit Pengatur Waktu",
+    "createdByYou": "Dibuat oleh Anda"
   },
   "tags": {
     "all": "Semua",
@@ -133,7 +135,14 @@
     "embedSnippetDesc": "Tempel iframe ini ke situs web cabang, halaman arahan acara, atau dasbor komunitas Anda:",
     "copyCode": "Salin Kode",
     "participants": "Peserta",
-    "viewDetails": "Lihat Detail"
+    "viewDetails": "Lihat Detail",
+    "wikiTemplate": "Templat Wiki",
+    "copyTemplate": "Salin Templat",
+    "templateCopied": "Templat disalin!",
+    "templateSnippetTitle": "Sintaks Templat MediaWiki",
+    "templateSnippetDesc": "Tempel ini di Meta-Wiki atau wiki mana pun dengan Templat:WikiTimer terpasang:",
+    "viewPoster": "Poster",
+    "viewFullImage": "Ketuk untuk melihat poster / gambar lengkap"
   },
   "time": {
     "days": "Hari",
@@ -189,7 +198,23 @@
     "saving": "Menyimpan pengatur waktu...",
     "submit": "Luncurkan Pelacak",
     "participants": "Perkiraan Peserta",
-    "participantsPlaceholder": "mis. 50"
+    "participantsPlaceholder": "mis. 50",
+    "updating": "Memperbarui...",
+    "saveChanges": "Simpan Perubahan",
+    "editTitle": "Edit Pengatur Waktu",
+    "editSubtitle": "Perbarui rincian dan jadwal pengatur waktu.",
+    "timerUpdated": "Pengatur waktu berhasil diperbarui!",
+    "successTitle": "Pengatur waktu berhasil ditambahkan! 🎉",
+    "successSubtitle": "Pengatur waktu khusus Anda sekarang aktif dan dapat dilihat.",
+    "addAnother": "Tambah Pengatur Waktu Lain",
+    "viewYourTimer": "Lihat Pengatur Waktu Anda",
+    "organizerTypeUser": "Pengguna Wiki",
+    "organizerTypeAffiliate": "Afiliasi / Grup",
+    "organizerTypeCustom": "Kustom / Eksternal",
+    "addOrganizer": "Tambah Penyelenggara",
+    "organizerPlaceholderUser": "Cari nama pengguna Wikimedia...",
+    "organizerPlaceholderAffiliate": "Cari afiliasi / kelompok pengguna...",
+    "organizerPlaceholderCustom": "Masukkan nama atau URL penyelenggara..."
   },
   "footer": {
     "createdBy": "Dibuat oleh",

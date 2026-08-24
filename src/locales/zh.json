@@ -39,7 +39,9 @@
     "removeStar": "取消收藏",
     "starEvent": "收藏活动",
     "meta": "Meta",
-    "link": "链接"
+    "link": "链接",
+    "editTimer": "编辑计时器",
+    "createdByYou": "由您创建"
   },
   "tags": {
     "all": "全部",
@@ -133,7 +135,14 @@
     "embedSnippetDesc": "将此 iframe 代码粘贴到您的分会网站、活动页面或社区仪表板：",
     "copyCode": "复制代码",
     "participants": "位参与者",
-    "viewDetails": "查看详情"
+    "viewDetails": "查看详情",
+    "wikiTemplate": "Wiki 模板",
+    "copyTemplate": "复制模板",
+    "templateCopied": "模板已复制！",
+    "templateSnippetTitle": "MediaWiki 模板语法",
+    "templateSnippetDesc": "将此内容粘贴到 Meta-Wiki 或安装了 Template:WikiTimer 的任何维基上：",
+    "viewPoster": "海报",
+    "viewFullImage": "点击查看完整海报/图片"
   },
   "time": {
     "days": "天",
@@ -189,7 +198,23 @@
     "saving": "正在保存计时器...",
     "submit": "启动计时器",
     "participants": "预计参与人数",
-    "participantsPlaceholder": "例如：50"
+    "participantsPlaceholder": "例如：50",
+    "updating": "更新中...",
+    "saveChanges": "保存更改",
+    "editTitle": "编辑计时器",
+    "editSubtitle": "更新计时器详细信息和日程安排。",
+    "timerUpdated": "计时器更新成功！",
+    "successTitle": "计时器添加成功！ 🎉",
+    "successSubtitle": "您的自定义计时器现已上线并可供所有人发现。",
+    "addAnother": "添加另一个计时器",
+    "viewYourTimer": "查看您的计时器",
+    "organizerTypeUser": "Wiki 用户",
+    "organizerTypeAffiliate": "分会 / 关联组织",
+    "organizerTypeCustom": "自定义 / 外部组织者",
+    "addOrganizer": "添加组织者",
+    "organizerPlaceholderUser": "搜索维基媒体用户名...",
+    "organizerPlaceholderAffiliate": "搜索分会 / 用户组...",
+    "organizerPlaceholderCustom": "输入组织者名称或链接..."
   },
   "footer": {
     "createdBy": "创建者",

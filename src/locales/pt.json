@@ -39,7 +39,9 @@
     "removeStar": "Remover dos favoritos",
     "starEvent": "Favoritar evento",
     "meta": "Meta",
-    "link": "Link"
+    "link": "Link",
+    "editTimer": "Editar temporizador",
+    "createdByYou": "Criado por você"
   },
   "tags": {
     "all": "Todos",
@@ -133,7 +135,14 @@
     "embedSnippetDesc": "Cole este iframe no site do seu grupo, landing page do evento ou painel da comunidade:",
     "copyCode": "Copiar código",
     "participants": "Participantes",
-    "viewDetails": "Ver detalhes"
+    "viewDetails": "Ver detalhes",
+    "wikiTemplate": "Predefinição Wiki",
+    "copyTemplate": "Copiar predefinição",
+    "templateCopied": "Predefinição copiada!",
+    "templateSnippetTitle": "Sintaxe da predefinição MediaWiki",
+    "templateSnippetDesc": "Cole isto no Meta-Wiki ou em qualquer wiki com Template:WikiTimer instalado:",
+    "viewPoster": "Pôster",
+    "viewFullImage": "Toque para ver o pôster / imagem completa"
   },
   "time": {
     "days": "Dias",
@@ -189,7 +198,23 @@
     "saving": "Salvando cronômetro...",
     "submit": "Criar cronômetro",
     "participants": "Participantes esperados",
-    "participantsPlaceholder": "ex: 50"
+    "participantsPlaceholder": "ex: 50",
+    "updating": "Atualizando...",
+    "saveChanges": "Salvar alterações",
+    "editTitle": "Editar temporizador",
+    "editSubtitle": "Atualizar detalhes e cronograma do temporizador.",
+    "timerUpdated": "Temporizador atualizado com sucesso!",
+    "successTitle": "Temporizador adicionado com sucesso! 🎉",
+    "successSubtitle": "Seu temporizador personalizado já está ativo e visível.",
+    "addAnother": "Adicionar outro temporizador",
+    "viewYourTimer": "Ver seu temporizador",
+    "organizerTypeUser": "Usuário Wiki",
+    "organizerTypeAffiliate": "Afiliado / Grupo",
+    "organizerTypeCustom": "Personalizado / Externo",
+    "addOrganizer": "Adicionar organizador",
+    "organizerPlaceholderUser": "Buscar nome de usuário da Wikimedia...",
+    "organizerPlaceholderAffiliate": "Buscar afiliado / grupo de usuários...",
+    "organizerPlaceholderCustom": "Digite o nome ou link do organizador..."
   },
   "footer": {
     "createdBy": "Criado por",

@@ -39,7 +39,9 @@
     "removeStar": "ᱠᱩᱥᱤ ᱠᱷᱚᱱ ᱚᱪᱚᱜ",
     "starEvent": "ᱠᱩᱥᱤ ᱞᱮᱠᱟᱛᱮ ᱫᱚᱦᱚᱭ ᱢᱮ",
     "meta": "ᱢᱮᱴᱟ",
-    "link": "ᱡᱚᱱᱚᱲ"
+    "link": "ᱡᱚᱱᱚᱲ",
+    "editTimer": "ᱴᱟᱭᱢᱟᱨ ᱥᱟᱯᱲᱟᱣ",
+    "createdByYou": "ᱟᱢᱟᱜ ᱛᱮᱭᱟᱨ"
   },
   "tags": {
     "all": "ᱡᱚᱛᱚ",
@@ -133,7 +135,14 @@
     "embedSnippetDesc": "ᱱᱚᱶᱟ iframe ᱠᱳᱰ ᱟᱢᱟᱜ ᱣᱮᱵᱽᱥᱟᱭᱤᱴ ᱥᱮ ᱰᱮᱥᱵᱳᱨᱰ ᱨᱮ ᱞᱟᱜᱟᱣ ᱢᱮ:",
     "copyCode": "ᱠᱳᱰ ᱠᱚᱯᱤ ᱢᱮ",
     "participants": "ᱥᱮᱞᱮᱫᱤᱭᱟᱹ",
-    "viewDetails": "ᱵᱤᱵᱚᱨᱚᱬ ᱧᱮᱞ ᱢᱮ"
+    "viewDetails": "ᱵᱤᱵᱚᱨᱚᱬ ᱧᱮᱞ ᱢᱮ",
+    "wikiTemplate": "ᱣᱤᱠᱤ ᱴᱮᱢᱯᱞᱮᱴ",
+    "copyTemplate": "ᱴᱮᱢᱯᱞᱮᱴ ᱠᱚᱯᱤ",
+    "templateCopied": "ᱴᱮᱢᱯᱞᱮᱴ ᱠᱚᱯᱤ ᱮᱱᱟ!",
+    "templateSnippetTitle": "ᱢᱤᱰᱤᱭᱟᱣᱤᱠᱤ ᱴᱮᱢᱯᱞᱮᱴ ᱥᱤᱱᱴᱟᱠᱥ",
+    "templateSnippetDesc": "ᱢᱮᱴᱟ-ᱣᱤᱠᱤ ᱥᱮ Template:WikiTimer ᱢᱮᱱᱟᱜ ᱡᱟᱦᱟᱸᱱ ᱣᱤᱠᱤᱨᱮ ᱱᱚᱶᱟ ᱞᱟᱜᱟᱣ ᱢᱮ:",
+    "viewPoster": "ᱯᱚᱥᱴᱟᱨ",
+    "viewFullImage": "ᱯᱩᱨᱟᱹ ᱯᱚᱥᱴᱟᱨ / ᱪᱤᱛᱟᱹᱨ ᱧᱮᱞ ᱞᱟᱹᱜᱤᱫ ᱴᱤᱯᱟᱹᱣ ᱢᱮ"
   },
   "time": {
     "days": "ᱢᱟᱦᱟᱸ",
@@ -189,7 +198,23 @@
     "saving": "ᱴᱟᱭᱢᱟᱨ ᱥᱟᱧᱪᱟᱣᱜ ᱠᱟᱱᱟ...",
     "submit": "ᱴᱟᱭᱢᱟᱨ ᱮᱦᱚᱵ ᱢᱮ",
     "participants": "ᱥᱮᱞᱮᱫᱚᱜ ᱦᱚᱲ ᱮᱞ",
-    "participantsPlaceholder": "ᱡᱮᱞᱮᱠᱟ: ᱕᱐"
+    "participantsPlaceholder": "ᱡᱮᱞᱮᱠᱟ: ᱕᱐",
+    "updating": "ᱱᱟᱣᱟᱜ ᱠᱟᱱᱟ...",
+    "saveChanges": "ᱵᱚᱫᱚᱞ ᱥᱟᱧᱪᱟᱣ",
+    "editTitle": "ᱴᱟᱭᱢᱟᱨ ᱥᱟᱯᱲᱟᱣ",
+    "editSubtitle": "ᱴᱟᱭᱢᱟᱨ ᱵᱤᱵᱚᱨᱚᱬ ᱟᱨ ᱚᱠᱛᱚ ᱥᱟᱯᱲᱟᱣ ᱢᱮ।",
+    "timerUpdated": "ᱴᱟᱭᱢᱟᱨ ᱱᱟᱯᱟᱭᱛᱮ ᱥᱟᱯᱲᱟᱣ ᱮᱱᱟ!",
+    "successTitle": "ᱴᱟᱭᱢᱟᱨ ᱱᱟᱯᱟᱭᱛᱮ ᱥᱮᱞᱮᱫ ᱮᱱᱟ! 🎉",
+    "successSubtitle": "ᱟᱢᱟᱜ ᱴᱟᱭᱢᱟᱨ ᱱᱤᱛᱚᱜ ᱞᱟᱭᱤᱵᱷ ᱢᱮᱱᱟᱜ-ᱟ।",
+    "addAnother": "ᱟᱨ ᱢᱤᱫᱴᱟᱝ ᱴᱟᱭᱢᱟᱨ ᱥᱮᱞᱮᱫ",
+    "viewYourTimer": "ᱟᱢᱟᱜ ᱴᱟᱭᱢᱟᱨ ᱧᱮᱞ",
+    "organizerTypeUser": "ᱣᱤᱠᱤ ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ",
+    "organizerTypeAffiliate": "ᱜᱟᱶᱛᱟ / ᱫᱚᱞ",
+    "organizerTypeCustom": "ᱮᱴᱟᱜ / ᱵᱟᱦᱨᱮ ᱥᱟᱯᱲᱟᱣᱤᱡ",
+    "addOrganizer": "ᱥᱟᱯᱲᱟᱣᱤᱡ ᱥᱮᱞᱮᱫ",
+    "organizerPlaceholderUser": "ᱣᱤᱠᱤᱢᱤᱰᱤᱭᱟ ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱧᱩᱛᱩᱢ ᱥᱮᱸᱫᱽᱨᱟ...",
+    "organizerPlaceholderAffiliate": "ᱜᱟᱶᱛᱟ / ᱤᱭᱩᱡᱟᱨ ᱜᱨᱩᱯ ᱥᱮᱸᱫᱽᱨᱟ...",
+    "organizerPlaceholderCustom": "ᱥᱟᱯᱲᱟᱣᱤᱡ ᱧᱩᱛᱩᱢ ᱥᱮ ᱞᱤᱸᱠ ᱮᱢ ᱢᱮ..."
   },
   "footer": {
     "createdBy": "ᱵᱮᱱᱟᱣᱤᱭᱟᱹ",

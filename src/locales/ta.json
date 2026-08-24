@@ -39,7 +39,9 @@
     "removeStar": "விருப்பத்திலிருந்து நீக்கு",
     "starEvent": "விருப்பமாகச் சேர்",
     "meta": "மெட்டா",
-    "link": "இணைப்பு"
+    "link": "இணைப்பு",
+    "editTimer": "டைமரைத் திருத்துக",
+    "createdByYou": "உங்களால் உருவாக்கப்பட்டது"
   },
   "tags": {
     "all": "அனைத்தும்",
@@ -133,7 +135,14 @@
     "embedSnippetDesc": "இந்த iframe குறியீட்டை உங்கள் இணையதளம் அல்லது சமூக டாஷ்போர்டில் ஒட்டவும்:",
     "copyCode": "குறியீட்டை நகலெடு",
     "participants": "பங்கேற்பாளர்கள்",
-    "viewDetails": "விவரங்களைக் காண்க"
+    "viewDetails": "விவரங்களைக் காண்க",
+    "wikiTemplate": "விக்கி வார்ப்புரு",
+    "copyTemplate": "வார்ப்புருவை நகலெடு",
+    "templateCopied": "வார்ப்புரு நகலெடுக்கப்பட்டது!",
+    "templateSnippetTitle": "மீடியாவிக்கி வார்ப்புரு தொடரியல்",
+    "templateSnippetDesc": "இதை மெட்டா-விக்கியில் அல்லது Template:WikiTimer நிறுவப்பட்ட எந்த விக்கியிலும் ஒட்டவும்:",
+    "viewPoster": "சுவரொட்டி (போஸ்டர்)",
+    "viewFullImage": "முழு போஸ்டர் / படத்தை காண தட்டவும்"
   },
   "time": {
     "days": "நாட்கள்",
@@ -189,7 +198,23 @@
     "saving": "நேரங்காட்டி சேமிக்கப்படுகிறது...",
     "submit": "நேரங்காட்டியைத் தொடங்கு",
     "participants": "எதிர்பார்க்கப்படும் பங்கேற்பாளர்கள்",
-    "participantsPlaceholder": "எ.கா. 50"
+    "participantsPlaceholder": "எ.கா. 50",
+    "updating": "புதுப்பிக்கப்படுகிறது...",
+    "saveChanges": "மாற்றங்களைச் சேமி",
+    "editTitle": "டைமரைத் திருத்துக",
+    "editSubtitle": "டைமர் விவரங்கள் மற்றும் அட்டவணையை புதுப்பிக்கவும்.",
+    "timerUpdated": "டைமர் வெற்றிகரமாக புதுப்பிக்கப்பட்டது!",
+    "successTitle": "டைமர் வெற்றிகரமாக சேர்க்கப்பட்டது! 🎉",
+    "successSubtitle": "உங்கள் தனிப்பயன் டைமர் இப்போது நேரலையில் உள்ளது.",
+    "addAnother": "மற்றொரு டைமரைச் சேர்",
+    "viewYourTimer": "உங்கள் டைமரைக் காண்க",
+    "organizerTypeUser": "விக்கி பயனர்",
+    "organizerTypeAffiliate": "இணைப்பு அமைப்பு / குழு",
+    "organizerTypeCustom": "தனிப்பயன் / வெளிப்புற அமைப்பாளர்",
+    "addOrganizer": "அமைப்பாளரைச் சேர்",
+    "organizerPlaceholderUser": "விக்கிமீடியா பயனர் பெயரைத் தேடவும்...",
+    "organizerPlaceholderAffiliate": "இணைப்பு அமைப்பு / பயனர் குழுவைத் தேடவும்...",
+    "organizerPlaceholderCustom": "அமைப்பாளர் பெயர் அல்லது இணைப்பை உள்ளிடவும்..."
   },
   "footer": {
     "createdBy": "உருவாக்கியவர்",
