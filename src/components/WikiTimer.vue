@@ -1084,16 +1084,16 @@
   </div>
 </template>
 
-
-
 <script setup>
 import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { useAuth } from '../store/auth';
 import EventsMap from './EventsMap.vue';
 import EventsCalendar from './EventsCalendar.vue';
 import EditTimerModal from './EditTimerModal.vue';
 
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const { user, isAuthenticated, isLoading, error: authError, login, logout, checkAuth } = useAuth();
@@ -1356,6 +1356,14 @@ const userTimezoneAbbr = computed(() => {
   }
 });
 
+function isAllDayEvent(event) {
+  if (!event || !event.time) return false;
+  if (event.allDay === true) return true;
+  const startStr = typeof event.time === 'string' ? event.time : (event.time instanceof Date ? event.time.toISOString() : '');
+  const endStr = event.endTime ? (typeof event.endTime === 'string' ? event.endTime : (event.endTime instanceof Date ? event.endTime.toISOString() : '')) : '';
+  return startStr.endsWith('T00:00:00.000Z') && (!endStr || endStr.endsWith('T23:59:59.999Z') || endStr.endsWith('T23:59:59Z') || endStr.endsWith('T23:59:00.000Z'));
+}
+
 function formatEventScheduleWithTz(event, tzMode) {
   if (!event || !event.time) return '';
   const tz = tzMode === 'UTC' ? 'UTC' : userTimezone;
@@ -1363,6 +1371,27 @@ function formatEventScheduleWithTz(event, tzMode) {
 
   const start = new Date(event.time);
   const end = event.endTime ? new Date(event.endTime) : null;
+
+  if (isAllDayEvent(event)) {
+    const allDayLabel = t('modal.allDay') || 'All day';
+    const dateOptions = {
+      timeZone: 'UTC',
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    };
+    const startFormatted = new Intl.DateTimeFormat('en-US', dateOptions).format(start);
+    if (!end) {
+      return `${startFormatted} (${allDayLabel})`;
+    }
+    const isSameUtcDay = start.toISOString().slice(0, 10) === end.toISOString().slice(0, 10);
+    if (isSameUtcDay) {
+      return `${startFormatted} (${allDayLabel})`;
+    } else {
+      const endFormatted = new Intl.DateTimeFormat('en-US', dateOptions).format(end);
+      return `${startFormatted} – ${endFormatted}`;
+    }
+  }
 
   const options = {
     timeZone: tz,

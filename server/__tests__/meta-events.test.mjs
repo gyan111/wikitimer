@@ -4,7 +4,7 @@
 import { describe, it, expect } from 'vitest';
 import { _testing } from '../meta-events.js';
 
-const { decodeEntities, parseDate, parseWidgets, parseRow, slugify } = _testing;
+const { decodeEntities, parseDate, parseWidgets, parseRow, parseEventDetails, slugify } = _testing;
 
 // ---------------------------------------------------------------------------
 // slugify
@@ -307,5 +307,54 @@ describe('deduplication', () => {
     }
 
     expect(byKey.size).toBe(2);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// parseEventDetails
+// ---------------------------------------------------------------------------
+describe('parseEventDetails', () => {
+  it('extracts start and end timestamps and timezone from CampaignEvents page HTML', () => {
+    const html = `
+      <div class="ext-campaignevents-textwithicon-widget ext-campaignevents-eventpage-header-time">
+        <span class="ext-campaignevents-time-range" data-mw-start="2026-08-25T08:00:00Z" data-mw-end="2026-08-25T09:30:00Z">08:00, 25 August 2026 – 09:30, 25 August 2026</span>
+        <div><strong>Timezone:</strong> <span class="ext-campaignevents-timezone">+00:00</span></div>
+      </div>
+    `;
+    const details = parseEventDetails(html);
+    expect(details).toEqual({
+      startTime: '2026-08-25T08:00:00Z',
+      endTime: '2026-08-25T09:30:00Z',
+      timeZone: '+00:00'
+    });
+  });
+
+  it('extracts named timezone like Africa/Tunis', () => {
+    const html = `
+      <span class="ext-campaignevents-time-range" data-mw-start="2026-08-23T11:00:00Z" data-mw-end="2026-08-27T11:06:00Z">...</span>
+      <span class="ext-campaignevents-timezone">Africa/Tunis</span>
+    `;
+    const details = parseEventDetails(html);
+    expect(details).toEqual({
+      startTime: '2026-08-23T11:00:00Z',
+      endTime: '2026-08-27T11:06:00Z',
+      timeZone: 'Africa/Tunis'
+    });
+  });
+
+  it('defaults timezone to UTC when timezone element is missing', () => {
+    const html = `<span class="ext-campaignevents-time-range" data-mw-start="2026-08-25T08:00:00Z" data-mw-end="2026-08-25T09:30:00Z"></span>`;
+    const details = parseEventDetails(html);
+    expect(details).toEqual({
+      startTime: '2026-08-25T08:00:00Z',
+      endTime: '2026-08-25T09:30:00Z',
+      timeZone: 'UTC'
+    });
+  });
+
+  it('returns null when time-range data attributes are missing', () => {
+    expect(parseEventDetails('<div>No campaign event here</div>')).toBeNull();
+    expect(parseEventDetails('')).toBeNull();
+    expect(parseEventDetails(null)).toBeNull();
   });
 });

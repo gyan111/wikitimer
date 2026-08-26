@@ -162,6 +162,7 @@
     "timezoneUtc": "UTC",
     "myTime": "My Time",
     "close": "Close",
+    "allDay": "All day",
     "eventSchedule": "Event Schedule",
     "hostLocation": "Host City / Location",
     "organizers": "Organizers",

@@ -142,7 +142,8 @@
     "templateSnippetTitle": "मीडियाविकी साँचा सिंटैक्स",
     "templateSnippetDesc": "इसे मेटा-विकी या किसी भी विकी पर पेस्ट करें जहाँ Template:WikiTimer उपलब्ध है:",
     "viewPoster": "पोस्टर",
-    "viewFullImage": "पूरा पोस्टर / चित्र देखने के लिए टैप करें"
+    "viewFullImage": "पूरा पोस्टर / चित्र देखने के लिए टैप करें",
+    "allDay": "पूरे दिन"
   },
   "time": {
     "days": "दिन",

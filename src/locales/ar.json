@@ -142,7 +142,8 @@
     "templateSnippetTitle": "صيغة قالب ميدياويكي",
     "templateSnippetDesc": "الصق هذا على ميتا ويكي أو أي ويكي يحتوي على Template:WikiTimer:",
     "viewPoster": "الملصق",
-    "viewFullImage": "انقر لعرض الملصق / الصورة بالكامل"
+    "viewFullImage": "انقر لعرض الملصق / الصورة بالكامل",
+    "allDay": "طوال اليوم"
   },
   "time": {
     "days": "أيام",

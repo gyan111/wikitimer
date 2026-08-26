@@ -155,11 +155,70 @@ function parseRow(rowHtml) {
     organizers,
     timeZone: 'UTC',
     logo: null,
-    wiki
+    wiki,
+    allDay: true
   };
 }
 
-// Fetches and parses events from Meta-Wiki. Deduplicates by event page URL.
+// Parses exact start/end timestamps and timezone from CampaignEvents page HTML
+function parseEventDetails(html) {
+  if (!html || typeof html !== 'string') return null;
+  const timeMatch = html.match(/data-mw-start="([^"]+)"(?:\s+data-mw-end="([^"]+)")?/);
+  if (!timeMatch) return null;
+
+  const tzMatch = html.match(/ext-campaignevents-timezone[^>]*>([^<]+)</);
+  return {
+    startTime: timeMatch[1],
+    endTime: timeMatch[2] || timeMatch[1],
+    timeZone: tzMatch ? decodeEntities(tzMatch[1]) : 'UTC'
+  };
+}
+
+// Fetches an individual event page to extract exact start/end timestamps
+async function fetchEventDetails(link) {
+  if (!link) return null;
+  try {
+    const res = await fetch(link, {
+      headers: { 'User-Agent': USER_AGENT },
+      signal: AbortSignal.timeout(5000)
+    });
+    if (!res.ok) return null;
+    const html = await res.text();
+    return parseEventDetails(html);
+  } catch {
+    return null;
+  }
+}
+
+// Concurrently enriches events with exact times from their respective wiki event pages
+async function enrichEvents(events, concurrency = 8) {
+  if (!events || events.length === 0) return events;
+
+  let index = 0;
+  async function worker() {
+    while (index < events.length) {
+      const i = index++;
+      const ev = events[i];
+      if (ev && ev.link) {
+        const details = await fetchEventDetails(ev.link);
+        if (details && details.startTime) {
+          ev.time = new Date(details.startTime).toISOString();
+          ev.endTime = details.endTime ? new Date(details.endTime).toISOString() : ev.time;
+          ev.allDay = false;
+          if (details.timeZone) {
+            ev.timeZone = details.timeZone;
+          }
+        }
+      }
+    }
+  }
+
+  const workers = Array.from({ length: Math.min(concurrency, events.length) }, () => worker());
+  await Promise.all(workers);
+  return events;
+}
+
+// Fetches and parses events from Meta-Wiki. Deduplicates by event page URL and enriches with exact times.
 async function fetchMetaEvents() {
   const params = new URLSearchParams({
     action: 'parse',
@@ -193,7 +252,9 @@ async function fetchMetaEvents() {
     const event = parseRow(row);
     if (event && !byKey.has(event.id)) byKey.set(event.id, event);
   }
-  return [...byKey.values()];
+  const events = [...byKey.values()];
+  await enrichEvents(events);
+  return events;
 }
 
 import prisma from './db.js';
@@ -221,7 +282,7 @@ async function syncEventsToDatabase(events) {
           endTime: e.endTime ? new Date(e.endTime) : null,
           region: e.region || 'Global',
           country: e.country || 'Online',
-          timeZone: 'UTC',
+          timeZone: e.timeZone || 'UTC',
           participation: e.participation || null,
           eventTypes: e.eventTypes || null,
           topics: e.topics || null,
@@ -238,7 +299,7 @@ async function syncEventsToDatabase(events) {
           endTime: e.endTime ? new Date(e.endTime) : null,
           region: e.region || 'Global',
           country: e.country || 'Online',
-          timeZone: 'UTC',
+          timeZone: e.timeZone || 'UTC',
           participation: e.participation || null,
           eventTypes: e.eventTypes || null,
           topics: e.topics || null,
@@ -310,26 +371,31 @@ export async function getMetaEvents() {
         orderBy: { time: 'desc' }
       });
       if (dbMetaTimers && dbMetaTimers.length > 0) {
-        return dbMetaTimers.map(t => ({
-          id: t.link ? 'meta:' + t.link.replace(/^https?:\/\//, '') : (t.metaId || `meta:${t.id}`),
-          slug: t.slug || slugify(t.name, t.link),
-          isMeta: true,
-          source: 'meta-allevents',
-          type: t.type || 'event',
-          name: t.name,
-          link: t.link,
-          time: t.time.toISOString(),
-          endTime: t.endTime ? t.endTime.toISOString() : null,
-          region: t.region,
-          country: t.country,
-          timeZone: t.timeZone || 'UTC',
-          organizers: t.organizers,
-          participation: t.participation,
-          eventTypes: t.eventTypes,
-          topics: t.topics,
-          wikiProject: t.wikiProject,
-          logo: t.logo
-        }));
+        return dbMetaTimers.map(t => {
+          const isAllDay = t.time.toISOString().endsWith('T00:00:00.000Z') &&
+            (!t.endTime || t.endTime.toISOString().endsWith('T23:59:59.999Z') || t.endTime.toISOString().endsWith('T23:59:59Z'));
+          return {
+            id: t.link ? 'meta:' + t.link.replace(/^https?:\/\//, '') : (t.metaId || `meta:${t.id}`),
+            slug: t.slug || slugify(t.name, t.link),
+            isMeta: true,
+            source: 'meta-allevents',
+            type: t.type || 'event',
+            name: t.name,
+            link: t.link,
+            time: t.time.toISOString(),
+            endTime: t.endTime ? t.endTime.toISOString() : null,
+            allDay: isAllDay,
+            region: t.region,
+            country: t.country,
+            timeZone: t.timeZone || 'UTC',
+            organizers: t.organizers,
+            participation: t.participation,
+            eventTypes: t.eventTypes,
+            topics: t.topics,
+            wikiProject: t.wikiProject,
+            logo: t.logo
+          };
+        });
       }
     } catch (e) {
       console.error('Failed to query meta events from database:', e.message);
@@ -340,5 +406,5 @@ export async function getMetaEvents() {
 }
 
 // Expose internal helpers for unit tests. Not part of the public API.
-export const _testing = { decodeEntities, parseDate, parseWidgets, parseRow, slugify, syncEventsToDatabase };
+export const _testing = { decodeEntities, parseDate, parseWidgets, parseRow, parseEventDetails, slugify, syncEventsToDatabase };
 

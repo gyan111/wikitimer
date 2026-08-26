@@ -142,7 +142,8 @@
     "templateSnippetTitle": "Sintaxis de plantilla MediaWiki",
     "templateSnippetDesc": "Pega esto en Meta-Wiki o cualquier wiki con Plantilla:WikiTimer instalada:",
     "viewPoster": "Póster",
-    "viewFullImage": "Toca para ver el póster / imagen completa"
+    "viewFullImage": "Toca para ver el póster / imagen completa",
+    "allDay": "Todo el día"
   },
   "time": {
     "days": "Días",

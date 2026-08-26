@@ -142,7 +142,8 @@
     "templateSnippetTitle": "Syntaxe de modèle MediaWiki",
     "templateSnippetDesc": "Collez ceci sur Meta-Wiki ou tout wiki avec Modèle:WikiTimer installé :",
     "viewPoster": "Affiche",
-    "viewFullImage": "Appuyez pour voir l'affiche / image complète"
+    "viewFullImage": "Appuyez pour voir l'affiche / image complète",
+    "allDay": "Toute la journée"
   },
   "time": {
     "days": "Jours",

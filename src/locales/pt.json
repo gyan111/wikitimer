@@ -142,7 +142,8 @@
     "templateSnippetTitle": "Sintaxe da predefinição MediaWiki",
     "templateSnippetDesc": "Cole isto no Meta-Wiki ou em qualquer wiki com Template:WikiTimer instalado:",
     "viewPoster": "Pôster",
-    "viewFullImage": "Toque para ver o pôster / imagem completa"
+    "viewFullImage": "Toque para ver o pôster / imagem completa",
+    "allDay": "Dia inteiro"
   },
   "time": {
     "days": "Dias",

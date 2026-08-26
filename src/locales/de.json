@@ -142,7 +142,8 @@
     "templateSnippetTitle": "MediaWiki-Vorlagensyntax",
     "templateSnippetDesc": "Auf Meta-Wiki oder jedem Wiki mit Vorlage:WikiTimer einfügen:",
     "viewPoster": "Plakat",
-    "viewFullImage": "Klicken, um das vollständige Plakat / Bild anzuzeigen"
+    "viewFullImage": "Klicken, um das vollständige Plakat / Bild anzuzeigen",
+    "allDay": "Ganztägig"
   },
   "time": {
     "days": "Tage",

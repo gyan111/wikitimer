@@ -142,7 +142,8 @@
     "templateSnippetTitle": "MediaWiki 模板语法",
     "templateSnippetDesc": "将此内容粘贴到 Meta-Wiki 或安装了 Template:WikiTimer 的任何维基上：",
     "viewPoster": "海报",
-    "viewFullImage": "点击查看完整海报/图片"
+    "viewFullImage": "点击查看完整海报/图片",
+    "allDay": "全天"
   },
   "time": {
     "days": "天",

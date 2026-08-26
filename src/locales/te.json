@@ -142,7 +142,8 @@
     "templateSnippetTitle": "మీడియావికీ మూస సింటాక్స్",
     "templateSnippetDesc": "దీనిని మెటా-వికీ లేదా Template:WikiTimer ఉన్న ఏ వికీలోనైనా అతికించండి:",
     "viewPoster": "పోస్టర్",
-    "viewFullImage": "పూర్తి పోస్టర్ / చిత్రాన్ని చూడటానికి నొక్కండి"
+    "viewFullImage": "పూర్తి పోస్టర్ / చిత్రాన్ని చూడటానికి నొక్కండి",
+    "allDay": "రోజంతా"
   },
   "time": {
     "days": "రోజులు",

@@ -142,7 +142,8 @@
     "templateSnippetTitle": "Sintassi template MediaWiki",
     "templateSnippetDesc": "Incolla questo su Meta-Wiki o su qualsiasi wiki con Template:WikiTimer installato:",
     "viewPoster": "Locandina",
-    "viewFullImage": "Tocca per visualizzare la locandina / immagine completa"
+    "viewFullImage": "Tocca per visualizzare la locandina / immagine completa",
+    "allDay": "Tutto il giorno"
   },
   "time": {
     "days": "Giorni",

@@ -142,7 +142,8 @@
     "templateSnippetTitle": "Sintaks Templat MediaWiki",
     "templateSnippetDesc": "Tempel ini di Meta-Wiki atau wiki mana pun dengan Templat:WikiTimer terpasang:",
     "viewPoster": "Poster",
-    "viewFullImage": "Ketuk untuk melihat poster / gambar lengkap"
+    "viewFullImage": "Ketuk untuk melihat poster / gambar lengkap",
+    "allDay": "Sepanjang hari"
   },
   "time": {
     "days": "Hari",

@@ -142,7 +142,8 @@
     "templateSnippetTitle": "MediaWiki テンプレート構文",
     "templateSnippetDesc": "Meta-Wiki または Template:WikiTimer が設置されたウィキに貼り付けてください：",
     "viewPoster": "ポスター",
-    "viewFullImage": "タップしてポスター/全画像を表示"
+    "viewFullImage": "タップしてポスター/全画像を表示",
+    "allDay": "終日"
   },
   "time": {
     "days": "日",

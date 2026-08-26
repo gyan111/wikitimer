@@ -142,7 +142,8 @@
     "templateSnippetTitle": "Синтаксис шаблона MediaWiki",
     "templateSnippetDesc": "Вставьте это на Мета-вики или в любой вики с установленным Template:WikiTimer:",
     "viewPoster": "Постер",
-    "viewFullImage": "Нажмите для просмотра полного постера / изображения"
+    "viewFullImage": "Нажмите для просмотра полного постера / изображения",
+    "allDay": "Весь день"
   },
   "time": {
     "days": "Дней",
