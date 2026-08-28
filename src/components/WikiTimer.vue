@@ -1689,18 +1689,22 @@ const events = computed(() => {
   return combined.filter(event => {
     if (!event || typeof event !== 'object' || !event.name || !event.time) return false;
     
-    // Deduplication key based on normalized URL, metaId, slug, or name+time
-    const linkKey = (event.link || '').replace(/^https?:\/\//, '').replace(/\/+$/, '').toLowerCase();
-    const metaKey = event.metaId ? `meta:${event.metaId}` : '';
-    const slugKey = event.slug ? `slug:${event.slug}` : '';
-    const fallbackKey = `fallback:${event.name.trim().toLowerCase()}_${new Date(event.time).getTime()}`;
+    // Deduplication key based on distinct event identifier or metaId/slug
+    let key;
+    if (event.metaId) {
+      key = `meta:${event.metaId}`;
+    } else if (event.id && !event.isMeta) {
+      key = `user:${event.id}`;
+    } else if (event.slug) {
+      key = `slug:${event.slug}`;
+    } else {
+      key = `event:${event.name.trim().toLowerCase()}_${new Date(event.time).getTime()}`;
+    }
     
-    const primaryKey = metaKey || slugKey || linkKey || fallbackKey;
-    if (seen.has(primaryKey) || (linkKey && seen.has(linkKey))) {
+    if (seen.has(key)) {
       return false;
     }
-    if (linkKey) seen.add(linkKey);
-    seen.add(primaryKey);
+    seen.add(key);
     return true;
   });
 });
@@ -1942,7 +1946,7 @@ function formatEventDates(event) {
   const start = new Date(event.time);
   const end = event.endTime ? new Date(event.endTime) : null;
   
-  const options = { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' };
+  const options = { month: 'short', day: 'numeric', year: 'numeric' };
   const startStr = start.toLocaleDateString('en-US', options);
   
   if (!end || start.toDateString() === end.toDateString()) {
