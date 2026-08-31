@@ -1,4 +1,4 @@
 backend: kubernetes
 type: buildservice
-mount: none
+mount: all
 health-check-path: /healthz

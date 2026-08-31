@@ -62,5 +62,5 @@ jobs:
             sleep 5
             
             echo "Starting webservice with newly built container image..."
-            become wikitimer toolforge webservice --mount=none buildservice start || become wikitimer toolforge webservice buildservice start
+            become wikitimer toolforge webservice --mount=all buildservice start || become wikitimer toolforge webservice buildservice start
             echo "WikiTimer deployment complete!"
