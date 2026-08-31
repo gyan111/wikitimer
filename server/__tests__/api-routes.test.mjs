@@ -53,100 +53,12 @@ process.env.WIKI_CLIENT_ID = 'test-client-id';
 process.env.WIKI_CLIENT_SECRET = 'test-client-secret';
 // Don't set DATABASE_URL — uses in-memory session store.
 
-// Dynamically import the app only after mocks are in place.
-// The server/index.js calls app.listen() at module level, so we need to
-// build a lightweight test app that mirrors the routes instead.
-
-import express from 'express';
-
 let app;
 
 beforeAll(async () => {
-  // Build a minimal Express app that mirrors the routes from server/index.js
-  // but doesn't call listen() or connect to a real DB.
-  const { getMetaEvents } = await import('../meta-events.js');
-  const prisma = (await import('../db.js')).default;
-
-  app = express();
-  app.use(express.json());
-
-  app.get('/test', (req, res) => {
-    res.json({ message: 'Server is working' });
-  });
-
-  app.get('/timers', async (req, res) => {
-    try {
-      const timers = await prisma.timer.findMany({
-        include: { creator: { select: { id: true, username: true } } },
-        orderBy: { time: 'asc' },
-      });
-      res.json(timers);
-    } catch (err) {
-      res.status(500).json({ message: 'Error fetching timers' });
-    }
-  });
-
-  app.get('/meta-events', async (req, res) => {
-    try {
-      const events = await getMetaEvents();
-      res.json(events);
-    } catch (err) {
-      res.status(502).json({ message: 'Error fetching meta events' });
-    }
-  });
-
-  app.post('/add-timer', (req, res) => {
-    if (!req.isAuthenticated || !req.isAuthenticated()) {
-      return res.status(401).json({ message: 'Unauthorized' });
-    }
-    res.status(201).json({ message: 'Timer added' });
-  });
-
-  app.put('/timers/:id', (req, res) => {
-    if (!req.isAuthenticated || !req.isAuthenticated()) {
-      return res.status(401).json({ message: 'Unauthorized' });
-    }
-    res.status(200).json({ message: 'Timer updated' });
-  });
-
-  app.delete('/timers/:id', (req, res) => {
-    if (!req.isAuthenticated || !req.isAuthenticated()) {
-      return res.status(401).json({ message: 'Unauthorized' });
-    }
-    res.status(200).json({ message: 'Timer deleted' });
-  });
-
-  app.get('/api/user', (req, res) => {
-    if (!req.isAuthenticated || !req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
-    }
-    res.json(req.user);
-  });
-
-  app.get('/api/favorites', (req, res) => {
-    if (!req.isAuthenticated || !req.isAuthenticated()) {
-      return res.json([]);
-    }
-    res.json([]);
-  });
-
-  app.post('/api/favorites/toggle', (req, res) => {
-    if (!req.isAuthenticated || !req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
-    }
-    res.json({ success: true, isStarred: true });
-  });
-
-  app.post('/api/favorites/sync', (req, res) => {
-    if (!req.isAuthenticated || !req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
-    }
-    res.json({ success: true, favorites: [] });
-  });
-
-  const healthHandler = (req, res) => res.json({ status: 'ok' });
-  app.get('/health', healthHandler);
-  app.get('/healthz', healthHandler);
+  process.env.NODE_ENV = 'test';
+  const serverModule = await import('../index.js');
+  app = serverModule.default;
 });
 
 // Simple helper to make requests without needing supertest

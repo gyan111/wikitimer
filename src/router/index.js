@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import AddTimer from '@/components/AddTimer.vue';
 import WikiTimer from '@/components/WikiTimer.vue';
-import EmbedTimer from '@/components/EmbedTimer.vue';
+
+const AddTimer = () => import('@/components/AddTimer.vue');
+const EmbedTimer = () => import('@/components/EmbedTimer.vue');
 
 const routes = [
   {

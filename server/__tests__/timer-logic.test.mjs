@@ -138,3 +138,105 @@ describe('Timezone Offset Parsing', () => {
     expect(d.toISOString()).toBe('2026-09-01T10:00:00.000Z');
   });
 });
+
+// Test validateTimerInput logic matching server/index.js
+function validateTimerInput(body) {
+  const errors = [];
+  const str = (v) => (typeof v === 'string' ? v.trim() : '');
+  const tz = str(body.timeZone) || 'UTC';
+  
+  const parsedTime = parseDateTimeWithTz(body.time, tz);
+  const parsedEndTime = body.endTime ? parseDateTimeWithTz(body.endTime, tz) : null;
+
+  const data = {
+    type: str(body.type),
+    name: str(body.name),
+    link: str(body.link),
+    time: parsedTime,
+    endTime: parsedEndTime,
+    region: str(body.region),
+    country: str(body.country),
+    timeZone: tz,
+    organizers: body.organizers != null ? str(body.organizers) : null,
+    logo: body.logo != null ? str(body.logo) : null,
+    topics: body.topics != null ? str(body.topics) : null,
+    participation: body.participation != null ? str(body.participation) : null,
+    participants: body.participants != null && body.participants !== '' && !isNaN(Number(body.participants)) ? Math.max(0, parseInt(body.participants, 10)) : null
+  };
+
+  if (!['event', 'deadline'].includes(data.type)) errors.push('type must be "event" or "deadline"');
+  if (!data.name || data.name.length > 255) errors.push('name is required (max 255 chars)');
+  if (!data.link || data.link.length > 2000) errors.push('link is required (max 2000 chars)');
+  if (data.link && !/^https?:\/\//i.test(data.link)) errors.push('link must be a valid http or https URL');
+  if (data.region.length > 100) errors.push('region too long (max 100 chars)');
+  if (data.country.length > 100) errors.push('country too long (max 100 chars)');
+  if (data.timeZone.length > 50) errors.push('timeZone too long (max 50 chars)');
+  if (data.organizers && data.organizers.length > 2000) errors.push('organizers too long (max 2000 chars)');
+  if (data.logo && data.logo.length > 500) errors.push('logo too long (max 500 chars)');
+  if (data.participation && data.participation.length > 100) errors.push('participation too long (max 100 chars)');
+  if (data.participants !== null && (isNaN(data.participants) || data.participants < 0)) errors.push('participants must be a positive number');
+
+  if (!data.time) {
+    errors.push('time is not a valid date');
+  }
+
+  return { data, errors };
+}
+
+describe('Timer Input Validation', () => {
+  it('accepts valid timer input with http or https link', () => {
+    const valid = {
+      type: 'event',
+      name: 'Valid Conference',
+      link: 'https://meta.wikimedia.org/wiki/Event:Valid',
+      time: '2026-10-01T09:00',
+      timeZone: 'UTC+02:00',
+      region: 'Europe',
+      country: 'France'
+    };
+    const { errors } = validateTimerInput(valid);
+    expect(errors).toHaveLength(0);
+  });
+
+  it('rejects javascript: and non-http URI schemes', () => {
+    const malicious = {
+      type: 'event',
+      name: 'Malicious Event',
+      link: 'javascript:alert(1)',
+      time: '2026-10-01T09:00',
+      timeZone: 'UTC',
+      region: 'Global',
+      country: 'Online'
+    };
+    const { errors } = validateTimerInput(malicious);
+    expect(errors).toContain('link must be a valid http or https URL');
+  });
+
+  it('rejects country exceeding 100 characters to prevent database truncation', () => {
+    const invalid = {
+      type: 'event',
+      name: 'Event with long country',
+      link: 'https://example.com',
+      time: '2026-10-01T09:00',
+      timeZone: 'UTC',
+      region: 'Global',
+      country: 'A'.repeat(101)
+    };
+    const { errors } = validateTimerInput(invalid);
+    expect(errors).toContain('country too long (max 100 chars)');
+  });
+
+  it('allows links up to 2000 characters for long wiki URLs', () => {
+    const valid = {
+      type: 'event',
+      name: 'Event with long URL',
+      link: 'https://meta.wikimedia.org/wiki/' + 'a'.repeat(500),
+      time: '2026-10-01T09:00',
+      timeZone: 'UTC',
+      region: 'Global',
+      country: 'Online'
+    };
+    const { errors } = validateTimerInput(valid);
+    expect(errors).toHaveLength(0);
+  });
+});

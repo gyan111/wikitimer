@@ -55,6 +55,11 @@ model Timer {
   updatedAt     DateTime  @default(now()) @updatedAt
   creatorId     Int?
   creator       User?     @relation(fields: [creatorId], references: [id])
+
+  @@index([deletedAt, time])
+  @@index([isMeta, isCancelled, time])
+  @@index([slug])
+  @@index([creatorId])
 }
 
 model Session {

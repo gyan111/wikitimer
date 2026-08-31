@@ -9,7 +9,7 @@
     "serve": "vite preview",
     "test": "vitest run",
     "start:server": "node server/index.js",
-    "start": "npx prisma db push --skip-generate --accept-data-loss && node server/index.js",
+    "start": "npx prisma migrate deploy && node server/index.js",
     "postinstall": "prisma generate"
   },
   "engines": {
@@ -20,7 +20,9 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "express-mysql-session": "^3.0.3",
+    "express-rate-limit": "^8.7.0",
     "express-session": "^1.18.1",
+    "helmet": "^8.3.0",
     "leaflet": "^1.9.4",
     "mysql2": "^3.11.5",
     "node-fetch": "^3.3.2",

@@ -3,6 +3,8 @@ import express from 'express';
 import session from 'express-session';
 import MySQLStoreFactory from 'express-mysql-session';
 import passport from 'passport';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -19,15 +21,55 @@ const isProd = process.env.NODE_ENV === 'production';
 const port = process.env.PORT || 3000;
 const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
 
-console.log('Starting server:', { port, clientUrl, nodeEnv: process.env.NODE_ENV });
+if (process.env.NODE_ENV !== 'test') {
+  console.log('Starting server:', { port, clientUrl, nodeEnv: process.env.NODE_ENV });
+}
 
 // Auto-seed historical Wikimedia events in background on startup if database is connected
-if (process.env.DATABASE_URL) {
+if (process.env.DATABASE_URL && process.env.NODE_ENV !== 'test') {
   seedHistoricalEvents().catch(e => console.error('Historical events seed error:', e.message));
 }
 
 // Behind the Toolforge nginx proxy, trust the first hop so secure cookies work.
 app.set('trust proxy', 1);
+
+// Security headers with Helmet
+app.use(helmet({
+  contentSecurityPolicy: false,
+  crossOriginResourcePolicy: false,
+  crossOriginEmbedderPolicy: false,
+  frameguard: false
+}));
+
+// Apply X-Frame-Options to non-embed routes while keeping /embed/* iframe-embeddable
+app.use((req, res, next) => {
+  if (!req.path.startsWith('/embed')) {
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  }
+  next();
+});
+
+// Rate limiting (disabled during test runs)
+if (process.env.NODE_ENV !== 'test') {
+  const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 600,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: 'Too many requests, please try again later.' }
+  });
+
+  const mutateLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 60,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: 'Too many requests, please try again later.' }
+  });
+
+  app.use(['/timers', '/meta-events', '/api/'], apiLimiter);
+  app.use(['/add-timer', '/timers/:id'], mutateLimiter);
+}
 
 // In production the frontend is served from the same origin as the API, so no
 // CORS handling is needed. In development the Vite dev server runs on a
@@ -242,9 +284,10 @@ function validateTimerInput(body) {
 
   if (!['event', 'deadline'].includes(data.type)) errors.push('type must be "event" or "deadline"');
   if (!data.name || data.name.length > 255) errors.push('name is required (max 255 chars)');
-  if (!data.link || data.link.length > 255) errors.push('link is required (max 255 chars)');
+  if (!data.link || data.link.length > 2000) errors.push('link is required (max 2000 chars)');
+  if (data.link && !/^https?:\/\//i.test(data.link)) errors.push('link must be a valid http or https URL');
   if (data.region.length > 100) errors.push('region too long (max 100 chars)');
-  if (data.country.length > 255) errors.push('country too long (max 255 chars)');
+  if (data.country.length > 100) errors.push('country too long (max 100 chars)');
   if (data.timeZone.length > 50) errors.push('timeZone too long (max 50 chars)');
   if (data.organizers && data.organizers.length > 2000) errors.push('organizers too long (max 2000 chars)');
   if (data.logo && data.logo.length > 500) errors.push('logo too long (max 500 chars)');
@@ -570,8 +613,10 @@ function injectEventMetaTags(html, event, req) {
   const locStr = event.country || event.region || 'Online / Virtual';
   const participation = event.participation ? ` (${event.participation})` : '';
   const desc = `⏱️ Live countdown and schedule for ${escapeHtml(event.name)} on ${dateStr} in ${escapeHtml(locStr)}${participation}. Track Wikimedia community events on WikiTimer.`;
-  const image = getEventOgImage(event);
-  const host = req.get('host') || 'wikitimer.toolforge.org';
+  const image = escapeHtml(getEventOgImage(event));
+  const rawHost = req.get('host') || '';
+  const isSafeHost = /^[a-zA-Z0-9.:-]+$/.test(rawHost);
+  const host = isSafeHost ? rawHost : 'wikitimer.toolforge.org';
   const protocol = req.protocol || 'https';
   const canonicalUrl = `${protocol}://${host}/timer/${encodeURIComponent(event.slug || event.id)}`;
 
@@ -628,7 +673,7 @@ async function findEventByIdOrSlug(idOrSlug) {
 }
 
 // Deep link route for events with rich social media preview tags
-app.get(['/timer/:idOrSlug', '/embed/:idOrSlug'], async (req, res, next) => {
+app.get(['/timer/:idOrSlug(*)', '/embed/:idOrSlug(*)'], async (req, res, next) => {
   const indexPath = path.join(distPath, 'index.html');
   if (!fs.existsSync(indexPath)) {
     return next();
@@ -669,14 +714,18 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal server error' });
 });
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+export default app;
 
-  // Warm up Meta-Wiki events cache on startup and keep synced periodically
-  getMetaEvents().catch(err => console.warn('Initial Meta-Wiki warmup sync:', err.message));
-  
-  const SYNC_INTERVAL_MS = Number(process.env.META_EVENTS_TTL_MS) || 60 * 60 * 1000; // 1 hour
-  setInterval(() => {
-    getMetaEvents().catch(err => console.warn('Periodic Meta-Wiki sync error:', err.message));
-  }, SYNC_INTERVAL_MS);
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+
+    // Warm up Meta-Wiki events cache on startup and keep synced periodically
+    getMetaEvents().catch(err => console.warn('Initial Meta-Wiki warmup sync:', err.message));
+    
+    const SYNC_INTERVAL_MS = Number(process.env.META_EVENTS_TTL_MS) || 60 * 60 * 1000; // 1 hour
+    setInterval(() => {
+      getMetaEvents().catch(err => console.warn('Periodic Meta-Wiki sync error:', err.message));
+    }, SYNC_INTERVAL_MS);
+  });
+}

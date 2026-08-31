@@ -1345,16 +1345,31 @@ watch(isAuthenticated, (authed) => {
 
 // 2. Modal Timezone & Schedule Formatting
 const modalTimezone = ref('UTC');
-const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+const savedTzSetting = ref(localStorage.getItem('wikitimer_tz') || 'auto');
+const systemTz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+
+const activeUserTimezone = computed(() => {
+  if (savedTzSetting.value === 'auto' || !savedTzSetting.value) return systemTz;
+  return savedTzSetting.value;
+});
+
+const userTimezone = computed(() => activeUserTimezone.value);
 const userTimezoneAbbr = computed(() => {
   try {
-    const parts = new Intl.DateTimeFormat('en-US', { timeZoneName: 'short' }).formatToParts(new Date());
+    const tz = activeUserTimezone.value;
+    const parts = new Intl.DateTimeFormat('en-US', { timeZone: tz, timeZoneName: 'short' }).formatToParts(new Date());
     const tzPart = parts.find(p => p.type === 'timeZoneName');
-    return tzPart ? tzPart.value : userTimezone.split('/').pop().replace('_', ' ');
+    return tzPart ? tzPart.value : tz.split('/').pop().replace('_', ' ');
   } catch (e) {
     return 'Local';
   }
 });
+
+function handleTzChanged(e) {
+  if (e && e.detail) {
+    savedTzSetting.value = e.detail;
+  }
+}
 
 function isAllDayEvent(event) {
   if (!event || !event.time) return false;
@@ -1366,7 +1381,7 @@ function isAllDayEvent(event) {
 
 function formatEventScheduleWithTz(event, tzMode) {
   if (!event || !event.time) return '';
-  const tz = tzMode === 'UTC' ? 'UTC' : userTimezone;
+  const tz = tzMode === 'UTC' ? 'UTC' : userTimezone.value;
   const tzSuffix = tzMode === 'UTC' ? 'UTC' : userTimezoneAbbr.value;
 
   const start = new Date(event.time);
@@ -2157,6 +2172,7 @@ function updateTime() {
 
 onMounted(async () => {
   window.addEventListener('keydown', handleKeyDown);
+  window.addEventListener('wikitimer_tz_changed', handleTzChanged);
   updateTime();
   timerInterval = setInterval(updateTime, 1000);
   const pinned = localStorage.getItem('pinnedFilters');
@@ -2177,6 +2193,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyDown);
+  window.removeEventListener('wikitimer_tz_changed', handleTzChanged);
   if (timerInterval) clearInterval(timerInterval);
 });
 </script>

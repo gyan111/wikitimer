@@ -270,12 +270,13 @@ async function syncEventsToDatabase(events) {
   try {
     const scrapedMetaHashes = new Set(events.map(e => getEventHash(e.id)));
     
-    // 1. Upsert each scraped live event
-    for (const e of events) {
-      const metaHash = getEventHash(e.id);
-      await prisma.timer.upsert({
-        where: { metaId: metaHash },
-        update: {
+    // 1. Upsert scraped live events in transaction chunks of 20 for fast atomic execution
+    const CHUNK_SIZE = 20;
+    for (let i = 0; i < events.length; i += CHUNK_SIZE) {
+      const chunk = events.slice(i, i + CHUNK_SIZE);
+      const operations = chunk.map(e => {
+        const metaHash = getEventHash(e.id);
+        const dataPayload = {
           name: e.name,
           link: e.link,
           time: new Date(e.time),
@@ -290,27 +291,27 @@ async function syncEventsToDatabase(events) {
           organizers: e.organizers || null,
           slug: e.slug,
           isCancelled: false
-        },
-        create: {
-          type: 'event',
-          name: e.name,
-          link: e.link,
-          time: new Date(e.time),
-          endTime: e.endTime ? new Date(e.endTime) : null,
-          region: e.region || 'Global',
-          country: e.country || 'Online',
-          timeZone: e.timeZone || 'UTC',
-          participation: e.participation || null,
-          eventTypes: e.eventTypes || null,
-          topics: e.topics || null,
-          wikiProject: e.wikiProject || null,
-          organizers: e.organizers || null,
-          slug: e.slug,
-          isMeta: true,
-          metaId: metaHash,
-          isCancelled: false
-        }
+        };
+        return prisma.timer.upsert({
+          where: { metaId: metaHash },
+          update: dataPayload,
+          create: {
+            type: 'event',
+            ...dataPayload,
+            isMeta: true,
+            metaId: metaHash
+          }
+        });
       });
+
+      try {
+        await prisma.$transaction(operations);
+      } catch (txErr) {
+        console.warn('Batch upsert fallback to individual queries:', txErr.message);
+        for (const op of operations) {
+          await op.catch(err => console.warn('Individual meta event upsert error:', err.message));
+        }
+      }
     }
 
     // 2. If a future event disappears before starting, mark as cancelled
