@@ -1515,8 +1515,11 @@ const showTemplateDrawer = ref(false);
 const isTemplateCopied = ref(false);
 
 function getWikiTemplateCode(event) {
-  if (!event || !event.time) return '';
-  const d = new Date(event.time);
+  if (!event) return '';
+  // If it's a deadline, use the deadline cutoff (endTime if available, otherwise time)
+  const targetIso = (event.type === 'deadline' && event.endTime) ? event.endTime : event.time;
+  if (!targetIso) return '';
+  const d = new Date(targetIso);
   const dateStr = d.toISOString().slice(0, 10);
   const hours = String(d.getUTCHours()).padStart(2, '0');
   const mins = String(d.getUTCMinutes()).padStart(2, '0');
@@ -1860,6 +1863,10 @@ function getNextMilestoneDate(event) {
   const startTime = new Date(event.time);
   const endTime = event.endTime ? new Date(event.endTime) : null;
   
+  // If deadline with endTime: next milestone is the deadline cutoff (endTime)
+  if (event.type === 'deadline' && endTime !== null) {
+    return endTime;
+  }
   // If ongoing: next milestone is when it finishes (endTime)
   if (startTime <= now && endTime !== null && endTime >= now) {
     return endTime;
@@ -1978,7 +1985,9 @@ function getCountdownParts(event) {
   const endTime = event.endTime ? new Date(event.endTime).getTime() : null;
 
   let target = startTime;
-  if (startTime <= now && endTime !== null && endTime >= now) {
+  if (event.type === 'deadline' && endTime !== null) {
+    target = endTime;
+  } else if (startTime <= now && endTime !== null && endTime >= now) {
     target = endTime;
   }
 

@@ -150,7 +150,9 @@ const countdown = computed(() => {
     return { days: '00', hours: '00', minutes: '00', seconds: '00' };
   }
 
-  const target = new Date(event.value.time);
+  const target = (event.value.type === 'deadline' && event.value.endTime)
+    ? new Date(event.value.endTime)
+    : ((isOngoing.value && event.value.endTime) ? new Date(event.value.endTime) : new Date(event.value.time));
   const diff = target.getTime() - currentTime.value.getTime();
 
   if (diff <= 0) {

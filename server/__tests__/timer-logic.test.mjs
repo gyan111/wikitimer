@@ -240,3 +240,50 @@ describe('Timer Input Validation', () => {
     expect(errors).toHaveLength(0);
   });
 });
+
+describe('Wiki Template and Deadline Countdown Logic', () => {
+  function getWikiTemplateCode(event) {
+    if (!event) return '';
+    const targetIso = (event.type === 'deadline' && event.endTime) ? event.endTime : event.time;
+    if (!targetIso) return '';
+    const d = new Date(targetIso);
+    const dateStr = d.toISOString().slice(0, 10);
+    const hours = String(d.getUTCHours()).padStart(2, '0');
+    const mins = String(d.getUTCMinutes()).padStart(2, '0');
+    const timeStr = `${hours}:${mins}`;
+    const targetId = event.slug || event.id;
+
+    return `{{WikiTimer\n | id   = ${targetId}\n | name = ${event.name || ''}\n | link = ${event.link || ''}\n | date = ${dateStr}\n | time = ${timeStr}\n}}`;
+  }
+
+  it('uses endTime for deadline timers in wiki template generation', () => {
+    const deadlineEvent = {
+      id: 271,
+      type: 'deadline',
+      name: 'Scholarship Application Open Knowledge Conference 2027',
+      link: 'https://meta.wikimedia.org/wiki/Open_Knowledge_Conference_2027',
+      time: '2026-07-31T18:31:00.000Z',
+      endTime: '2026-09-10T18:29:00.000Z'
+    };
+
+    const templateCode = getWikiTemplateCode(deadlineEvent);
+    expect(templateCode).toContain('| date = 2026-09-10');
+    expect(templateCode).toContain('| time = 18:29');
+  });
+
+  it('uses start time for regular event timers in wiki template generation', () => {
+    const conferenceEvent = {
+      id: 272,
+      type: 'event',
+      name: 'Open Knowledge Conference 2027',
+      link: 'https://meta.wikimedia.org/wiki/Open_Knowledge_Conference_2027',
+      time: '2026-07-31T18:31:00.000Z',
+      endTime: '2026-09-10T18:29:00.000Z'
+    };
+
+    const templateCode = getWikiTemplateCode(conferenceEvent);
+    expect(templateCode).toContain('| date = 2026-07-31');
+    expect(templateCode).toContain('| time = 18:31');
+  });
+});
+
