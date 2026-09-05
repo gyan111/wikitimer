@@ -11,15 +11,23 @@ function deduplicateEvents(userTimers = [], metaEvents = []) {
   return combined.filter(event => {
     if (!event || typeof event !== 'object' || !event.name || !event.time) return false;
     
+    // Canonical deduplication key:
+    // 1. Meta events: deduplicate by slug or canonical link
+    // 2. User & Meta events sharing exact same event URL + timestamp: merge
     let key;
-    if (event.metaId) {
-      key = `meta:${event.metaId}`;
-    } else if (event.id && !event.isMeta) {
+    const cleanLink = event.link ? event.link.toLowerCase().replace(/^https?:\/\//, '').replace(/\/$/, '') : '';
+    const eventTimeMs = new Date(event.time).getTime();
+
+    if (event.isMeta) {
+      key = event.slug ? `meta-slug:${event.slug.toLowerCase()}` : (cleanLink ? `link:${cleanLink}_${eventTimeMs}` : `meta:${event.metaId || event.id}`);
+    } else if (cleanLink && eventTimeMs) {
+      key = `link:${cleanLink}_${eventTimeMs}`;
+    } else if (event.id) {
       key = `user:${event.id}`;
     } else if (event.slug) {
-      key = `slug:${event.slug}`;
+      key = `slug:${event.slug.toLowerCase()}`;
     } else {
-      key = `event:${event.name.trim().toLowerCase()}_${new Date(event.time).getTime()}`;
+      key = `event:${event.name.trim().toLowerCase()}_${eventTimeMs}`;
     }
     
     if (seen.has(key)) {
@@ -117,6 +125,35 @@ describe('Timer Deduplication and Management', () => {
     ];
     const result = deduplicateEvents(userTimers, []);
     expect(result.length).toBe(1);
+  });
+
+  it('deduplicates live scraped meta events with DB-synced meta events sharing the same slug or link', () => {
+    const fromTimersEndpoint = [
+      {
+        id: 142,
+        isMeta: true,
+        metaId: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+        slug: 'the-wikipedia-library-workshop-wikiconference-indi-2jxo',
+        name: 'The Wikipedia Library Workshop (WikiConference India 2026)',
+        link: 'https://meta.wikimedia.org/wiki/Event:The_Wikipedia_Library_Workshop_(WikiConference_India_2026)',
+        time: '2026-09-04T00:00:00.000Z'
+      }
+    ];
+
+    const fromMetaEventsEndpoint = [
+      {
+        id: 'meta:meta.wikimedia.org/wiki/Event:The_Wikipedia_Library_Workshop_(WikiConference_India_2026)',
+        isMeta: true,
+        slug: 'the-wikipedia-library-workshop-wikiconference-indi-2jxo',
+        name: 'The Wikipedia Library Workshop (WikiConference India 2026)',
+        link: 'https://meta.wikimedia.org/wiki/Event:The_Wikipedia_Library_Workshop_(WikiConference_India_2026)',
+        time: '2026-09-04T00:00:00.000Z'
+      }
+    ];
+
+    const result = deduplicateEvents(fromTimersEndpoint, fromMetaEventsEndpoint);
+    expect(result.length).toBe(1);
+    expect(result[0].slug).toBe('the-wikipedia-library-workshop-wikiconference-indi-2jxo');
   });
 });
 

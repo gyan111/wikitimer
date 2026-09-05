@@ -377,6 +377,7 @@ export async function getMetaEvents() {
             (!t.endTime || t.endTime.toISOString().endsWith('T23:59:59.999Z') || t.endTime.toISOString().endsWith('T23:59:59Z'));
           return {
             id: t.link ? 'meta:' + t.link.replace(/^https?:\/\//, '') : (t.metaId || `meta:${t.id}`),
+            metaId: t.metaId,
             slug: t.slug || slugify(t.name, t.link),
             isMeta: true,
             source: 'meta-allevents',

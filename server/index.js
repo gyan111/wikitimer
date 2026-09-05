@@ -192,11 +192,11 @@ let devTimerCounter = devTimers.length + 1;
 // Timers created by users and seeded archive.
 app.get('/timers', async (req, res) => {
   if (!process.env.DATABASE_URL) {
-    return res.json(devTimers.filter(t => !t.deletedAt));
+    return res.json(devTimers.filter(t => !t.deletedAt && !t.isMeta));
   }
   try {
     const timers = await prisma.timer.findMany({
-      where: { deletedAt: null },
+      where: { deletedAt: null, isMeta: false },
       include: { creator: { select: { id: true, username: true } } },
       orderBy: { time: 'asc' }
     });
