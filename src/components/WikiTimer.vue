@@ -1708,22 +1708,18 @@ const events = computed(() => {
     if (!event || typeof event !== 'object' || !event.name || !event.time) return false;
     
     // Canonical deduplication key:
-    // 1. Meta events: deduplicate by slug or canonical link
-    // 2. User & Meta events sharing exact same event URL + timestamp: merge
+    // - Meta events: deduplicated by slug / canonical link / metaId
+    // - User timers: deduplicated by unique database id
     let key;
-    const cleanLink = event.link ? event.link.toLowerCase().replace(/^https?:\/\//, '').replace(/\/$/, '') : '';
-    const eventTimeMs = new Date(event.time).getTime();
-
     if (event.isMeta) {
-      key = event.slug ? `meta-slug:${event.slug.toLowerCase()}` : (cleanLink ? `link:${cleanLink}_${eventTimeMs}` : `meta:${event.metaId || event.id}`);
-    } else if (cleanLink && eventTimeMs) {
-      key = `link:${cleanLink}_${eventTimeMs}`;
+      const cleanLink = event.link ? event.link.toLowerCase().replace(/^https?:\/\//, '').replace(/\/$/, '') : '';
+      key = event.slug ? `meta-slug:${event.slug.toLowerCase()}` : (cleanLink ? `meta-link:${cleanLink}` : `meta:${event.metaId || event.id}`);
     } else if (event.id) {
       key = `user:${event.id}`;
     } else if (event.slug) {
       key = `slug:${event.slug.toLowerCase()}`;
     } else {
-      key = `event:${event.name.trim().toLowerCase()}_${eventTimeMs}`;
+      key = `event:${event.name.trim().toLowerCase()}_${new Date(event.time).getTime()}`;
     }
     
     if (seen.has(key)) {
