@@ -69,7 +69,8 @@ export default function(app) {
       const response = await fetch('https://meta.wikimedia.org/w/rest.php/oauth2/resource/profile', {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
-          'User-Agent': process.env.META_USER_AGENT || 'WikiTimer/1.0 (https://wikitimer.toolforge.org/; contact: toolforge-wikitimer@wmcloud.org)'
+          'User-Agent': process.env.META_USER_AGENT || 'WikiTimer/1.0 (https://wikitimer.toolforge.org/; contact: toolforge-wikitimer@wmcloud.org)',
+          'Accept-Encoding': 'gzip, deflate'
         }
       });
 

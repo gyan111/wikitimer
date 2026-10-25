@@ -148,8 +148,8 @@ app.use(session({
   }
 }));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: false, limit: '1mb' }));
 
 // Verbose request/response logging is useful in development but leaks headers
 // (and cookies) in production, so keep it dev-only.

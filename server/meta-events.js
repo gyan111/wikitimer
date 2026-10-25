@@ -179,7 +179,7 @@ async function fetchEventDetails(link) {
   if (!link) return null;
   try {
     const res = await fetch(link, {
-      headers: { 'User-Agent': USER_AGENT },
+      headers: { 'User-Agent': USER_AGENT, 'Accept-Encoding': 'gzip, deflate' },
       signal: AbortSignal.timeout(5000)
     });
     if (!res.ok) return null;
@@ -234,7 +234,7 @@ async function fetchMetaEvents() {
   });
 
   const res = await fetch(`${META_API}?${params.toString()}`, {
-    headers: { 'User-Agent': USER_AGENT, 'Accept': 'application/json' }
+    headers: { 'User-Agent': USER_AGENT, 'Accept': 'application/json', 'Accept-Encoding': 'gzip, deflate' }
   });
   if (res.status === 503) {
     const retryAfter = res.headers.get('Retry-After');
